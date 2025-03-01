@@ -4,28 +4,41 @@
 
 package frc.robot;
 
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.DriveTrainKrakens;
-import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.ExampleSubsystem;
-import edu.wpi.first.wpilibj2.command.Command;
+
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.TeleopDrive;
+import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Elevator;
 
 public class RobotContainer {
 
-  public static DriveTrainKrakens driveTrain = new DriveTrainKrakens();
+  public static DriveTrain driveTrain = new DriveTrain();
   public static Elevator elevator = new Elevator();
+
+  public static CommandXboxController controller = new CommandXboxController(0);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+
+    driveTrain.setDefaultCommand(new TeleopDrive());
   }
 
   private void configureBindings() {
 
+  }
+
+  public static double getLeftY() {
+    return controller.getLeftY();
+  }
+
+  public static double getRightX() {
+    return controller.getRightX();
+  }
+
+  public static double getLeftX() {
+    return controller.getLeftX();
   }
 
   /**
@@ -33,8 +46,7 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
-  }
+  // public Command getAutonomousCommand() {
+    // // An example command will be run in autonomous
+  // }
 }

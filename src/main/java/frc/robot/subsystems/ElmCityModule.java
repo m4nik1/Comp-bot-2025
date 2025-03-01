@@ -16,6 +16,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -126,7 +127,7 @@ public class ElmCityModule extends SubsystemBase {
   }
 
   public SwerveModulePosition getPosition() {
-    return new SwerveModulePosition(getDrivePosConversion(), Rotation2d.fromRotations(getAngle()));
+    return new SwerveModulePosition(getDrivePosMeters(), Rotation2d.fromRotations(getAngle()));
   }
 
   public double getNac() {
@@ -145,6 +146,43 @@ public class ElmCityModule extends SubsystemBase {
     return angleMotor.getPosition().getValueAsDouble();
   }
 
+  public void setSpeed(SwerveModuleState desiredState, boolean openLoop) {
+    if (openLoop) {
+      driveOpenLoop.Output = desiredState.speedMetersPerSecond / Constants.maxSpeed;
+      driveMotor.setControl(driveOpenLoop); // change this to a set speed if its not smooth
+    }
+    // add closed loop for driveController
+    else {
+      // converts velocity to Rotation per second with wheel curcumfirence
+      driveVelocity.Velocity = desiredState.speedMetersPerSecond / Constants.wheelCircum;
+
+      driveVelocity.Slot = 0;
+
+      // sets the feedforward to simple feedforward calculation with the requested speed
+      driveVelocity.FeedForward = driveKfCalc.calculate(desiredState.speedMetersPerSecond);
+
+      // Calculate using feedforward
+      driveMotor.setControl(driveVelocity);
+    }
+  }
+
+  public void setAngle(SwerveModuleState desiredState) {
+    Rotation2d angle;
+    double absSpd = Math.abs(desiredState.speedMetersPerSecond);
+    anglePosition.Slot = 0;
+
+    if (absSpd <= (Constants.maxSpeed * .01)) {
+      angle = lastAngle;
+    } else {
+      angle = desiredState.angle;
+    }
+
+    anglePosition.Position = angle.getRotations();
+    angleMotor.setControl(anglePosition);
+    lastAngle = angle;
+
+  }
+
   public void runVelocity(double vel) {
     driveVelocity.Velocity = vel / Constants.wheelCircum; // meters per second to rotations per second
 
@@ -158,6 +196,13 @@ public class ElmCityModule extends SubsystemBase {
 
       // Calculate using feedforward
     driveMotor.setControl(driveVelocity);
+  }
+
+  public void setDesiredState(SwerveModuleState desiredState, boolean openLoop) {
+    desiredState.optimize(getState().angle);
+
+    setSpeed(desiredState, openLoop);
+    setAngle(desiredState);
   }
 
   public void goToAngle(double deg) {
@@ -174,22 +219,18 @@ public class ElmCityModule extends SubsystemBase {
     return meters;
   }
 
+  public SwerveModuleState getState() {
+    return new SwerveModuleState(driveMotor.getVelocity().getValueAsDouble(), Rotation2d.fromRotations(getAngle()));
+  }
+
   public void zeroAngleCoders() {
-    // nacCoder.
+    nacCoder.get();
   }
 
-  public double getDrivePosConversion() {
+  public double getDrivePosMeters() {
     double velocity = driveMotor.getPosition().getValueAsDouble() * Constants.wheelCircum;
-    // SmartDashboard.putString("Units of velocity", driveMotor.getVelocity().getUnits());
-    
+
     return velocity;
-  }
-
-  public void goToAngle2(double deg) {
-    anglePosition.withSlot(0);
-
-    anglePosition.Position = Rotation2d.fromDegrees(deg).getRotations();
-    angleMotor.setControl(anglePosition);
   }
 
   @Override
@@ -197,6 +238,7 @@ public class ElmCityModule extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Module Angle " + modNum, getAngle());
     SmartDashboard.putNumber("Encoder " + modNum, getNac());
+    SmartDashboard.putNumber("Distance (M)" + modNum, getDrivePosMeters());
     // SmartDashboard.putNumber("Swerve Velocity " + modNum, getDriveVelocityConversion());
     // SmartDashboard.putNumber("Drive Distance " + modNum, getDrivePosConversion());
     // SmartDashboard.putNumber("Drive Velocity Wanted" + modNum, velocitySet);
