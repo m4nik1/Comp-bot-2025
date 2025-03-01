@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 
 public class DriveTrainKrakens extends SubsystemBase {
@@ -20,12 +21,12 @@ public class DriveTrainKrakens extends SubsystemBase {
 
   public DriveTrainKrakens() {
     elmCityModules = new ElmCityKrakenModule[] {
-      new ElmCityKrakenModule(0, 1, 2, InvertedValue.CounterClockwise_Positive, InvertedValue.Clockwise_Positive),
-      new ElmCityKrakenModule(1, 15, 14,  InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive),
-      new ElmCityKrakenModule(2, 1, 2, InvertedValue.CounterClockwise_Positive, InvertedValue.Clockwise_Positive),
-      new ElmCityKrakenModule(3, 4, 3, InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive)
+      new ElmCityKrakenModule(0, 8, 7, InvertedValue.CounterClockwise_Positive, InvertedValue.Clockwise_Positive),
+      new ElmCityKrakenModule(1, 10, 9, InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive),
+      new ElmCityKrakenModule(2, 17, 18, InvertedValue.CounterClockwise_Positive, InvertedValue.Clockwise_Positive),
+      new ElmCityKrakenModule(3, 20, 19, InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive)
     };
-    gyro = new Pigeon2(21);
+      gyro = new Pigeon2(21);
   }
 
   @Override
