@@ -46,10 +46,11 @@ public class Elevator extends SubsystemBase {
     elevatorConfig.CurrentLimits.StatorCurrentLimit = 60;
     elevatorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
-    // These are the gains to tune
-    elevatorConfig.Slot0.kG = .3; // run the robot with voltage on a joystick and this is the voltage making the elevator stay in place
-    elevatorConfig.Slot0.kV = 0; // runs robot at a up ward slope
-    elevatorConfig.Slot0.kA = 0; // Makes the curve of the set position more curvier
+    // Feedforward gains
+    elevatorConfig.Slot0.kS = .37;
+    elevatorConfig.Slot0.kG = .34; // run the robot with voltage on a joystick and this is the voltage making the elevator stay in place
+    elevatorConfig.Slot0.kV = 0.11; // runs robot at a up ward slope
+    elevatorConfig.Slot0.kA = 0.01; // Makes the curve of the set position more curvier
     
     // Needed if we dont reach our set position
     elevatorConfig.Slot0.kP = 0;
@@ -58,8 +59,8 @@ public class Elevator extends SubsystemBase {
 
     
     // Set
-    elevatorConfig.MotionMagic.MotionMagicExpo_kA = 0;
-    elevatorConfig.MotionMagic.MotionMagicExpo_kV = 0;
+    elevatorConfig.MotionMagic.MotionMagicCruiseVelocity = 40;
+    elevatorConfig.MotionMagic.MotionMagicAcceleration = 75;
 
     elevatorMotor.getConfigurator().apply(elevatorConfig);
     elevatorMotor.getConfigurator().setPosition(0);
