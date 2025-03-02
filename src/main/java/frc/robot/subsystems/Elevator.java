@@ -58,13 +58,12 @@ public class Elevator extends SubsystemBase {
     elevatorConfig.Slot0.kD = 0; 
 
     
-    // Set
+    // Set Velocity and acceleration for Motion magic
     elevatorConfig.MotionMagic.MotionMagicCruiseVelocity = 40;
     elevatorConfig.MotionMagic.MotionMagicAcceleration = 75;
 
     elevatorMotor.getConfigurator().apply(elevatorConfig);
     elevatorMotor.getConfigurator().setPosition(0);
-
   }
 
   public double getElevatorPosition() {
