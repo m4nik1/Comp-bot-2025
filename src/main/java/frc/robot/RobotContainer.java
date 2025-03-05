@@ -5,14 +5,19 @@
 package frc.robot;
 
 import frc.robot.commands.TeleopDrive;
+import frc.robot.subsystems.CoralIntake;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class RobotContainer {
 
   public static DriveTrain driveTrain = new DriveTrain();
+  public static Elevator elevator = new Elevator();
+  public static CoralIntake coralIntake = new CoralIntake();
 
   static CommandXboxController controller = new CommandXboxController(0);
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -23,6 +28,15 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+  }
+
+  public static double getLeftYOp() {
+    return controller.getLeftY();
+  }
+
+  
+  public static double getRightYOp() {
+    return controller.getLeftY();
   }
 
   public static double getLeftY() {
