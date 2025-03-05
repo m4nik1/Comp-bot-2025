@@ -8,11 +8,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class RunElevator extends Command {
+public class RunElevatorManual extends Command {
   /** Creates a new RunElevatorVolts. */
 
   boolean stop = false;
-  public RunElevator() {
+  public RunElevatorManual() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.elevator);
   }
@@ -26,7 +26,7 @@ public class RunElevator extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double voltage = -RobotContainer.getLeftYOp();
+    double speed = -RobotContainer.getLeftYOp();
 
     if(RobotContainer.elevator.getTopLimit()) {
       stop = true;
@@ -35,7 +35,7 @@ public class RunElevator extends Command {
     // if(RobotContainer.elevator.getLowerLimit()) {
     //   stop = true;
     // }
-    RobotContainer.elevator.driveElevatorPercent(voltage);
+    RobotContainer.elevator.driveElevatorPercent(speed);
   }
 
   // Called once the command ends or is interrupted.

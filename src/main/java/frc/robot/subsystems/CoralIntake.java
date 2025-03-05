@@ -22,7 +22,7 @@ public class CoralIntake extends SubsystemBase {
   }
 
   public void runCoral(double speed){
-    coralMax.set(speed);
+    coralMax.set(speed * 0.5);
   }
 
   @Override

@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import frc.robot.commands.RunCoralIntake;
+import frc.robot.commands.RunElevatorManual;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.subsystems.CoralIntake;
 import frc.robot.subsystems.DriveTrain;
@@ -24,6 +26,8 @@ public class RobotContainer {
     // Configure the trigger bindings
 
     driveTrain.setDefaultCommand(new TeleopDrive());
+    // elevator.setDefaultCommand(new RunElevatorManual());
+    // coralIntake.setDefaultCommand(new RunCoralIntake());
     configureBindings();
   }
 
