@@ -4,43 +4,36 @@
 
 package frc.robot;
 
-
-import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.TeleopDrive;
+import frc.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.RunCoralIntake;
-import frc.robot.commands.RunElevator;
-import frc.robot.subsystems.AlgaeIntake;
-import frc.robot.subsystems.CoralIntake;
-import frc.robot.subsystems.DriveTrainKrakens;
-import frc.robot.subsystems.Elevator;
 
 public class RobotContainer {
 
-  public static DriveTrainKrakens driveTrain = new DriveTrainKrakens();
-  public static Elevator elevator = new Elevator();
-  public static CoralIntake coralIntake = new CoralIntake();
-  public static AlgaeIntake algaeIntake = new AlgaeIntake();
+  public static DriveTrain driveTrain = new DriveTrain();
 
   static CommandXboxController controller = new CommandXboxController(0);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
-    configureBindings();
 
-    // elevator.setDefaultCommand(new RunElevator());
-    coralIntake.setDefaultCommand(new RunCoralIntake());
+    driveTrain.setDefaultCommand(new TeleopDrive());
+    configureBindings();
   }
 
   private void configureBindings() {
-
   }
 
-  public static double getY() {
+  public static double getLeftY() {
     return controller.getLeftY();
   }
 
-  public static double getRightY() {
-    return controller.getRightY();
+  public static double getRightX() {
+    return controller.getRightX();
+  }
+
+  public static double getLeftX() {
+    return controller.getLeftX();
   }
 }
