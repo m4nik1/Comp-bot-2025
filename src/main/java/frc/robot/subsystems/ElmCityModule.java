@@ -70,7 +70,6 @@ public class ElmCityModule extends SubsystemBase {
     driveMotor.setPosition(0.0);
     lastAngle = Rotation2d.fromDegrees(0);
     resetToAbsolute();
-    angleMotor.setPosition(0);
   }
 
   public void configDriveMotor(InvertedValue drive) {
@@ -247,16 +246,8 @@ public class ElmCityModule extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Module Angle " + modNum, getAngleDegrees());
-    // SmartDashboard.putNumber("Encoder " + modNum, getNac());
     SmartDashboard.putNumber("Distance (M)" + modNum, getDrivePosMeters());
     SmartDashboard.putNumber("Nac coder rot " + modNum, getNac());
     SmartDashboard.putNumber("Mod vel " + modNum, getDriveVelocityConversion());
-    // SmartDashboard.putNumber("Swerve Velocity " + modNum, getDriveVelocityConversion());
-    // SmartDashboard.putNumber("Drive Distance " + modNum, getDrivePosConversion());
-    // SmartDashboard.putNumber("Drive Velocity Wanted" + modNum, velocitySet);
-    // SmartDashboard.putNumber("Swerve Motor Voltage " + modNum, driveMotor.getMotorVoltage().getValueAsDouble());
-    // SmartDashboard.putNumber("Swerve Motor Supply " + modNum, driveMotor.getSupplyVoltage().getValueAsDouble());
-    // SmartDashboard.putNumber("Nac Angle " + modNum, getNac());
-    // SmartDashboard.putNumber("Rotation 90", Rotation2d.fromDegrees(90).getRotations());
   }
 }
