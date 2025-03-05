@@ -17,12 +17,11 @@ public class CoralIntake extends SubsystemBase {
   
   public CoralIntake() {
     // Change the pivot to its own subsystem
-
     coralMax = new SparkMax(31, MotorType.kBrushless);
   }
 
   public void runCoral(double speed){
-    coralMax.set(speed * 0.5);
+    coralMax.set(speed * 0.35);
   }
 
   @Override

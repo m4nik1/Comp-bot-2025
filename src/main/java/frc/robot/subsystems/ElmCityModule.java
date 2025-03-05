@@ -68,8 +68,9 @@ public class ElmCityModule extends SubsystemBase {
     configAngleMotor(angleInvert);
 
     driveMotor.setPosition(0.0);
+    angleMotor.setPosition(0);
     lastAngle = Rotation2d.fromDegrees(0);
-    resetToAbsolute();
+    // resetToAbsolute();
   }
 
   public void configDriveMotor(InvertedValue drive) {
@@ -119,6 +120,7 @@ public class ElmCityModule extends SubsystemBase {
     angleConfig.Slot0.kD = Constants.angleD;
 
     angleMotor.getConfigurator().apply(angleConfig);
+    goToAngle(0);
   }
 
   public void resetToAbsolute() {
@@ -232,15 +234,12 @@ public class ElmCityModule extends SubsystemBase {
     return new SwerveModuleState(driveMotor.getVelocity().getValueAsDouble(), Rotation2d.fromRotations(getAngle()));
   }
 
-  // public void zeroAngleCoders() {
-  //   nacCoder.get();
-  // }
-
   public double getDrivePosMeters() {
     double velocity = driveMotor.getPosition().getValueAsDouble() * Constants.wheelCircum;
 
     return velocity;
   }
+
 
   @Override
   public void periodic() {

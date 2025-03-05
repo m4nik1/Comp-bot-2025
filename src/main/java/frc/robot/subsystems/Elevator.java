@@ -83,7 +83,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void driveElevatorPercent(double percent) {
-    elevatorMotor.set(percent*.30);
+    elevatorMotor.set(percent*.40);
   }
 
   public boolean getTopLimit() {
