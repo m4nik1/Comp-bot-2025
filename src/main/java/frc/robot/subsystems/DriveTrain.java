@@ -18,6 +18,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -35,10 +36,10 @@ public class DriveTrain extends SubsystemBase {
 
   public DriveTrain() {
     elmCityModules = new ElmCityModule[] {
-      new ElmCityModule(0, 8, 7, , Constants.angleOffsetMod0,InvertedValue.CounterClockwise_Positive, InvertedValue.Clockwise_Positive),
-      new ElmCityModule(1, 10, 9, Constants.angleOffsetMod1 ,InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive),
-      new ElmCityModule(2, 17, 18, Constants.angleOffsetMod2, InvertedValue.CounterClockwise_Positive, InvertedValue.Clockwise_Positive),
-      new ElmCityModule(3, 20, 19, Constants.angleOffsetMod3, InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive)
+      new ElmCityModule(0, 8, 7, 0,Constants.angleOffsetMod0,InvertedValue.CounterClockwise_Positive, InvertedValue.CounterClockwise_Positive),
+      new ElmCityModule(1, 20, 19, 3, Constants.angleOffsetMod3, InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive),
+      new ElmCityModule(2, 10, 9, 1, Constants.angleOffsetMod1 ,InvertedValue.CounterClockwise_Positive, InvertedValue.CounterClockwise_Positive),
+      new ElmCityModule(3, 17, 18, 2, Constants.angleOffsetMod2, InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive),
     };
 
     gyro = new Pigeon2(Constants.pigeonID);
@@ -91,7 +92,8 @@ public class DriveTrain extends SubsystemBase {
     return gyro.getYaw().getValueAsDouble();
   }
 
-  public void setAngle(double deg) {
+  public void setAngle(double deg){
+  
     elmCityModules[0].goToAngle(deg);
   }
 
@@ -109,6 +111,7 @@ public class DriveTrain extends SubsystemBase {
     // updatePose();
 
     // Updates the robot pose for the Robot itself
+    SmartDashboard.putNumber("Robot Angle", getRobotAngle());
 
 
 

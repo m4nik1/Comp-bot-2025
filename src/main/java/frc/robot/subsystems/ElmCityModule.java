@@ -52,6 +52,7 @@ public class ElmCityModule extends SubsystemBase {
 
     driveMotor = new TalonFX(driveID);
     angleMotor = new TalonFX(angleID);
+
     nacCoder = new AnalogEncoder(nacID);
 
     velocitySet = 0;
@@ -64,11 +65,11 @@ public class ElmCityModule extends SubsystemBase {
     driveVelocity.Slot = 0;
 
     configDriveMotor(driveInvert);
-    configAngleMotor();
+    configAngleMotor(angleInvert);
 
     driveMotor.setPosition(0.0);
     lastAngle = Rotation2d.fromDegrees(0);
-    // resetToAbsolute();
+    resetToAbsolute();
     angleMotor.setPosition(0);
   }
 
@@ -98,11 +99,11 @@ public class ElmCityModule extends SubsystemBase {
 
   }
 
-  public void configAngleMotor() {
+  public void configAngleMotor(InvertedValue invertedValue) {
     TalonFXConfiguration angleConfig = new TalonFXConfiguration();
     angleMotor.getConfigurator().apply(new TalonFXConfiguration());
 
-    angleConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    angleConfig.MotorOutput.Inverted = invertedValue;
     angleConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
     angleConfig.Feedback.SensorToMechanismRatio = Constants.angleRatio;
     angleConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
@@ -126,6 +127,10 @@ public class ElmCityModule extends SubsystemBase {
     angleMotor.setPosition(absoluteValue);
   }
 
+  public void setAngleZero() {
+    angleMotor.setPosition(0);
+  }
+
   public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(getDrivePosMeters(), Rotation2d.fromRotations(getAngle()));
   }
@@ -145,6 +150,11 @@ public class ElmCityModule extends SubsystemBase {
   public double getAngle() {
     return angleMotor.getPosition().getValueAsDouble();
   }
+
+  public double getAngleDegrees() {
+    return angleMotor.getPosition().getValueAsDouble() * 360;
+  }
+
 
   public void setSpeed(SwerveModuleState desiredState, boolean openLoop) {
     if (openLoop) {
@@ -223,9 +233,9 @@ public class ElmCityModule extends SubsystemBase {
     return new SwerveModuleState(driveMotor.getVelocity().getValueAsDouble(), Rotation2d.fromRotations(getAngle()));
   }
 
-  public void zeroAngleCoders() {
-    nacCoder.get();
-  }
+  // public void zeroAngleCoders() {
+  //   nacCoder.get();
+  // }
 
   public double getDrivePosMeters() {
     double velocity = driveMotor.getPosition().getValueAsDouble() * Constants.wheelCircum;
@@ -236,9 +246,11 @@ public class ElmCityModule extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Module Angle " + modNum, getAngle());
-    SmartDashboard.putNumber("Encoder " + modNum, getNac());
+    SmartDashboard.putNumber("Module Angle " + modNum, getAngleDegrees());
+    // SmartDashboard.putNumber("Encoder " + modNum, getNac());
     SmartDashboard.putNumber("Distance (M)" + modNum, getDrivePosMeters());
+    SmartDashboard.putNumber("Nac coder rot " + modNum, getNac());
+    SmartDashboard.putNumber("Mod vel " + modNum, getDriveVelocityConversion());
     // SmartDashboard.putNumber("Swerve Velocity " + modNum, getDriveVelocityConversion());
     // SmartDashboard.putNumber("Drive Distance " + modNum, getDrivePosConversion());
     // SmartDashboard.putNumber("Drive Velocity Wanted" + modNum, velocitySet);
