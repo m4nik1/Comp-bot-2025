@@ -70,7 +70,6 @@ public class ElmCityModule extends SubsystemBase {
     driveMotor.setPosition(0.0);
     lastAngle = Rotation2d.fromDegrees(0);
     resetToAbsolute();
-    angleMotor.setPosition(0);
   }
 
   public void configDriveMotor(InvertedValue drive) {
