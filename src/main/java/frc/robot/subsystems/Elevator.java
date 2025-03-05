@@ -36,7 +36,7 @@ public class Elevator extends SubsystemBase {
 
     elevatorMotor.setPosition(0);
 
-    configElevatorMotor();
+    // configElevatorMotor();
   }
 
   public void configElevatorMotor() {

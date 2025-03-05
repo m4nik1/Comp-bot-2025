@@ -13,7 +13,7 @@ public class RunCoralIntake extends Command {
   /** Creates a new RunCoralIntake. */
   public RunCoralIntake() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.coralIntake);
+    // addRequirements(RobotContainer.coralIntake);
   }
 
   // Called when the command is initially scheduled.
@@ -23,7 +23,7 @@ public class RunCoralIntake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.coralIntake.runCoral(RobotContainer.getRightY());
+    // RobotContainer.coralIntake.runCoral(RobotContainer.getRightY());
   }
 
   // Called once the command ends or is interrupted.

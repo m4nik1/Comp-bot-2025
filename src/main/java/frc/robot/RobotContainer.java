@@ -17,9 +17,9 @@ import frc.robot.subsystems.Elevator;
 public class RobotContainer {
 
   public static DriveTrainKrakens driveTrain = new DriveTrainKrakens();
-  public static Elevator elevator = new Elevator();
-  public static CoralIntake coralIntake = new CoralIntake();
-  public static AlgaeIntake algaeIntake = new AlgaeIntake();
+  // public static Elevator elevator = new Elevator();
+  // public static CoralIntake coralIntake = new CoralIntake();
+  // public static AlgaeIntake algaeIntake = new AlgaeIntake();
 
   static CommandXboxController controller = new CommandXboxController(0);
 
@@ -29,7 +29,7 @@ public class RobotContainer {
     configureBindings();
 
     // elevator.setDefaultCommand(new RunElevator());
-    coralIntake.setDefaultCommand(new RunCoralIntake());
+    // coralIntake.setDefaultCommand(new RunCoralIntake());
   }
 
   private void configureBindings() {

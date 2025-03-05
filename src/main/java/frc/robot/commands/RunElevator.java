@@ -15,7 +15,7 @@ public class RunElevator extends Command {
   boolean stop = false;
   public RunElevator() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.elevator);
+    // addRequirements(RobotContainer.elevator);
   }
 
   // Called when the command is initially scheduled.
@@ -27,22 +27,22 @@ public class RunElevator extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double voltage = -RobotContainer.getY();
+    // double voltage = -RobotContainer.getY();
 
-    if(RobotContainer.elevator.getTopLimit()) {
-      stop = true;
-    }
+    // if(RobotContainer.elevator.getTopLimit()) {
+    //   stop = true;
+    // }
 
     // if(RobotContainer.elevator.getLowerLimit()) {
     //   stop = true;
     // }
-    RobotContainer.elevator.driveElevatorPercent(voltage);
+    // RobotContainer.elevator.driveElevatorPercent(voltage);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.elevator.driveElevatorPercent(0);
+    // RobotContainer.elevator.driveElevatorPercent(0);
   }
 
   // Returns true when the command should end.
