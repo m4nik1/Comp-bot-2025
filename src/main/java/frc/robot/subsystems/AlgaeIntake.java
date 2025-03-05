@@ -4,16 +4,17 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.hardware.TalonFXS;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class AlgaeIntake extends SubsystemBase {
   /** Creates a new AlgaeIntake. */
-  TalonFX AlgaeRun;
+  TalonFXS AlgaeRun;
+  
   public AlgaeIntake() {
-   AlgaeRun = new TalonFX(46);
+   AlgaeRun = new TalonFXS(36);
   }
   @Override
   public void periodic() {

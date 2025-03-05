@@ -14,6 +14,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ElmCityKrakenModule extends SubsystemBase {
@@ -109,5 +110,7 @@ public class ElmCityKrakenModule extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("Mod angle " + modNum, angleMotor.getPosition().getValueAsDouble());
+    SmartDashboard.putNumber("Mod Pos " + modNum, driveMotor.getPosition().getValueAsDouble());
   }
 }
