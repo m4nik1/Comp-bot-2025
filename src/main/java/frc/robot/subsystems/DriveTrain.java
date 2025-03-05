@@ -35,11 +35,10 @@ public class DriveTrain extends SubsystemBase {
 
   public DriveTrain() {
     elmCityModules = new ElmCityModule[] {
-      // Remember to Set angle 
-      new ElmCityModule(0, 1, 2, 0, Constants.angleOffsetMod0, InvertedValue.CounterClockwise_Positive, InvertedValue.Clockwise_Positive),
-      // new ElmCityKrakenModule(1, 15, 14, 25, Constants.angleOffsetMod1, InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive),
-      // new ElmCityKrakenModule(2, 1, 2, 26, Constants.angleOffsetMod2, InvertedValue.CounterClockwise_Positive, InvertedValue.Clockwise_Positive),
-      // new ElmCityKrakenModule(3, 4, 3, 27, Constants.angleOffsetMod3, InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive)
+      new ElmCityModule(0, 8, 7, , Constants.angleOffsetMod0,InvertedValue.CounterClockwise_Positive, InvertedValue.Clockwise_Positive),
+      new ElmCityModule(1, 10, 9, Constants.angleOffsetMod1 ,InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive),
+      new ElmCityModule(2, 17, 18, Constants.angleOffsetMod2, InvertedValue.CounterClockwise_Positive, InvertedValue.Clockwise_Positive),
+      new ElmCityModule(3, 20, 19, Constants.angleOffsetMod3, InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive)
     };
 
     gyro = new Pigeon2(Constants.pigeonID);
