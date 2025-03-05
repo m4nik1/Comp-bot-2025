@@ -42,7 +42,13 @@ public class DriveTrain extends SubsystemBase {
       new ElmCityModule(3, 17, 18, 2, Constants.angleOffsetMod2, InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive),
     };
 
+    
+
     gyro = new Pigeon2(Constants.pigeonID);
+
+    odom = new SwerveDrivePoseEstimator(Constants.swerveKinematics, getYaw(), getPositions(), new Pose2d());
+
+    robotPose = getPose();
     
     resetGyro();
   }
@@ -59,6 +65,10 @@ public class DriveTrain extends SubsystemBase {
     }
 
     return positions;
+  }
+
+  public Pose2d getPose() {
+    return odom.getEstimatedPosition(); // returns pose in meters
   }
 
 
@@ -97,6 +107,10 @@ public class DriveTrain extends SubsystemBase {
     elmCityModules[0].goToAngle(deg);
   }
 
+  public void updateOdometry() {
+    odom.update(getYaw(), getPositions());
+  }
+
   public void setDriveVelocity(double vel) {
     for(ElmCityModule m : elmCityModules) {
       m.runVelocity(vel);
@@ -108,7 +122,7 @@ public class DriveTrain extends SubsystemBase {
   public void periodic() {
 
     // First update pose with vision and other sensors
-    // updatePose();
+    updateOdometry();
 
     // Updates the robot pose for the Robot itself
     SmartDashboard.putNumber("Robot Angle", getRobotAngle());
