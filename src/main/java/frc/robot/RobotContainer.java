@@ -43,10 +43,4 @@ public class RobotContainer {
   public static double getRightY() {
     return controller.getRightY();
   }
-
-
-  // public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    // return Autos.exampleAuto(m_exampleSubsystem);
-  // }
 }

@@ -5,17 +5,20 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFXS;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class AlgaeIntake extends SubsystemBase {
   /** Creates a new AlgaeIntake. */
-  TalonFXS AlgaeRun;
+  TalonFXS algaeRun;
   
   public AlgaeIntake() {
-   AlgaeRun = new TalonFXS(36);
+   algaeRun = new TalonFXS(36);
   }
+
+  public void runIntake(double speed) {
+    algaeRun.set(speed);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
