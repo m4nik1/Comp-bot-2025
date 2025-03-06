@@ -68,8 +68,9 @@ public class ElmCityModule extends SubsystemBase {
     configAngleMotor(angleInvert);
 
     driveMotor.setPosition(0.0);
+    angleMotor.setPosition(0);
     lastAngle = Rotation2d.fromDegrees(0);
-    resetToAbsolute();
+    // resetToAbsolute();
   }
 
   public void configDriveMotor(InvertedValue drive) {
@@ -119,6 +120,7 @@ public class ElmCityModule extends SubsystemBase {
     angleConfig.Slot0.kD = Constants.angleD;
 
     angleMotor.getConfigurator().apply(angleConfig);
+    goToAngle(0);
   }
 
   public void resetToAbsolute() {
@@ -232,30 +234,19 @@ public class ElmCityModule extends SubsystemBase {
     return new SwerveModuleState(driveMotor.getVelocity().getValueAsDouble(), Rotation2d.fromRotations(getAngle()));
   }
 
-  // public void zeroAngleCoders() {
-  //   nacCoder.get();
-  // }
-
   public double getDrivePosMeters() {
     double velocity = driveMotor.getPosition().getValueAsDouble() * Constants.wheelCircum;
 
     return velocity;
   }
 
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Module Angle " + modNum, getAngleDegrees());
-    // SmartDashboard.putNumber("Encoder " + modNum, getNac());
     SmartDashboard.putNumber("Distance (M)" + modNum, getDrivePosMeters());
     SmartDashboard.putNumber("Nac coder rot " + modNum, getNac());
     SmartDashboard.putNumber("Mod vel " + modNum, getDriveVelocityConversion());
-    // SmartDashboard.putNumber("Swerve Velocity " + modNum, getDriveVelocityConversion());
-    // SmartDashboard.putNumber("Drive Distance " + modNum, getDrivePosConversion());
-    // SmartDashboard.putNumber("Drive Velocity Wanted" + modNum, velocitySet);
-    // SmartDashboard.putNumber("Swerve Motor Voltage " + modNum, driveMotor.getMotorVoltage().getValueAsDouble());
-    // SmartDashboard.putNumber("Swerve Motor Supply " + modNum, driveMotor.getSupplyVoltage().getValueAsDouble());
-    // SmartDashboard.putNumber("Nac Angle " + modNum, getNac());
-    // SmartDashboard.putNumber("Rotation 90", Rotation2d.fromDegrees(90).getRotations());
   }
 }
