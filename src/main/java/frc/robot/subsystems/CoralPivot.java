@@ -78,9 +78,10 @@ public class CoralPivot extends SubsystemBase {
 
   public void setPivot(double pos) {
     // double pidCalculate = pivotPID.calculate(pivotCoder.getPosition(), pos);
+    double anglePivot = getPivotCoder() * (1/9) * 180;
     double kP = 0.001;
     double kG = 0.0195;
-    double pidCalculate = -(kP * (Math.abs(getPivotCoder()) - pos) + kG * Math.cos(getPivotCoder()));
+    double pidCalculate = kP * (Math.abs(pos - getPivotCoder())) + kG * Math.sin(anglePivot);
 
     SmartDashboard.putNumber("PIDCalculated", pidCalculate);
 

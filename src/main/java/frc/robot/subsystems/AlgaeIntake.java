@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class AlgaeIntake extends SubsystemBase {
   /** Creates a new AlgaeIntake. */
   TalonFXS algaeRun;
+
+  // Make sure elevator is at 8 inches off top of bumper
   
   public AlgaeIntake() {
    algaeRun = new TalonFXS(36);
