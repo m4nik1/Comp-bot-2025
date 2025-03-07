@@ -39,9 +39,9 @@ public class TeleopDrive extends Command {
 
     speedMultiplier = Constants.speedMultiTeleop;
 
-    double translationVal = translateLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(-getY, .08));
-    double strafeVal = strafeLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(-getX, .09));
-    double rotationVal = rotationLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(-getRotation, .08));
+    double translationVal = translateLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getY, .08)); // getY was negativeß
+    double strafeVal = strafeLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getX, .09)); // getX was negative
+    double rotationVal = rotationLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getRotation, .08)); // getRotation was negative
 
     Translation2d translation = new Translation2d(translationVal, strafeVal);
 

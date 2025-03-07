@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -30,7 +31,7 @@ public class DriveTrain extends SubsystemBase {
   Pigeon2 gyro;
   Pose2d robotPose;
 
-  SwerveDrivePoseEstimator odom;
+  SwerveDriveOdometry odom;
   Field2d field;
 
 
@@ -44,6 +45,8 @@ public class DriveTrain extends SubsystemBase {
 
     gyro = new Pigeon2(Constants.pigeonID);
     
+    odom = new SwerveDriveOdometry(Constants.swerveKinematics, getYaw(), getPositions());
+
     resetGyro();
   }
 
@@ -109,6 +112,7 @@ public class DriveTrain extends SubsystemBase {
 
     // First update pose with vision and other sensors
     // updatePose();
+    odom.update(getYaw(), getPositions());
 
     // Updates the robot pose for the Robot itself
     SmartDashboard.putNumber("Robot Angle", getRobotAngle());

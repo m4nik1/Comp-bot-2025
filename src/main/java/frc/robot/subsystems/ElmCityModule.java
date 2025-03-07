@@ -68,9 +68,9 @@ public class ElmCityModule extends SubsystemBase {
     configAngleMotor(angleInvert);
 
     driveMotor.setPosition(0.0);
-    angleMotor.setPosition(0.0);
-    lastAngle = Rotation2d.fromDegrees(0);
-    // resetToAbsolute(); 
+    // angleMotor.setPosition(0.0);
+    resetToAbsolute(); 
+    lastAngle = getState().angle;
   }
 
   public void configDriveMotor(InvertedValue drive) {
