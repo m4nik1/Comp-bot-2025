@@ -37,15 +37,15 @@ public class DriveTrain extends SubsystemBase {
 
   public DriveTrain() {
     elmCityModules = new ElmCityModule[] {
-      new ElmCityModule(0, 8, 7, 0,Constants.angleOffsetMod0,InvertedValue.CounterClockwise_Positive, InvertedValue.Clockwise_Positive),
-      new ElmCityModule(1, 20, 19, 2, Constants.angleOffsetMod1, InvertedValue.CounterClockwise_Positive, InvertedValue.Clockwise_Positive),
-      new ElmCityModule(2, 10, 9, 1, Constants.angleOffsetMod2 ,InvertedValue.CounterClockwise_Positive, InvertedValue.Clockwise_Positive),
-      new ElmCityModule(3, 17, 18, 3, Constants.angleOffsetMod3, InvertedValue.CounterClockwise_Positive, InvertedValue.Clockwise_Positive),
+      new ElmCityModule(0, 8, 7, 0,Constants.angleOffsetMod0,InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive),
+      new ElmCityModule(1, 20, 19, 2, Constants.angleOffsetMod1, InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive),
+      new ElmCityModule(2, 10, 9, 1, Constants.angleOffsetMod2 ,InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive),
+      new ElmCityModule(3, 17, 18, 3, Constants.angleOffsetMod3, InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive),
     };
 
     gyro = new Pigeon2(Constants.pigeonID);
     
-    odom = new SwerveDriveOdometry(Constants.swerveKinematics, getYaw(), getPositions());
+    // odom = new SwerveDriveOdometry(Constants.swerveKinematics, getYaw(), getPositions());
 
     resetGyro();
   }
@@ -112,7 +112,7 @@ public class DriveTrain extends SubsystemBase {
 
     // First update pose with vision and other sensors
     // updatePose();
-    odom.update(getYaw(), getPositions());
+    // odom.update(getYaw(), getPositions());
 
     // Updates the robot pose for the Robot itself
     SmartDashboard.putNumber("Robot Angle", getRobotAngle());

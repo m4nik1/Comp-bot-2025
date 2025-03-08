@@ -43,10 +43,10 @@ public final class Constants {
   public static final double driveKv = 2.0; // 6.4 is the voltage for max speed per module divde by 6.4 plz
   public static final double drivekA = .20; // 6.4 is the voltage for max speed per module
   
-  public static final Rotation2d angleOffsetMod0 = Rotation2d.fromRotations(0.0278);
-  public static final Rotation2d angleOffsetMod1 = Rotation2d.fromRotations(0.5159);
-  public static final Rotation2d angleOffsetMod2 = Rotation2d.fromRotations(0.6293);
-  public static final Rotation2d angleOffsetMod3 = Rotation2d.fromRotations(0.1737);
+  public static final Rotation2d angleOffsetMod0 = Rotation2d.fromRotations(0.0240);
+  public static final Rotation2d angleOffsetMod1 = Rotation2d.fromRotations(0.5153);
+  public static final Rotation2d angleOffsetMod2 = Rotation2d.fromRotations(0.6416);
+  public static final Rotation2d angleOffsetMod3 = Rotation2d.fromRotations(0.6968);
 
   public static final boolean driveStatorEnable = true;
   public static final double driveStatorCurrentLimit = 60;

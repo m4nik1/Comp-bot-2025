@@ -42,6 +42,7 @@ public class ElmCityModule extends SubsystemBase {
   Rotation2d lastAngle;
   Rotation2d offset;
   InvertedValue driveInverted;
+  int resetTimeout_MS;
 
   public ElmCityModule(int moduleNumber, int driveID, int angleID, int nacID, Rotation2d givenOffset,
       InvertedValue driveInvert,
@@ -56,6 +57,7 @@ public class ElmCityModule extends SubsystemBase {
     nacCoder = new AnalogEncoder(nacID);
 
     velocitySet = 0;
+    resetTimeout_MS = 20;
 
     // 0 is default position
     anglePosition.Slot = 0;
@@ -67,10 +69,10 @@ public class ElmCityModule extends SubsystemBase {
     configDriveMotor(driveInvert);
     configAngleMotor(angleInvert);
 
-    driveMotor.setPosition(0.0);
-    // angleMotor.setPosition(0.0);
-    resetToAbsolute(); 
-    lastAngle = getState().angle;
+    driveMotor.setPosition(0.0, resetTimeout_MS);
+    angleMotor.setPosition(0, 20);
+    // resetToAbsolute(); 
+    lastAngle = Rotation2d.fromDegrees(0);
   }
 
   public void configDriveMotor(InvertedValue drive) {
@@ -94,7 +96,7 @@ public class ElmCityModule extends SubsystemBase {
     driveConfig.Slot0.kD = Constants.driveKd;
 
     driveMotor.getConfigurator().apply(driveConfig);
-    driveMotor.getConfigurator().setPosition(0.0);
+    driveMotor.getConfigurator().setPosition(0.0, resetTimeout_MS);
 
 
   }

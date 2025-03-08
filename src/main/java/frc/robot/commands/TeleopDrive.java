@@ -33,9 +33,9 @@ public class TeleopDrive extends Command {
   @Override
   public void execute() {
     double speedMultiplier = Constants.speedMultiTeleop;
-    double getX = RobotContainer.getLeftX();
-    double getY = RobotContainer.getLeftY();
-    double getRotation = RobotContainer.getRightX();
+    double getX = -RobotContainer.getLeftX();
+    double getY = -RobotContainer.getLeftY();
+    double getRotation = -RobotContainer.getRightX();
 
     speedMultiplier = Constants.speedMultiTeleop;
 

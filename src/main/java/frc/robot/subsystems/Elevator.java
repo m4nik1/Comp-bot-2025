@@ -44,12 +44,16 @@ public class Elevator extends SubsystemBase {
   }
 
   public void configElevatorMotor() {
-    
+    TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
     elevatorMotor.getConfigurator().apply(new TalonFXConfiguration());
     elevatorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
     elevatorConfig.Feedback.SensorToMechanismRatio = 1/25;
     elevatorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     
+
+    elevatorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
+    elevatorConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
+
     elevatorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     elevatorConfig.CurrentLimits.StatorCurrentLimit = 60;
     elevatorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;

@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.commands.AlgaeIn;
 import frc.robot.commands.AlgaeOut;
+import frc.robot.commands.AngleSet;
 import frc.robot.commands.CoralIn;
 import frc.robot.commands.CoralOut;
 import frc.robot.commands.Elevator_L2;
@@ -64,8 +65,8 @@ public class RobotContainer {
 
     SmartDashboard.putData("Field", field);
 
-    // driveTrain.setDefaultCommand(new TeleopDrive());
-    elevator.setDefaultCommand(new RunElevatorManual());
+    driveTrain.setDefaultCommand(new TeleopDrive());
+    // elevator.setDefaultCommand(new RunElevatorManual());
     // coralIntake.setDefaultCommand(new RunCoralIntake())/;
     // coralPivot.setDefaultCommand(new RunPivotManual());
 
@@ -76,8 +77,9 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+    driver.a().onTrue(new AngleSet());
     // operator.a().onTrue(new SetCoralPivot());
-    operator.b().whileTrue(new Elevator_L2());
+    // operator.b().whileTrue(new Elevator_L2());
     // operator.a().whileTrue(new CoralOut());
     // operator.b().whileTrue(new CoralIn());
     // operator.y().whileTrue(new AlgaeIn());
