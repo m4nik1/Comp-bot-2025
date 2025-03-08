@@ -57,6 +57,16 @@ public final class Constants {
   // CAN ID's
   public static final int pigeonID = 21;
 
+  public static double elevator_l2 = 40;
+  public static double elevator_l3 = 66.3;
+  public static double elevator_l4  = 128.38;
+  public static double elevator_HP = 14.3;
+
+  public static double pivot_HP = .893;
+  public static double pivot_score = 3.82;
+  // public static double pivot_l4 = null; 
+
+
   public static final double driveKp = 2;
   public static final double driveKi = 0.0;
   public static final double driveKd = 0;
