@@ -17,7 +17,7 @@ import frc.robot.subsystems.Elevator;
 public class RobotContainer {
 
   public static DriveTrainKrakens driveTrain = new DriveTrainKrakens();
-  // public static Elevator elevator = new Elevator();
+  public static Elevator elevator = new Elevator();
   // public static CoralIntake coralIntake = new CoralIntake();
   // public static AlgaeIntake algaeIntake = new AlgaeIntake();
 

@@ -22,9 +22,7 @@ public class Elevator extends SubsystemBase {
 
   DigitalInput TopElevatorLimit;
   DigitalInput LowerLimit;
-  TalonFXConfiguration elevatorConfig;
-
-
+  
   public Elevator() {
     voltage = new VoltageOut(0);
 
@@ -32,15 +30,14 @@ public class Elevator extends SubsystemBase {
 
     TopElevatorLimit = new DigitalInput(4);
     LowerLimit = new DigitalInput(0);
-    elevatorConfig = new TalonFXConfiguration();
 
     elevatorMotor.setPosition(0);
 
-    // configElevatorMotor();
+    configElevatorMotor();
   }
 
   public void configElevatorMotor() {
-    
+    TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
     elevatorMotor.getConfigurator().apply(new TalonFXConfiguration());
     elevatorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
     elevatorConfig.Feedback.SensorToMechanismRatio = 1/25;
