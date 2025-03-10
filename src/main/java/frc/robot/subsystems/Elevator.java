@@ -23,7 +23,6 @@ public class Elevator extends SubsystemBase {
 
   DigitalInput TopElevatorLimit;
   DigitalInput LowerLimit;
-  TalonFXConfiguration elevatorConfig;
   MotionMagicVoltage elevatorMagic;
 
 
@@ -34,7 +33,6 @@ public class Elevator extends SubsystemBase {
 
     TopElevatorLimit = new DigitalInput(4);
     LowerLimit = new DigitalInput(0);
-    elevatorConfig = new TalonFXConfiguration();
 
     elevatorMotor.setPosition(0);
 

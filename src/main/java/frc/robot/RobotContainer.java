@@ -34,11 +34,11 @@ public class RobotContainer {
 
   // private SendableChooser<Command> autoChooser;
 
-  public static DriveTrain driveTrain = new DriveTrain();
-  public static Elevator elevator = new Elevator();
-  public static CoralIntake coralIntake = new CoralIntake();
-  public static CoralPivot coralPivot = new CoralPivot();
-  public static AlgaeIntake algaeIntake = new AlgaeIntake();
+  public static DriveTrain driveTrain;
+  public static Elevator elevator;
+  public static CoralIntake coralIntake;
+  public static CoralPivot coralPivot;
+  public static AlgaeIntake algaeIntake;
 
   static CommandXboxController driver = new CommandXboxController(0);
   static CommandXboxController operator = new CommandXboxController(1);
@@ -48,6 +48,11 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
+    driveTrain = new DriveTrain();
+    elevator = new Elevator();
+    coralIntake = new CoralIntake();
+    coralPivot = new CoralPivot();
+    algaeIntake = new AlgaeIntake();
 
     field = new Field2d();
 
