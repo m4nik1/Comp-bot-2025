@@ -39,6 +39,7 @@ public class TeleopDrive extends Command {
 
     speedMultiplier = Constants.speedMultiTeleop;
 
+    // Remember all these values from the stick are negative
     double translationVal = translateLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getY, .08)); // getY was negativeß
     double strafeVal = strafeLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getX, .09)); // getX was negative
     double rotationVal = rotationLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getRotation, .08)); // getRotation was negative

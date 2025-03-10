@@ -20,6 +20,7 @@ import frc.robot.subsystems.CoralIntake;
 import frc.robot.subsystems.CoralPivot;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Vision;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.PathPlannerLogging;
@@ -39,6 +40,7 @@ public class RobotContainer {
   public static CoralIntake coralIntake;
   public static CoralPivot coralPivot;
   public static AlgaeIntake algaeIntake;
+  public static Vision photonVision;
 
   static CommandXboxController driver = new CommandXboxController(0);
   static CommandXboxController operator = new CommandXboxController(1);
@@ -53,6 +55,7 @@ public class RobotContainer {
     coralIntake = new CoralIntake();
     coralPivot = new CoralPivot();
     algaeIntake = new AlgaeIntake();
+    photonVision = new Vision();
 
     field = new Field2d();
 
@@ -72,7 +75,7 @@ public class RobotContainer {
 
     driveTrain.setDefaultCommand(new TeleopDrive());
     // elevator.setDefaultCommand(new RunElevatorManual());
-    // coralIntake.setDefaultCommand(new RunCoralIntake())/;
+    // coralIntake.setDefaultCommand(new RunCoralIntake());
     // coralPivot.setDefaultCommand(new RunPivotManual());
 
     configureBindings();
