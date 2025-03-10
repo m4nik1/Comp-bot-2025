@@ -14,11 +14,14 @@ public class GenerateReefPoses {
     double FieldWidth = 317;
     double ReefWidth = 65.5;
     double coralBranchSpacing = 13;
+    double robotCoralIntake = 10;
+
+
+    double radius_reef = (ReefWidth/2) + 10;
 
     double reefX;
-    double reefY;
-ß
+    double reefY = 158.5;
+
     public void GenerateReefPoses() {
-        
     }
 }
