@@ -4,17 +4,21 @@
 
 package frc.robot;
 
-import frc.robot.commands.AlgaeIn;
-import frc.robot.commands.AlgaeOut;
+import frc.robot.commands.AimAndTarget;
 import frc.robot.commands.AngleSet;
-import frc.robot.commands.CoralIn;
-import frc.robot.commands.CoralOut;
-import frc.robot.commands.Elevator_L2;
 import frc.robot.commands.RunCoralIntake;
 import frc.robot.commands.RunElevatorManual;
 import frc.robot.commands.RunPivotManual;
-import frc.robot.commands.SetCoralPivot;
+import frc.robot.commands.CoralPivot90;
 import frc.robot.commands.TeleopDrive;
+import frc.robot.commands.Elevator_Postions.Elevator_HP;
+import frc.robot.commands.Elevator_Postions.Elevator_L2;
+import frc.robot.commands.Elevator_Postions.Elevator_L3;
+import frc.robot.commands.Elevator_Postions.Elevator_L4;
+import frc.robot.commands.Intakes.AlgaeIn;
+import frc.robot.commands.Intakes.AlgaeOut;
+import frc.robot.commands.Intakes.CoralIn;
+import frc.robot.commands.Intakes.CoralOut;
 import frc.robot.subsystems.AlgaeIntake;
 import frc.robot.subsystems.CoralIntake;
 import frc.robot.subsystems.CoralPivot;
@@ -59,39 +63,35 @@ public class RobotContainer {
 
     field = new Field2d();
 
-    // PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
-    //   field.setRobotPose(pose);
-    // });
-
-    // PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
-    //   field.getObject("target pose").setPose(pose);
-    // });
-
-    // PathPlannerLogging.setLogActivePathCallback((poses) -> {
-    //   field.getObject("path").setPoses(poses);
-    // });
-
     SmartDashboard.putData("Field", field);
 
     driveTrain.setDefaultCommand(new TeleopDrive());
-    // elevator.setDefaultCommand(new RunElevatorManual());
-    // coralIntake.setDefaultCommand(new RunCoralIntake());
-    // coralPivot.setDefaultCommand(new RunPivotManual());
+    elevator.setDefaultCommand(new RunElevatorManual());
+    coralPivot.setDefaultCommand(new RunPivotManual());
 
     configureBindings();
 
-    // autoChooser = AutoBuilder.buildAutoChooser("Do Nothing");
-    // SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   private void configureBindings() {
-    driver.a().onTrue(new AngleSet());
-    // operator.a().onTrue(new SetCoralPivot());
-    // operator.b().whileTrue(new Elevator_L2());
-    // operator.a().whileTrue(new CoralOut());
-    // operator.b().whileTrue(new CoralIn());
-    // operator.y().whileTrue(new AlgaeIn());
-    // operator.x().whileTrue(new AlgaeOut());
+    // driver.a().onTrue(new AngleSet());
+    // driver.a().onTrue(new AimAndTarget());
+    
+
+    // Elevator Positions - Find out what btn should be elevator ground
+    operator.b().onTrue(new Elevator_L2());
+    operator.a().onTrue(new Elevator_L3());
+    operator.y().onTrue(new Elevator_L4());
+    operator.x().onTrue(new Elevator_HP());
+
+    // Coral and Algae Intakes
+    operator.leftTrigger().onTrue(new AlgaeIn());
+    operator.leftBumper().onTrue(new AlgaeOut());
+
+    operator.rightTrigger().onTrue(new CoralIn());
+    operator.rightBumper().onTrue(new CoralOut());
+
+
   }
 
   public static double getLeftYOp() {
@@ -111,8 +111,8 @@ public class RobotContainer {
     return driver.getRightX();
   }
 
-  public static boolean getABtn() {
-    return operator.a().getAsBoolean();
+  public static boolean getStartBtn() {
+    return operator.start().getAsBoolean();
   }
 
   public static double getLeftX() {

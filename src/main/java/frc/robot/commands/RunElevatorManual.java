@@ -27,18 +27,18 @@ public class RunElevatorManual extends Command {
   @Override
   public void execute() {
 
-    // if(RobotContainer.getABtn()) {
+    if(RobotContainer.getStartBtn()) {
       double speed = -RobotContainer.getLeftYOp();
 
       if(RobotContainer.elevator.getTopLimit()) {
         stop = true;
       }
 
-      // if(RobotContainer.elevator.getLowerLimit()) {
-      //   stop = true;
-      // }
+      if(RobotContainer.elevator.getLowerLimit()) {
+        stop = true;
+      }
       RobotContainer.elevator.driveElevatorPercent(speed);
-    // }
+    }
   }
 
   // Called once the command ends or is interrupted.

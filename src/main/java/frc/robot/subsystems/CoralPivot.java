@@ -65,7 +65,7 @@ public class CoralPivot extends SubsystemBase {
 
   public void runPivotManual(double speed) {
     referenceSet = false;
-    pivotPoint.set(speed * 0.10);
+    pivotPoint.set(speed * 0.15);
   }
 
   public double getPivotCoder() {
