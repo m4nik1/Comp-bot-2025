@@ -59,7 +59,7 @@ public final class Constants {
 
   public static double elevator_l2 = 40;
   public static double elevator_l3 = 66.3;
-  public static double elevator_l4  = 128.38;
+  public static double elevator_l4  = 124;
   public static double elevator_HP = 14.3;
 
   public static double pivot_HP = .893;

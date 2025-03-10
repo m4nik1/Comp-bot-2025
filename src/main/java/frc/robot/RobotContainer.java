@@ -67,7 +67,7 @@ public class RobotContainer {
 
     driveTrain.setDefaultCommand(new TeleopDrive());
     elevator.setDefaultCommand(new RunElevatorManual());
-    coralPivot.setDefaultCommand(new RunPivotManual());
+    // coralPivot.setDefaultCommand(new RunPivotManual());
 
     configureBindings();
 
@@ -80,13 +80,14 @@ public class RobotContainer {
 
     // Elevator Positions - Find out what btn should be elevator ground
     operator.b().onTrue(new Elevator_L2());
-    operator.a().onTrue(new Elevator_L3());
+    operator.x().onTrue(new Elevator_L3());
+    operator.start().whileTrue(new RunElevatorManual());
     operator.y().onTrue(new Elevator_L4());
-    operator.x().onTrue(new Elevator_HP());
+    operator.a().onTrue(new Elevator_HP());
 
     // Coral and Algae Intakes
-    operator.leftTrigger().onTrue(new AlgaeIn());
-    operator.leftBumper().onTrue(new AlgaeOut());
+    operator.leftTrigger().whileTrue(new AlgaeIn());
+    operator.leftBumper().whileTrue(new AlgaeOut());
 
     operator.rightTrigger().onTrue(new CoralIn());
     operator.rightBumper().onTrue(new CoralOut());
