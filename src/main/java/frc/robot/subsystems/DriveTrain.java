@@ -36,7 +36,7 @@ public class DriveTrain extends SubsystemBase {
   Pigeon2 gyro;
   Pose2d robotPose;
 
-  SwerveDriveOdometry odom;
+  SwerveDrivePoseEstimator odom;
   Field2d field;
   RobotConfig autoConfig;
 
@@ -54,6 +54,7 @@ public class DriveTrain extends SubsystemBase {
     gyro = new Pigeon2(Constants.pigeonID);
 
     odom = new SwerveDrivePoseEstimator(Constants.swerveKinematics, getYaw(), getPositions(), new Pose2d());
+
     try {
       autoConfig = RobotConfig.fromGUISettings();
     } catch(Exception e) {
@@ -180,12 +181,7 @@ public class DriveTrain extends SubsystemBase {
   public void periodic() {
 
     // First update pose with vision and other sensors
-<<<<<<< HEAD
     updateOdometry();
-=======
-    // updatePose();
-    // odom.update(getYaw(), getPositions());
->>>>>>> c7fa0a7acf1dc5323aa3e3255c390a75fd584832
 
     // Updates the robot pose for the Robot itself
     SmartDashboard.putNumber("Robot Angle", getRobotAngle());

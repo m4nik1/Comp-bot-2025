@@ -20,12 +20,6 @@ import frc.robot.subsystems.CoralIntake;
 import frc.robot.subsystems.CoralPivot;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
-
-<<<<<<< HEAD
-import java.lang.reflect.Field;
-
-=======
->>>>>>> c7fa0a7acf1dc5323aa3e3255c390a75fd584832
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
@@ -36,13 +30,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class RobotContainer {
-
-<<<<<<< HEAD
-  Field2d field;
   private SendableChooser<Command> autoChooser;
-=======
-  // private SendableChooser<Command> autoChooser;
->>>>>>> c7fa0a7acf1dc5323aa3e3255c390a75fd584832
 
   public static DriveTrain driveTrain = new DriveTrain();
   public static Elevator elevator = new Elevator();
@@ -60,7 +48,6 @@ public class RobotContainer {
     // Configure the trigger bindings
 
     field = new Field2d();
-<<<<<<< HEAD
     
     PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
       field.setRobotPose(pose);
@@ -81,23 +68,6 @@ public class RobotContainer {
     autoChooser = AutoBuilder.buildAutoChooser("Do Nothing");
     SmartDashboard.putData("AutoChooser", autoChooser);
 
-=======
-
-    // PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
-    //   field.setRobotPose(pose);
-    // });
-
-    // PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
-    //   field.getObject("target pose").setPose(pose);
-    // });
-
-    // PathPlannerLogging.setLogActivePathCallback((poses) -> {
-    //   field.getObject("path").setPoses(poses);
-    // });
-
-    SmartDashboard.putData("Field", field);
-
->>>>>>> c7fa0a7acf1dc5323aa3e3255c390a75fd584832
     driveTrain.setDefaultCommand(new TeleopDrive());
     // elevator.setDefaultCommand(new RunElevatorManual());
     // coralIntake.setDefaultCommand(new RunCoralIntake())/;
