@@ -4,7 +4,13 @@
 
 package frc.robot;
 
+import java.util.List;
+import java.util.Optional;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 /** Add your docs here. */
 public class GenerateReefPoses {
@@ -14,14 +20,43 @@ public class GenerateReefPoses {
     double FieldWidth = 317;
     double ReefWidth = 65.5;
     double coralBranchSpacing = 13;
-    double robotCoralIntake = 10;
+    double robotCoralIntake = 10; // This is the offset of the coral intake length wise
 
 
-    double radius_reef = (ReefWidth/2) + 10;
+    double radius_reef = (ReefWidth/2) + robotCoralIntake;
 
     double reefX;
     double reefY = 158.5;
 
-    public void GenerateReefPoses() {
+    public GenerateReefPoses() {
+        var alliance = DriverStation.getAlliance();
+
+        if(alliance.get() == DriverStation.Alliance.Red) {
+            reefX = 690 - (144 + (65.2/2));
+        } 
+        else {
+            reefX = 144 + (65.5/2);
+        }
+    }
+
+    public Translation2d calculateAlgaePose(double theta) {
+        double algaeX = reefX + (radius_reef * Math.cos(theta));
+        double algaeY = reefY + (radius_reef * Math.sin(theta));
+
+        return new Translation2d(algaeX, algaeY);
+    }
+
+    public Translation2d calculateCoralLeft(double theta) {
+        double coralX = (reefX + (radius_reef * Math.cos(theta))) + ((coralBranchSpacing/2)*Math.cos(theta-Math.PI/2));
+        double coralY = (reefX + (radius_reef * Math.sin(theta))) + ((coralBranchSpacing/2)*Math.sin(theta-Math.PI/2));
+
+        return new Translation2d(coralX, coralY);
+    }
+
+    public Translation2d calculateCoralRight(double theta) {
+        double coralX = (reefX + (radius_reef * Math.cos(theta))) + ((coralBranchSpacing/2)*Math.cos(theta+Math.PI/2));
+        double coralY = (reefX + (radius_reef * Math.sin(theta))) + ((coralBranchSpacing/2)*Math.sin(theta+Math.PI/2));
+
+        return new Translation2d(coralX, coralY);
     }
 }
