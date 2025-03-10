@@ -22,7 +22,7 @@ public class SetCoralPivot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.coralPivot.setPivot(0);
+    RobotContainer.coralPivot.setPivot(3);
   }
 
   // Called once the command ends or is interrupted.

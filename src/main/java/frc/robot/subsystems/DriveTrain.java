@@ -19,6 +19,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -35,17 +36,17 @@ public class DriveTrain extends SubsystemBase {
   Pigeon2 gyro;
   Pose2d robotPose;
 
-  SwerveDrivePoseEstimator odom;
+  SwerveDriveOdometry odom;
   Field2d field;
   RobotConfig autoConfig;
 
 
   public DriveTrain() {
     elmCityModules = new ElmCityModule[] {
-      new ElmCityModule(0, 8, 7, 0,Constants.angleOffsetMod0,InvertedValue.CounterClockwise_Positive, InvertedValue.Clockwise_Positive),
-      new ElmCityModule(1, 20, 19, 3, Constants.angleOffsetMod1, InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive),
-      new ElmCityModule(2, 10, 9, 1, Constants.angleOffsetMod2 ,InvertedValue.CounterClockwise_Positive, InvertedValue.Clockwise_Positive),
-      new ElmCityModule(3, 17, 18, 2, Constants.angleOffsetMod3, InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive),
+      new ElmCityModule(0, 8, 7, 0,Constants.angleOffsetMod0,InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive),
+      new ElmCityModule(1, 20, 19, 2, Constants.angleOffsetMod1, InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive),
+      new ElmCityModule(2, 10, 9, 1, Constants.angleOffsetMod2 ,InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive),
+      new ElmCityModule(3, 17, 18, 3, Constants.angleOffsetMod3, InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive),
     };
 
     
@@ -82,6 +83,8 @@ public class DriveTrain extends SubsystemBase {
 
     robotPose = getPose();
     
+    // odom = new SwerveDriveOdometry(Constants.swerveKinematics, getYaw(), getPositions());
+
     resetGyro();
   }
 
@@ -177,7 +180,12 @@ public class DriveTrain extends SubsystemBase {
   public void periodic() {
 
     // First update pose with vision and other sensors
+<<<<<<< HEAD
     updateOdometry();
+=======
+    // updatePose();
+    // odom.update(getYaw(), getPositions());
+>>>>>>> c7fa0a7acf1dc5323aa3e3255c390a75fd584832
 
     // Updates the robot pose for the Robot itself
     SmartDashboard.putNumber("Robot Angle", getRobotAngle());

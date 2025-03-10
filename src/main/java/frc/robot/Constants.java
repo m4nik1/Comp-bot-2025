@@ -19,14 +19,14 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
     // Swerve system constants
-  public static final double wheelBase = Units.inchesToMeters(23);
-  public static final double trackWidth = Units.inchesToMeters(18);
+  public static final double wheelBase = Units.inchesToMeters(21);
+  public static final double trackWidth = Units.inchesToMeters(21);
   public static final double driveBaseRadius = Math.hypot(wheelBase / 2.0, trackWidth / 2.0);
   public static final double wheelDia = Units.inchesToMeters(4.0);
   public static final double wheelCircum = Units.inchesToMeters(4.0) * Math.PI;
   public static final double driveRatio = 6.75;
   public static final double angleRatio = 150.0 / 7.0;
-  public static final double speedMultiTeleop = 0.7;
+  public static final double speedMultiTeleop = 0.5;
   public static final double speedTurboTeleop = .85;
   public static final double maxSpeed = 4; // meters per second
   public static final double maxAngularSpd = 5;
@@ -43,10 +43,10 @@ public final class Constants {
   public static final double driveKv = 2.0; // 6.4 is the voltage for max speed per module divde by 6.4 plz
   public static final double drivekA = .20; // 6.4 is the voltage for max speed per module
   
-  public static final Rotation2d angleOffsetMod0 = Rotation2d.fromRotations(0.0362);
-  public static final Rotation2d angleOffsetMod1 = Rotation2d.fromRotations(0.1984);
-  public static final Rotation2d angleOffsetMod2 = Rotation2d.fromRotations(0.6485);
-  public static final Rotation2d angleOffsetMod3 = Rotation2d.fromRotations(0.4945);
+  public static final Rotation2d angleOffsetMod0 = Rotation2d.fromRotations(0.0240);
+  public static final Rotation2d angleOffsetMod1 = Rotation2d.fromRotations(0.5153);
+  public static final Rotation2d angleOffsetMod2 = Rotation2d.fromRotations(0.6416);
+  public static final Rotation2d angleOffsetMod3 = Rotation2d.fromRotations(0.6968);
 
   public static final boolean driveStatorEnable = true;
   public static final double driveStatorCurrentLimit = 60;
@@ -56,6 +56,16 @@ public final class Constants {
 
   // CAN ID's
   public static final int pigeonID = 21;
+
+  public static double elevator_l2 = 40;
+  public static double elevator_l3 = 66.3;
+  public static double elevator_l4  = 128.38;
+  public static double elevator_HP = 14.3;
+
+  public static double pivot_HP = .893;
+  public static double pivot_score = 3.82;
+  // public static double pivot_l4 = null; 
+
 
   public static final double driveKp = 2;
   public static final double driveKi = 0.0;

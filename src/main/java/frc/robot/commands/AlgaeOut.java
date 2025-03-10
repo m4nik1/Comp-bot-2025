@@ -8,9 +8,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class AlgaeIn extends Command {
-  /** Creates a new AlgaeIn. */
-  public AlgaeIn() {
+public class AlgaeOut extends Command {
+  /** Creates a new AlgaeOut. */
+  public AlgaeOut() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.algaeIntake);
   }
@@ -22,7 +22,7 @@ public class AlgaeIn extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.algaeIntake.runIntake(0.90);
+    RobotContainer.algaeIntake.runIntake(-.75);
   }
 
   // Called once the command ends or is interrupted.

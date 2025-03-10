@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
@@ -23,6 +24,7 @@ public class Elevator extends SubsystemBase {
   DigitalInput TopElevatorLimit;
   DigitalInput LowerLimit;
   TalonFXConfiguration elevatorConfig;
+  MotionMagicVoltage elevatorMagic;
 
 
   public Elevator() {
@@ -36,35 +38,41 @@ public class Elevator extends SubsystemBase {
 
     elevatorMotor.setPosition(0);
 
+    elevatorMagic = new MotionMagicVoltage(0);
+
     configElevatorMotor();
   }
 
   public void configElevatorMotor() {
-    
+    TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
     elevatorMotor.getConfigurator().apply(new TalonFXConfiguration());
     elevatorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
     elevatorConfig.Feedback.SensorToMechanismRatio = 1/25;
     elevatorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     
+
+    elevatorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
+    elevatorConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
+
     elevatorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     elevatorConfig.CurrentLimits.StatorCurrentLimit = 60;
     elevatorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
     // These are the gains to tune
-    elevatorConfig.Slot0.kS = .37;
+    elevatorConfig.Slot0.kS = .30;
     elevatorConfig.Slot0.kG = .34; // run the robot with voltage on a joystick and this is the voltage making the elevator stay in place
-    elevatorConfig.Slot0.kV = 0.11; // runs robot at a up ward slope
+    elevatorConfig.Slot0.kV = 0.1; // runs robot at a up ward slope
     elevatorConfig.Slot0.kA = 0.01; // Makes the curve of the set position more curvier
     
     // Needed if we dont reach our set position
-    elevatorConfig.Slot0.kP = 0;
+    elevatorConfig.Slot0.kP = 0.18;
     elevatorConfig.Slot0.kI = 0;
     elevatorConfig.Slot0.kD = 0; 
 
     
-    // Set
-    elevatorConfig.MotionMagic.MotionMagicAcceleration = 40;
-    elevatorConfig.MotionMagic.MotionMagicCruiseVelocity = 75;
+    // Set for speed of elevator
+    elevatorConfig.MotionMagic.MotionMagicAcceleration = 100;
+    elevatorConfig.MotionMagic.MotionMagicCruiseVelocity = 100;
 
     elevatorMotor.getConfigurator().apply(elevatorConfig);
     elevatorMotor.getConfigurator().setPosition(0);
@@ -86,6 +94,10 @@ public class Elevator extends SubsystemBase {
     elevatorMotor.set(percent*.40);
   }
 
+  public void setElevatorMagic(double pos) {
+    elevatorMotor.setControl(elevatorMagic.withPosition(40));
+  }
+
   public boolean getTopLimit() {
     return TopElevatorLimit.get();
   }
@@ -102,9 +114,9 @@ public class Elevator extends SubsystemBase {
     SmartDashboard.putNumber("Elevator Volts", getElevatorMotorVolts());
 
 
-    // if(getLowerLimit() == true) {
-    //   elevatorMotor.setPosition(0);
-    // }
+    if(getLowerLimit() == true) {
+      elevatorMotor.setPosition(0);
+    }
 
     SmartDashboard.putBoolean("Top Limit", getTopLimit());
     SmartDashboard.putBoolean("Lower Limit", getLowerLimit());

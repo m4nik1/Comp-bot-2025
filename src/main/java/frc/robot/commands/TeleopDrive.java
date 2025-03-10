@@ -33,15 +33,15 @@ public class TeleopDrive extends Command {
   @Override
   public void execute() {
     double speedMultiplier = Constants.speedMultiTeleop;
-    double getX = RobotContainer.getLeftX();
-    double getY = RobotContainer.getLeftY();
-    double getRotation = RobotContainer.getRightX();
+    double getX = -RobotContainer.getLeftX();
+    double getY = -RobotContainer.getLeftY();
+    double getRotation = -RobotContainer.getRightX();
 
     speedMultiplier = Constants.speedMultiTeleop;
 
-    double translationVal = translateLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(-getY, .05));
-    double strafeVal = strafeLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(-getX, .06));
-    double rotationVal = rotationLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(-getRotation, .07));
+    double translationVal = translateLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getY, .08)); // getY was negativeß
+    double strafeVal = strafeLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getX, .09)); // getX was negative
+    double rotationVal = rotationLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getRotation, .08)); // getRotation was negative
 
     Translation2d translation = new Translation2d(translationVal, strafeVal);
 

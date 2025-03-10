@@ -4,15 +4,18 @@
 
 package frc.robot.commands;
 
+
+
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class AlgaeIn extends Command {
-  /** Creates a new AlgaeIn. */
-  public AlgaeIn() {
+public class Elevatorhp extends Command {
+  /** Creates a new Elevatorhp. */
+  public Elevatorhp() {
+    addRequirements(RobotContainer.elevator);
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.algaeIntake);
   }
 
   // Called when the command is initially scheduled.
@@ -22,14 +25,12 @@ public class AlgaeIn extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.algaeIntake.runIntake(0.90);
+    RobotContainer.elevator.setElevatorMagic(Constants.elevator_HP);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    RobotContainer.algaeIntake.runIntake(0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
