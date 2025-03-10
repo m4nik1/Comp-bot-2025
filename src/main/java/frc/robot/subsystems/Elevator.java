@@ -73,7 +73,7 @@ public class Elevator extends SubsystemBase {
     elevatorConfig.MotionMagic.MotionMagicCruiseVelocity = 100;
 
     elevatorMotor.getConfigurator().apply(elevatorConfig);
-    elevatorMotor.getConfigurator().setPosition(0);
+    elevatorMotor.setPosition(0);
 
   }
 
