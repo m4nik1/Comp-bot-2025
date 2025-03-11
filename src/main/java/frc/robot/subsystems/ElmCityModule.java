@@ -219,8 +219,8 @@ public class ElmCityModule extends SubsystemBase {
     
 
 
-    setSpeed(desiredState, openLoop);
-    setAngle(desiredState);
+    setSpeed(newState, openLoop);
+    setAngle(newState);
   }
 
   public void goToAngle(double deg) {
