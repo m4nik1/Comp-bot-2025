@@ -67,6 +67,19 @@ public final class Constants {
   // public static double pivot_l4 = null; 
 
 
+  public static final Mode currentMode = Mode.REAL;
+
+  public static enum Mode {
+      /** Running on a real robot. */
+      REAL,
+
+      /** Running a physics simulator. */
+      SIM,
+
+      /** Replaying from a log file. */
+      REPLAY
+  }
+
   public static final double driveKp = 2;
   public static final double driveKi = 0.0;
   public static final double driveKd = 0;
