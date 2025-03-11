@@ -71,8 +71,8 @@ public class ElmCityModule extends SubsystemBase {
 
     driveMotor.setPosition(0.0, resetTimeout_MS);
     // angleMotor.setPosition(0, resetTimeout_MS);
-    resetToAbsolute();
     lastAngle = Rotation2d.fromDegrees(0);
+    resetToAbsolute();
   }
 
   public void configDriveMotor(InvertedValue drive) {
@@ -211,7 +211,7 @@ public class ElmCityModule extends SubsystemBase {
   }
 
   public void setDesiredState(SwerveModuleState desiredState, boolean openLoop) {
-    desiredState.optimize(getState().angle);
+    desiredState.optimize(Rotation2d.fromRotations(getAngle()));
 
     setSpeed(desiredState, openLoop);
     setAngle(desiredState);

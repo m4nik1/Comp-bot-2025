@@ -44,7 +44,7 @@ public class DriveTrain extends SubsystemBase {
     };
 
     gyro = new Pigeon2(Constants.pigeonID);
-    // odom = new SwerveDriveOdometry(Constants.swerveKinematics, getYaw(), getPositions());
+    odom = new SwerveDriveOdometry(Constants.swerveKinematics, getYaw(), getPositions());
 
     resetGyro();
   }
@@ -117,7 +117,7 @@ public class DriveTrain extends SubsystemBase {
 
     // First update pose with vision and other sensors
     // updatePose();
-    // odom.update(getYaw(), getPositions());
+    odom.update(getYaw(), getPositions());
 
     // Updates the robot pose for the Robot itself
     SmartDashboard.putNumber("Robot Angle", getRobotAngle());
