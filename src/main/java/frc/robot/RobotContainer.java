@@ -7,19 +7,19 @@ package frc.robot;
 import frc.robot.commands.AimAndTarget;
 import frc.robot.commands.AngleSet;
 import frc.robot.commands.RunCoralIntake;
-import frc.robot.commands.RunElevatorManual;
-import frc.robot.commands.RunPivotManual;
 import frc.robot.commands.Runclimber;
 import frc.robot.commands.RunclimberBack;
-import frc.robot.commands.CoralPivot90;
-import frc.robot.commands.CoralPivotDown;
-import frc.robot.commands.CoralPivotUp;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.zeroGyro;
+import frc.robot.commands.CoralPivot.CoralPivot90;
+import frc.robot.commands.CoralPivot.CoralPivotDown;
+import frc.robot.commands.CoralPivot.CoralPivotUp;
+import frc.robot.commands.CoralPivot.RunPivotManual;
 import frc.robot.commands.Elevator_Postions.Elevator_HP;
 import frc.robot.commands.Elevator_Postions.Elevator_L2;
 import frc.robot.commands.Elevator_Postions.Elevator_L3;
 import frc.robot.commands.Elevator_Postions.Elevator_L4;
+import frc.robot.commands.Elevator_Postions.RunElevatorManual;
 import frc.robot.commands.Intakes.AlgaeIn;
 import frc.robot.commands.Intakes.AlgaeOut;
 import frc.robot.commands.Intakes.CoralIn;
@@ -81,7 +81,6 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    // driver.a().onTrue(new AngleSet());
     // driver.a().onTrue(new AimAndTarget());
 
     operator.povRight().onTrue(new CoralPivot90());

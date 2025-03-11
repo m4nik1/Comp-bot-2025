@@ -16,8 +16,6 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -29,9 +27,6 @@ public class CoralPivot extends SubsystemBase {
   DigitalInput pivotLimit;
   SparkClosedLoopController pivotClosedLoop;
   RelativeEncoder pivotCoder;
-
-  SimpleMotorFeedforward pivotFF;
-  PIDController pivotPID;
 
   boolean referenceSet;
 
@@ -76,7 +71,7 @@ public class CoralPivot extends SubsystemBase {
     double anglePivot = (pivotPoint.getEncoder().getPosition()) * (1/9) * 180;
     SmartDashboard.putNumber("Pivot Deg", anglePivot);
     double kP = 0.01;
-    double kG = 0.05;
+    double kG = 0.0195;
 
     // Vtot = kp*(Rset - Rfb) + kg*sin(arm_angle)
     double pidCalculate = kP * (pos - getPivotCoder()) + kG * Math.sin(Rotation2d.fromDegrees(anglePivot).getRadians());
