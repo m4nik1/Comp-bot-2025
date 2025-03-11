@@ -12,6 +12,7 @@ import frc.robot.commands.RunPivotManual;
 import frc.robot.commands.Runclimber;
 import frc.robot.commands.RunclimberBack;
 import frc.robot.commands.CoralPivot90;
+import frc.robot.commands.CoralPivotDown;
 import frc.robot.commands.CoralPivotUp;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.zeroGyro;
@@ -85,6 +86,7 @@ public class RobotContainer {
 
     operator.povRight().onTrue(new CoralPivot90());
     operator.povUp().onTrue(new CoralPivotUp());
+    operator.povDown().onTrue(new CoralPivotDown());
     // operator.start().whileTrue(new RunPivotManual());
     
 
