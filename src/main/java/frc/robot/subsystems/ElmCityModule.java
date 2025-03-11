@@ -77,7 +77,6 @@ public class ElmCityModule extends SubsystemBase {
 
   public void configDriveMotor(InvertedValue drive) {
     TalonFXConfiguration driveConfig = new TalonFXConfiguration();
-    driveMotor.getConfigurator().apply(new TalonFXConfiguration());
 
     driveConfig.MotorOutput.Inverted = drive;
     driveConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
@@ -103,7 +102,6 @@ public class ElmCityModule extends SubsystemBase {
 
   public void configAngleMotor(InvertedValue invertedValue) {
     TalonFXConfiguration angleConfig = new TalonFXConfiguration();
-    angleMotor.getConfigurator().apply(new TalonFXConfiguration());
 
     angleConfig.MotorOutput.Inverted = invertedValue;
     angleConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;

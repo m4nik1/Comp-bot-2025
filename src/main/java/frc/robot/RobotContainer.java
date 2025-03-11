@@ -80,7 +80,6 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    // driver.a().onTrue(new AngleSet());
     // driver.a().onTrue(new AimAndTarget());
 
     operator.povRight().onTrue(new CoralPivot90());
