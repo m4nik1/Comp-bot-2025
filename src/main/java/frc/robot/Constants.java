@@ -25,7 +25,7 @@ public final class Constants {
   public static final double wheelDia = Units.inchesToMeters(4.0);
   public static final double wheelCircum = Units.inchesToMeters(4.0) * Math.PI;
   public static final double driveRatio = 5.9;
-  public static final double angleRatio = 150.0 / 7.0;
+  public static final double angleRatio = 18.75/1;
   public static final double speedMultiTeleop = 0.5;
   public static final double speedTurboTeleop = .85;
   public static final double maxSpeed = 4; // meters per second
@@ -43,10 +43,10 @@ public final class Constants {
   public static final double driveKv = 2.0; // 6.4 is the voltage for max speed per module divde by 6.4 plz
   public static final double drivekA = .20; // 6.4 is the voltage for max speed per module
   
-  public static final Rotation2d angleOffsetMod0 = Rotation2d.fromRotations(0.0094);
-  public static final Rotation2d angleOffsetMod1 = Rotation2d.fromRotations(0.5202);
-  public static final Rotation2d angleOffsetMod2 = Rotation2d.fromRotations(0.6301);
-  public static final Rotation2d angleOffsetMod3 = Rotation2d.fromRotations(0.2265);
+  public static final Rotation2d angleOffsetMod0 = Rotation2d.fromRotations(.0352);
+  public static final Rotation2d angleOffsetMod1 = Rotation2d.fromRotations(.5263);
+  public static final Rotation2d angleOffsetMod2 = Rotation2d.fromRotations(.6401);
+  public static final Rotation2d angleOffsetMod3 = Rotation2d.fromRotations(.2003);
 
   public static final boolean driveStatorEnable = true;
   public static final double driveStatorCurrentLimit = 60;

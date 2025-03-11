@@ -29,7 +29,6 @@ public class CoralPivot extends SubsystemBase {
   SparkFlex pivotPoint;
   DigitalInput pivotLimit;
   SparkClosedLoopController pivotClosedLoop;
-  RelativeEncoder pivotCoder;
   double pivotAngleConversion;
 
   boolean referenceSet;
@@ -62,10 +61,6 @@ public class CoralPivot extends SubsystemBase {
     pivotPoint.set(speed * 0.15);
   }
 
-  public double getPivotCoder() {
-    return pivotCoder.getPosition();
-  }
-
   public boolean getPivotLimit() {
     return pivotLimit.get();
   }
@@ -77,7 +72,7 @@ public class CoralPivot extends SubsystemBase {
     double kG = 0.0195;
 
     // Vtot = kp*(Rset - Rfb) + kg*sin(arm_angle)
-    double pidCalculate = kP * (pos - getPivotCoder()) + kG * Math.sin(Rotation2d.fromDegrees(anglePivot).getRadians());
+    double pidCalculate = kP * (pos - pivotPoint.getEncoder().getPosition()) + kG * Math.sin(Rotation2d.fromDegrees(anglePivot).getRadians());
 
     Logger.recordOutput("Pivot PID calculated", pidCalculate);
 
@@ -88,10 +83,10 @@ public class CoralPivot extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    Logger.recordOutput("Pivot Position", getPivotCoder());
+    Logger.recordOutput("Pivot Position", pivotPoint.getEncoder().getPosition());
     Logger.recordOutput("Pivot Limit", getPivotLimit());
 
-    SmartDashboard.putNumber("Pivot Pos", getPivotCoder());
+    SmartDashboard.putNumber("Pivot Pos", pivotPoint.getEncoder().getPosition());
 
     SmartDashboard.putNumber("Pivot Spd", pivotPoint.get());
     SmartDashboard.putBoolean("Pivot Limit", getPivotLimit());

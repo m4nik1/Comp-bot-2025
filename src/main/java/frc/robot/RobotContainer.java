@@ -66,7 +66,6 @@ public class RobotContainer {
     coralIntake = new CoralIntake();
     coralPivot = new CoralPivot();
     algaeIntake = new AlgaeIntake();
-    photonVision = new Vision();
 
     field = new Field2d();
 
@@ -103,9 +102,9 @@ public class RobotContainer {
     operator.rightTrigger().whileTrue(new CoralIn());
     operator.rightBumper().whileTrue(new CoralOut());
 
-    driver.a().whileTrue(new Runclimber());
+    // driver.a().whileTrue(new Runclimber());
     driver.rightBumper().whileTrue(new zeroGyro());
-    driver.b().whileTrue(new RunclimberBack());
+    // driver.b().whileTrue(new RunclimberBack());
 
 
   }

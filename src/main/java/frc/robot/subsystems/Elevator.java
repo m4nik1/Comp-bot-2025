@@ -15,6 +15,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -130,7 +131,7 @@ public class Elevator extends SubsystemBase {
     SmartDashboard.putNumber("Position Elevator", getElevatorPosition());
 
 
-    if(getLowerLimit() == true) {
+    if(getLowerLimit() == true && DriverStation.isDisabled() && getElevatorPosition() != 0) {
       elevatorMotor.getConfigurator().setPosition(0);
     }
 
