@@ -4,13 +4,14 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class CoralLeftAlign extends Command {
+public class AlgaeAlign extends Command {
   /** Creates a new CoralLeftAlign. */
-  public CoralLeftAlign() {
+  public AlgaeAlign() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.photonVision);
   }
@@ -27,7 +28,7 @@ public class CoralLeftAlign extends Command {
       
       // Gets the latest frame since one has been processed since then
       var result = results.get(results.size() - 1);
-      if(result.hasTargets()) {
+      if(result.hasTargets()) { // At least one tag has been seen by the camera
         for (var target : result.getTargets()) {
           // For now it will be 17 in front of the reef
           if(target.getFiducialId() == 17) {
@@ -36,6 +37,8 @@ public class CoralLeftAlign extends Command {
         }
       }
     }
+
+    // RobotContainer.driveTrain.drive(new Translation2d(), 0);
   }
 
   // Called once the command ends or is interrupted.

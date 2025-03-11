@@ -5,6 +5,9 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkBase.ResetMode;
+
+import org.littletonrobotics.junction.Logger;
+
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkClosedLoopController;
@@ -27,6 +30,7 @@ public class CoralPivot extends SubsystemBase {
   DigitalInput pivotLimit;
   SparkClosedLoopController pivotClosedLoop;
   RelativeEncoder pivotCoder;
+  double pivotAngleConversion;
 
   boolean referenceSet;
 
@@ -34,6 +38,7 @@ public class CoralPivot extends SubsystemBase {
     pivotPoint = new SparkFlex(35, MotorType.kBrushless);
     pivotLimit = new DigitalInput(1);
     pivotClosedLoop = pivotPoint.getClosedLoopController();
+    pivotAngleConversion = (1/9) * 180;
 
     pivotConfig();
   }
@@ -45,8 +50,7 @@ public class CoralPivot extends SubsystemBase {
     
     configPivot.inverted(false).idleMode(IdleMode.kBrake);
     configPivot.encoder.positionConversionFactor(1).velocityConversionFactor(1);
-
-    // configPivot.encoder
+    // configPivot.encoder.positionConversionFactor(pivotAngleConversion).velocityConversionFactor(1);
 
     configPivot.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).pidf(0, 0, 0, 0);
 
@@ -67,7 +71,6 @@ public class CoralPivot extends SubsystemBase {
   }
 
   public void setPivot(double pos) {
-    // double pidCalculate = pivotPID.calculate(pivotCoder.getPosition(), pos);
     double anglePivot = (pivotPoint.getEncoder().getPosition()) * (1/9) * 180;
     SmartDashboard.putNumber("Pivot Deg", anglePivot);
     double kP = 0.01;
@@ -76,7 +79,7 @@ public class CoralPivot extends SubsystemBase {
     // Vtot = kp*(Rset - Rfb) + kg*sin(arm_angle)
     double pidCalculate = kP * (pos - getPivotCoder()) + kG * Math.sin(Rotation2d.fromDegrees(anglePivot).getRadians());
 
-    SmartDashboard.putNumber("PIDCalculated", pidCalculate);
+    Logger.recordOutput("Pivot PID calculated", pidCalculate);
 
     pivotPoint.setVoltage(pidCalculate);
   }
@@ -84,12 +87,14 @@ public class CoralPivot extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
+    Logger.recordOutput("Pivot Position", getPivotCoder());
+    Logger.recordOutput("Pivot Limit", getPivotLimit());
+
     SmartDashboard.putNumber("Pivot Pos", getPivotCoder());
 
     SmartDashboard.putNumber("Pivot Spd", pivotPoint.get());
     SmartDashboard.putBoolean("Pivot Limit", getPivotLimit());
-    SmartDashboard.putNumber("Pivot Volts", pivotPoint.getAppliedOutput());
-    SmartDashboard.putBoolean("Position Mode", referenceSet);
 
     if(getPivotLimit() == true) {
       pivotPoint.getEncoder().setPosition(0);
