@@ -39,12 +39,6 @@ public class CoralPivot extends SubsystemBase {
     pivotPoint = new SparkFlex(35, MotorType.kBrushless);
     pivotLimit = new DigitalInput(1);
     pivotClosedLoop = pivotPoint.getClosedLoopController();
-    pivotCoder = pivotPoint.getEncoder();
-
-    pivotFF = new SimpleMotorFeedforward(0, 0, 0);
-    pivotPID = new PIDController(0.001, 0, 0);
-
-    referenceSet = false;
 
     pivotConfig();
   }
@@ -79,7 +73,7 @@ public class CoralPivot extends SubsystemBase {
 
   public void setPivot(double pos) {
     // double pidCalculate = pivotPID.calculate(pivotCoder.getPosition(), pos);
-    double anglePivot = getPivotCoder() * (1/9) * 180;
+    double anglePivot = (pivotPoint.getEncoder().getPosition()) * (1/9) * 180;
     SmartDashboard.putNumber("Pivot Deg", anglePivot);
     double kP = 0.01;
     double kG = 0.05;
