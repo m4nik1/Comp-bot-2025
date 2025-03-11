@@ -15,6 +15,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Elevator extends SubsystemBase {
   /** Creates a new Elevator. */
@@ -94,6 +95,16 @@ public class Elevator extends SubsystemBase {
 
   public void setElevatorMagic(double pos) {
     elevatorMotor.setControl(elevatorMagic.withPosition(pos));
+  }
+
+  public boolean isElevatorL4() {
+    double elevator_pos = getElevatorPosition();
+    return elevator_pos >= Constants.elevator_l4;
+  }
+
+  public boolean isElevatorL3() {
+    double elevator_pos = getElevatorPosition();
+    return elevator_pos >= Constants.elevator_l3;
   }
 
   public boolean getTopLimit() {
