@@ -72,7 +72,7 @@ public class CoralPivot extends SubsystemBase {
 
   public void setPivot(double pos) {
     double anglePivot = (pivotPoint.getEncoder().getPosition()) * (1/9) * 180;
-    SmartDashboard.putNumber("Pivot Deg", anglePivot);
+    Logger.recordOutput("Pivot Convert Deg", anglePivot);
     double kP = 0.01;
     double kG = 0.0195;
 

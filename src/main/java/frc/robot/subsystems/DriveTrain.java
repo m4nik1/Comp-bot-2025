@@ -40,8 +40,8 @@ public class DriveTrain extends SubsystemBase {
   public DriveTrain() {
     elmCityModules = new ElmCityModule[] {
 
-      // If drive tuning takes longer than 10 minutes set all drive motors CounterClockwise positive
-      // Then set the bevel to face left robot relative 
+      // TODO: If drive tuning takes longer than 10 minutes set all drive motors CounterClockwise positive
+      // TODO: Then set the bevel to face left robot relative and then tunee
       new ElmCityModule(0, 8, 7, 0,Constants.angleOffsetMod0,InvertedValue.CounterClockwise_Positive, InvertedValue.Clockwise_Positive),
       new ElmCityModule(1, 20, 19, 2, Constants.angleOffsetMod1, InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive),
       new ElmCityModule(2, 10, 9, 1, Constants.angleOffsetMod2 ,InvertedValue.CounterClockwise_Positive, InvertedValue.Clockwise_Positive),
