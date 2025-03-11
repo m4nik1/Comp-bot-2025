@@ -209,7 +209,13 @@ public class ElmCityModule extends SubsystemBase {
   }
 
   public void setDesiredState(SwerveModuleState desiredState, boolean openLoop) {
-    desiredState.optimize(Rotation2d.fromRotations(getAngle()));
+    SwerveModuleState newState = new SwerveModuleState();
+    newState.speedMetersPerSecond = desiredState.speedMetersPerSecond;
+    newState.angle = desiredState.angle;
+
+
+
+    newState.optimize(Rotation2d.fromRotations(getAngle()));
 
     setSpeed(desiredState, openLoop);
     setAngle(desiredState);
