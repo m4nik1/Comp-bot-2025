@@ -24,7 +24,7 @@ public final class Constants {
   public static final double driveBaseRadius = Math.hypot(wheelBase / 2.0, trackWidth / 2.0);
   public static final double wheelDia = Units.inchesToMeters(4.0);
   public static final double wheelCircum = Units.inchesToMeters(4.0) * Math.PI;
-  public static final double driveRatio = 6.75;
+  public static final double driveRatio = 5.9;
   public static final double angleRatio = 150.0 / 7.0;
   public static final double speedMultiTeleop = 0.5;
   public static final double speedTurboTeleop = .85;
