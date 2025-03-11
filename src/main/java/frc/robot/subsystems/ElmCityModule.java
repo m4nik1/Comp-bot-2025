@@ -57,7 +57,7 @@ public class ElmCityModule extends SubsystemBase {
     nacCoder = new AnalogEncoder(nacID);
 
     velocitySet = 0;
-    resetTimeout_MS = 20;
+    resetTimeout_MS = 250;
 
     // 0 is default position
     anglePosition.Slot = 0;
@@ -70,8 +70,8 @@ public class ElmCityModule extends SubsystemBase {
     configAngleMotor(angleInvert);
 
     driveMotor.setPosition(0.0, resetTimeout_MS);
-    angleMotor.setPosition(0, 20);
-    // resetToAbsolute(); 
+    // angleMotor.setPosition(0, resetTimeout_MS);
+    resetToAbsolute();
     lastAngle = Rotation2d.fromDegrees(0);
   }
 

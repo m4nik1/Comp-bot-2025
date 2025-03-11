@@ -18,6 +18,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -79,19 +80,23 @@ public class CoralPivot extends SubsystemBase {
   public void setPivot(double pos) {
     // double pidCalculate = pivotPID.calculate(pivotCoder.getPosition(), pos);
     double anglePivot = getPivotCoder() * (1/9) * 180;
-    double kP = 0.001;
-    double kG = 0.0195;
-    double pidCalculate = kP * (Math.abs(pos - getPivotCoder())) + kG * Math.sin(anglePivot);
+    SmartDashboard.putNumber("Pivot Deg", anglePivot);
+    double kP = 0.01;
+    double kG = 0.05;
+
+    // Vtot = kp*(Rset - Rfb) + kg*sin(arm_angle)
+    double pidCalculate = kP * (pos - getPivotCoder()) + kG * Math.sin(Rotation2d.fromDegrees(anglePivot).getRadians());
 
     SmartDashboard.putNumber("PIDCalculated", pidCalculate);
 
-    // pivotPoint.setVoltage(pidCalculate);
+    pivotPoint.setVoltage(pidCalculate);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Pivot Pos", getPivotCoder());
+
     SmartDashboard.putNumber("Pivot Spd", pivotPoint.get());
     SmartDashboard.putBoolean("Pivot Limit", getPivotLimit());
     SmartDashboard.putNumber("Pivot Volts", pivotPoint.getAppliedOutput());

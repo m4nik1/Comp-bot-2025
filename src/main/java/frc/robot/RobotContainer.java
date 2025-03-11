@@ -9,8 +9,12 @@ import frc.robot.commands.AngleSet;
 import frc.robot.commands.RunCoralIntake;
 import frc.robot.commands.RunElevatorManual;
 import frc.robot.commands.RunPivotManual;
+import frc.robot.commands.Runclimber;
+import frc.robot.commands.RunclimberBack;
 import frc.robot.commands.CoralPivot90;
+import frc.robot.commands.CoralPivotUp;
 import frc.robot.commands.TeleopDrive;
+import frc.robot.commands.zeroGyro;
 import frc.robot.commands.Elevator_Postions.Elevator_HP;
 import frc.robot.commands.Elevator_Postions.Elevator_L2;
 import frc.robot.commands.Elevator_Postions.Elevator_L3;
@@ -20,6 +24,7 @@ import frc.robot.commands.Intakes.AlgaeOut;
 import frc.robot.commands.Intakes.CoralIn;
 import frc.robot.commands.Intakes.CoralOut;
 import frc.robot.subsystems.AlgaeIntake;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.CoralIntake;
 import frc.robot.subsystems.CoralPivot;
 import frc.robot.subsystems.DriveTrain;
@@ -45,6 +50,7 @@ public class RobotContainer {
   public static CoralPivot coralPivot;
   public static AlgaeIntake algaeIntake;
   public static Vision photonVision;
+  public static Climber climber = new Climber();
 
   static CommandXboxController driver = new CommandXboxController(0);
   static CommandXboxController operator = new CommandXboxController(1);
@@ -67,7 +73,7 @@ public class RobotContainer {
 
     driveTrain.setDefaultCommand(new TeleopDrive());
     elevator.setDefaultCommand(new RunElevatorManual());
-    // coralPivot.setDefaultCommand(new RunPivotManual());
+    coralPivot.setDefaultCommand(new RunPivotManual());
 
     configureBindings();
 
@@ -76,21 +82,29 @@ public class RobotContainer {
   private void configureBindings() {
     // driver.a().onTrue(new AngleSet());
     // driver.a().onTrue(new AimAndTarget());
+
+    operator.povRight().onTrue(new CoralPivot90());
+    operator.povUp().onTrue(new CoralPivotUp());
+    // operator.start().whileTrue(new RunPivotManual());
     
 
     // Elevator Positions - Find out what btn should be elevator ground
-    operator.b().onTrue(new Elevator_L2());
-    operator.x().onTrue(new Elevator_L3());
+    operator.a().onTrue(new Elevator_L2());
+    operator.b().onTrue(new Elevator_L3());
     operator.start().whileTrue(new RunElevatorManual());
     operator.y().onTrue(new Elevator_L4());
-    operator.a().onTrue(new Elevator_HP());
+    operator.x().onTrue(new Elevator_HP());
 
     // Coral and Algae Intakes
     operator.leftTrigger().whileTrue(new AlgaeIn());
     operator.leftBumper().whileTrue(new AlgaeOut());
 
-    operator.rightTrigger().onTrue(new CoralIn());
-    operator.rightBumper().onTrue(new CoralOut());
+    operator.rightTrigger().whileTrue(new CoralIn());
+    operator.rightBumper().whileTrue(new CoralOut());
+
+    driver.a().whileTrue(new Runclimber());
+    driver.rightBumper().whileTrue(new zeroGyro());
+    driver.b().whileTrue(new RunclimberBack());
 
 
   }

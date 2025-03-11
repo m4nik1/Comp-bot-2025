@@ -29,16 +29,15 @@ public class RunPivotManual extends Command {
   public void execute() {
     RobotContainer.coralPivot.runPivotManual(-RobotContainer.getRightYOp());
 
-    if(RobotContainer.coralPivot.getPivotLimit()) {
-      stop = true;
-    }
+    // if(RobotContainer.coralPivot.getPivotLimit()) {
+    //   stop = true;
+    // }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     // Stops the Pivot speed
-    RobotContainer.coralPivot.runPivotManual(0);
   }
 
   // Returns true when the command should end.
