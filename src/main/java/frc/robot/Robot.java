@@ -24,7 +24,7 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
-  private final GenerateReefPoses reefPosesGenerate;
+  // private final GenerateReefPoses reefPosesGenerate;
 
 
 
@@ -49,8 +49,10 @@ public class Robot extends TimedRobot {
         break;
     }
 
+    // Logger.start();
+
     m_robotContainer = new RobotContainer();
-    reefPosesGenerate = new GenerateReefPoses();
+    // reefPosesGenerate = new GenerateReefPoses();
 
     CameraServer.startAutomaticCapture();
   }

@@ -22,7 +22,7 @@ public class Runclimber extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.climber.runClimber(0.15);
+    RobotContainer.climber.runClimber(0.30);
   }
 
   // Called once the command ends or is interrupted.

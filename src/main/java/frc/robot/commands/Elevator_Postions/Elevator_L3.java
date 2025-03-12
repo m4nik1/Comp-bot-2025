@@ -13,6 +13,7 @@ public class Elevator_L3 extends Command {
   /** Creates a new Elevator_L3. */
   public Elevator_L3() {
     addRequirements( RobotContainer.elevator);
+    addRequirements( RobotContainer.coralPivot);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -23,7 +24,8 @@ public class Elevator_L3 extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.elevator.setElevatorMagic(66.3);
+    RobotContainer.elevator.setElevatorMagic(Constants.elevator_l3);
+    RobotContainer.coralPivot.setPivot(-75);
   }
 
   // Called once the command ends or is interrupted.

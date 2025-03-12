@@ -13,7 +13,7 @@ public class CoralPivot90 extends Command {
   /** Creates a new SetCoralPivot. */
   public CoralPivot90() {
     // Use addRequirements() here to declare subsystem dependencies.
-    // addRequirements(RobotContainer.coralPivot);
+    addRequirements(RobotContainer.coralPivot);
   }
 
   // Called when the command is initially scheduled.
@@ -23,8 +23,8 @@ public class CoralPivot90 extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.coralPivot.setPivot(-3);
-    SmartDashboard.putNumber("Pivot setpoint", -3);
+    RobotContainer.coralPivot.setPivot(-50);
+    SmartDashboard.putNumber("Pivot setpoint", -50);
   }
 
   // Called once the command ends or is interrupted.

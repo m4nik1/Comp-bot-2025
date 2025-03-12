@@ -108,7 +108,7 @@ public class ElmCityModule extends SubsystemBase {
     angleConfig.MotorOutput.Inverted = invertedValue;
     angleConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
     angleConfig.Feedback.SensorToMechanismRatio = Constants.angleRatio;
-    angleConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+    angleConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     angleConfig.ClosedLoopGeneral.ContinuousWrap = true;
 
     angleConfig.CurrentLimits.StatorCurrentLimitEnable = true;

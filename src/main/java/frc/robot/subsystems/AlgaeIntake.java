@@ -4,8 +4,10 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXSConfiguration;
 import com.ctre.phoenix6.hardware.TalonFXS;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,6 +18,7 @@ public class AlgaeIntake extends SubsystemBase {
   TalonFXS algaeRun;
   DigitalInput algaeDetector;
   DigitalInput algaeDetector2;
+  TalonFXSConfiguration algaeConfig;
   // Make sure elevator is at 8 inches off top of bumper
   
   public AlgaeIntake() {
@@ -23,8 +26,10 @@ public class AlgaeIntake extends SubsystemBase {
    algaeDetector = new DigitalInput(2);
    algaeDetector2 = new DigitalInput(3);
 
+   algaeConfig = new TalonFXSConfiguration();
+   algaeConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-   algaeRun.getConfigurator().apply(new TalonFXSConfiguration());
+   algaeRun.getConfigurator().apply(algaeConfig);
   }
 
   public void runIntake(double speed) {

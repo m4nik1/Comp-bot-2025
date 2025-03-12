@@ -30,6 +30,7 @@ public class CoralPivot extends SubsystemBase {
   DigitalInput pivotLimit;
   SparkClosedLoopController pivotClosedLoop;
   double pivotAngleConversion;
+  double pidCalculate = 0;
 
   boolean referenceSet;
 
@@ -37,7 +38,7 @@ public class CoralPivot extends SubsystemBase {
     pivotPoint = new SparkFlex(35, MotorType.kBrushless);
     pivotLimit = new DigitalInput(1);
     pivotClosedLoop = pivotPoint.getClosedLoopController();
-    pivotAngleConversion = (1/9) * 180;
+    pivotAngleConversion = (1/20) * 180;
 
     pivotConfig();
   }
@@ -47,13 +48,16 @@ public class CoralPivot extends SubsystemBase {
 
     pivotPoint.configure(configPivot, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
     
+    configPivot.idleMode(IdleMode.kBrake);
     configPivot.inverted(false).idleMode(IdleMode.kBrake);
-    configPivot.encoder.positionConversionFactor(1).velocityConversionFactor(1);
+    SmartDashboard.putNumber("Conversion pivot", pivotAngleConversion);
+
     // configPivot.encoder.positionConversionFactor(pivotAngleConversion).velocityConversionFactor(1);
+    configPivot.encoder.positionConversionFactor(18).velocityConversionFactor(1);
 
-    configPivot.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).pidf(0, 0, 0, 0);
+    // configPivot.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).pidf(0, 0, 0, 0);
 
-    pivotPoint.configure(configPivot, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+    pivotPoint.configure(configPivot, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
   }
 
   public void runPivotManual(double speed) {
@@ -67,14 +71,14 @@ public class CoralPivot extends SubsystemBase {
 
   public void setPivot(double pos) {
     double anglePivot = (pivotPoint.getEncoder().getPosition()) * (1/9) * 180;
-    Logger.recordOutput("Pivot Convert Deg", anglePivot);
-    double kP = 0.01;
-    double kG = 0.0195;
+   SmartDashboard.putNumber("Pivot Convert Deg", anglePivot);
+    double kP = 0.023;
+    double kG = 0.021;
 
     // Vtot = kp*(Rset - Rfb) + kg*sin(arm_angle)
-    double pidCalculate = kP * (pos - pivotPoint.getEncoder().getPosition()) + kG * Math.sin(Rotation2d.fromDegrees(anglePivot).getRadians());
+    pidCalculate = kP * (pos - pivotPoint.getEncoder().getPosition()) + kG * Math.sin(Rotation2d.fromDegrees(anglePivot).getRadians());
 
-    Logger.recordOutput("Pivot PID calculated", pidCalculate);
+    SmartDashboard.putNumber("Pivot PID calculated", pidCalculate);
 
     pivotPoint.setVoltage(pidCalculate);
   }
@@ -87,6 +91,10 @@ public class CoralPivot extends SubsystemBase {
     Logger.recordOutput("Pivot Limit", getPivotLimit());
 
     SmartDashboard.putNumber("Pivot Pos", pivotPoint.getEncoder().getPosition());
+    SmartDashboard.putNumber("Pivot PID calculated", pidCalculate);
+
+    // double anglePivot = (pivotPoint.getEncoder().getPosition()) * (1/9) * 180;
+    // SmartDashboard.putNumber("Pivot Convert Deg", anglePivot);
 
     SmartDashboard.putNumber("Pivot Spd", pivotPoint.get());
     SmartDashboard.putBoolean("Pivot Limit", getPivotLimit());

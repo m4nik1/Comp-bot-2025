@@ -19,7 +19,7 @@ public class TeleopDrive extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.driveTrain);
 
-    rotationLimiter = new SlewRateLimiter(2.0);
+    rotationLimiter = new SlewRateLimiter(1.8);
     translateLimiter = new SlewRateLimiter(1.8);
     strafeLimiter = new SlewRateLimiter(1.8);
 

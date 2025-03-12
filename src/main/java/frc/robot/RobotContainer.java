@@ -9,10 +9,12 @@ import frc.robot.commands.AngleSet;
 import frc.robot.commands.RunCoralIntake;
 import frc.robot.commands.Runclimber;
 import frc.robot.commands.RunclimberBack;
+import frc.robot.commands.StillClimber;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.zeroGyro;
 import frc.robot.commands.CoralPivot.CoralPivot90;
 import frc.robot.commands.CoralPivot.CoralPivotDown;
+import frc.robot.commands.CoralPivot.CoralPivotHP;
 import frc.robot.commands.CoralPivot.CoralPivotUp;
 import frc.robot.commands.CoralPivot.RunPivotManual;
 import frc.robot.commands.Elevator_Postions.Elevator_HP;
@@ -73,7 +75,7 @@ public class RobotContainer {
 
     driveTrain.setDefaultCommand(new TeleopDrive());
     elevator.setDefaultCommand(new RunElevatorManual());
-    coralPivot.setDefaultCommand(new RunPivotManual());
+    // coralPivot.setDefaultCommand(new RunPivotManual());
 
     configureBindings();
 
@@ -84,6 +86,7 @@ public class RobotContainer {
 
     operator.povRight().onTrue(new CoralPivot90());
     operator.povUp().onTrue(new CoralPivotUp());
+    operator.povLeft().onTrue(new CoralPivotHP());
     operator.povDown().onTrue(new CoralPivotDown());
     // operator.start().whileTrue(new RunPivotManual());
     
@@ -102,9 +105,10 @@ public class RobotContainer {
     operator.rightTrigger().whileTrue(new CoralIn());
     operator.rightBumper().whileTrue(new CoralOut());
 
-    // driver.a().whileTrue(new Runclimber());
+    driver.a().whileTrue(new Runclimber());
     driver.rightBumper().whileTrue(new zeroGyro());
-    // driver.b().whileTrue(new RunclimberBack());
+    driver.b().whileTrue(new RunclimberBack());
+    driver.y().whileTrue(new StillClimber());
 
 
   }

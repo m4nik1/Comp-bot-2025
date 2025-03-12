@@ -5,6 +5,7 @@
 package frc.robot.commands.Elevator_Postions;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 public class Elevator_L2 extends Command {
@@ -12,6 +13,7 @@ public class Elevator_L2 extends Command {
   public Elevator_L2() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.elevator);
+    addRequirements(RobotContainer.coralPivot);
   }
 
   // Called when the command is initially scheduled.
@@ -21,7 +23,8 @@ public class Elevator_L2 extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.elevator.setElevatorMagic(40);
+    RobotContainer.elevator.setElevatorMagic(Constants.elevator_l2);
+    RobotContainer.coralPivot.setPivot(-50);
   }
 
   // Called once the command ends or is interrupted.

@@ -22,7 +22,7 @@ public class CoralOut extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.coralIntake.runCoral(0.9);
+    RobotContainer.coralIntake.runCoral(-0.9);
   }
 
   // Called once the command ends or is interrupted.
