@@ -25,7 +25,7 @@ public class Elevator_L3 extends Command {
   @Override
   public void execute() {
     RobotContainer.elevator.setElevatorMagic(Constants.elevator_l3);
-    RobotContainer.coralPivot.setPivot(-75);
+    RobotContainer.coralPivot.setPivot(Constants.pivot_l3);
   }
 
   // Called once the command ends or is interrupted.

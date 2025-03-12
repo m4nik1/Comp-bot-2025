@@ -28,16 +28,16 @@ public class CoralPivot extends SubsystemBase {
   /** Creates a new CoralPivot. */
   SparkFlex pivotPoint;
   DigitalInput pivotLimit;
-  SparkClosedLoopController pivotClosedLoop;
+  RelativeEncoder pivotEncoder;
+
   double pivotAngleConversion;
   double pidCalculate = 0;
-
-  boolean referenceSet;
 
   public CoralPivot() {
     pivotPoint = new SparkFlex(35, MotorType.kBrushless);
     pivotLimit = new DigitalInput(1);
-    pivotClosedLoop = pivotPoint.getClosedLoopController();
+    pivotEncoder = pivotPoint.getEncoder();
+    // pivotClosedLoop = pivotPoint.getClosedLoopController();
     pivotAngleConversion = (1/20) * 180;
 
     pivotConfig();
@@ -57,11 +57,10 @@ public class CoralPivot extends SubsystemBase {
 
     // configPivot.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).pidf(0, 0, 0, 0);
 
-    pivotPoint.configure(configPivot, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+    pivotPoint.configure(configPivot, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   public void runPivotManual(double speed) {
-    referenceSet = false;
     pivotPoint.set(speed * 0.15);
   }
 
@@ -76,6 +75,7 @@ public class CoralPivot extends SubsystemBase {
     double kG = 0.021;
 
     // Vtot = kp*(Rset - Rfb) + kg*sin(arm_angle)
+    // Change the the fromDegrees(anglePivot) to fromDegrees(pivotPoint.getEncoder().getPosition())
     pidCalculate = kP * (pos - pivotPoint.getEncoder().getPosition()) + kG * Math.sin(Rotation2d.fromDegrees(anglePivot).getRadians());
 
     SmartDashboard.putNumber("Pivot PID calculated", pidCalculate);

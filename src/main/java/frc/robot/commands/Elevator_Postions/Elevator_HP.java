@@ -30,7 +30,7 @@ public class Elevator_HP extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.coralPivot.setPivot(-6.7);
+    RobotContainer.coralPivot.setPivot(Constants.pivot_HP);
 
 
     RobotContainer.elevator.setElevatorMagic(Constants.elevator_HP);

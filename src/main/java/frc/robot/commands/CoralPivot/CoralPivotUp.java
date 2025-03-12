@@ -4,6 +4,7 @@
 
 package frc.robot.commands.CoralPivot;
 
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -26,7 +27,7 @@ public class CoralPivotUp extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.coralPivot.setPivot(-7);
+    RobotContainer.coralPivot.setPivot(Constants.pivot_up);
 
     if(RobotContainer.coralPivot.getPivotLimit()) {
       stop = true;
