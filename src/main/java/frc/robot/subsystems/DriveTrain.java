@@ -83,8 +83,6 @@ public class DriveTrain extends SubsystemBase {
 
 
     robotPose = getPose();
-    
-    // odom = new SwerveDriveOdometry(Constants.swerveKinematics, getYaw(), getPositions());
 
     resetGyro();
   }
