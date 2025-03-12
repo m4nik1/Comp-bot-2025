@@ -45,7 +45,7 @@ public class TeleopDrive extends Command {
     double getRotation = -RobotContainer.getRightX();
     double turnKp = 0.01;
 
-    if(RobotContainer.getDriverA()) { // Driver press a button
+    if(RobotContainer.getDriverA()) { // Driver presses the A button
       var results = RobotContainer.photonVision.getUnreadResults();
 
       if(!results.isEmpty()) {
@@ -61,7 +61,7 @@ public class TeleopDrive extends Command {
       }
       translationVal = translateLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getY, .08)); // getY was negativeß
       strafeVal = strafeLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getX, .09)); // getX was negative
-      rotationVal = -1.0 * turnKp * targetYaw * Constants.maxAngularSpd; 
+      rotationVal = -1.0 * turnKp * targetYaw; 
     }
     else {
       speedMultiplier = Constants.speedMultiTeleop;

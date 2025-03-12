@@ -4,6 +4,13 @@
 
 package frc.robot;
 
+import java.util.Arrays;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -71,6 +78,17 @@ public final class Constants {
 
 
   public static final Mode currentMode = Mode.REAL;
+
+  public static final List<Integer> desiredTagIds = Arrays.asList(6, 7, 8, 9, 10 ,11, 19, 20, 18, 17, 22, 21);
+
+  public static final Map<Integer, Integer> TagToFaceBlue = Map.of(
+    18, 0,
+    17, 1,
+    22, 2, 
+    21, 3, 
+    20, 4,
+    19, 5
+  );
 
   public static enum Mode {
       /** Running on a real robot. */

@@ -25,7 +25,7 @@ public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
-  private final GenerateReefPoses reefPosesGenerate;
+  public static GenerateReefPoses reefPosesGenerate;
 
 
 

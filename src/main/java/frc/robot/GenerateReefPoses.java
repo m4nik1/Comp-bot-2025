@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Optional;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -39,11 +41,11 @@ public class GenerateReefPoses {
         }
     }
 
-    public Translation2d calculateAlgaePose(double theta) {
+    public Transform2d calculateAlgaePose(double theta) {
         double algaeX = reefX + (radius_reef * Math.cos(theta));
         double algaeY = reefY + (radius_reef * Math.sin(theta));
 
-        return new Translation2d(algaeX, algaeY);
+        return new Transform2d(algaeX, algaeY, Rotation2d.fromRadians(theta));
     }
 
     public Translation2d calculateCoralLeft(double theta) {

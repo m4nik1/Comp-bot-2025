@@ -70,12 +70,13 @@ public class CoralPivot extends SubsystemBase {
 
   public void setPivot(double pos) {
     double anglePivot = (pivotPoint.getEncoder().getPosition()) * (1/9) * 180;
-   SmartDashboard.putNumber("Pivot Convert Deg", anglePivot);
-    double kP = 0.023;
-    double kG = 0.021;
+    SmartDashboard.putNumber("Pivot Convert Deg", anglePivot);
+    double kP = 0.023; // retune this for new pivot
+    double kG = 0.021; // change this to .027
 
     // Vtot = kp*(Rset - Rfb) + kg*sin(arm_angle)
     // Change the the fromDegrees(anglePivot) to fromDegrees(pivotPoint.getEncoder().getPosition())
+    // If pivot tuning is not working just add -40 to the encoder and tune with that value
     pidCalculate = kP * (pos - pivotPoint.getEncoder().getPosition()) + kG * Math.sin(Rotation2d.fromDegrees(anglePivot).getRadians());
 
     SmartDashboard.putNumber("Pivot PID calculated", pidCalculate);

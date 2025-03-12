@@ -66,7 +66,7 @@ public class AimAndTarget extends Command {
 
     if(targetVisible) {
       // applies p gain to error to get back a turn value
-      turn = -.01 * targetYaw * vision_kP * Constants.maxAngularSpd; 
+      turn = -.01 * targetYaw * vision_kP; 
 
       SmartDashboard.putNumber("turn vision", turn);
     }
