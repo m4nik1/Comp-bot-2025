@@ -105,10 +105,11 @@ public class RobotContainer {
     operator.rightTrigger().whileTrue(new CoralIn());
     operator.rightBumper().whileTrue(new CoralOut());
 
-    driver.a().whileTrue(new Runclimber());
+    driver.povUp().whileTrue(new Runclimber());
     driver.rightBumper().whileTrue(new zeroGyro());
-    driver.b().whileTrue(new RunclimberBack());
-    driver.y().whileTrue(new StillClimber());
+    driver.povDown().whileTrue(new RunclimberBack());
+    driver.povRight().whileTrue(new StillClimber());
+    driver.a().whileTrue(new AimAndTarget());
 
 
   }
@@ -117,6 +118,10 @@ public class RobotContainer {
     return operator.getLeftY();
   }
 
+
+  public static boolean getDriverA() {
+    return false;
+  }
   
   public static double getRightYOp() {
     return operator.getRightY();

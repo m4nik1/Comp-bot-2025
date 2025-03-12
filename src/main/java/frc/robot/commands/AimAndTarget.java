@@ -18,7 +18,7 @@ public class AimAndTarget extends Command {
   boolean targetVisible;
   double targetYaw;
   double turn;
-  double vision_kP = 1; // Change this to a constant
+  double vision_kP; // Change this to a constant
 
   SlewRateLimiter translateLimiter, strafeLimiter;
 
@@ -41,6 +41,7 @@ public class AimAndTarget extends Command {
     double speedMultiplier = Constants.speedMultiTeleop;
     double getX = -RobotContainer.getLeftX();
     double getY = -RobotContainer.getLeftY();
+    vision_kP = 0.01;
     
     targetYaw = 0.0;
     targetVisible = false;
@@ -65,13 +66,13 @@ public class AimAndTarget extends Command {
 
     if(targetVisible) {
       // applies p gain to error to get back a turn value
-      turn = -1.0 * targetYaw * vision_kP; 
+      turn = -.01 * targetYaw * vision_kP * Constants.maxAngularSpd; 
 
       SmartDashboard.putNumber("turn vision", turn);
     }
 
-    double translationVal = translateLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getY, .08)); // getY was negativeß
-    double strafeVal = strafeLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getX, .09)); // getX was negative
+    double translationVal = translateLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(-getY, .08)); // getY was negativeß
+    double strafeVal = strafeLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(-getX, .09)); // getX was negative
 
     Translation2d translationDrive = new Translation2d(translationVal, strafeVal);
 

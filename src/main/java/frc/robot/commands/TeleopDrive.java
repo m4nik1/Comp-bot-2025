@@ -15,6 +15,10 @@ public class TeleopDrive extends Command {
   /** Creates a new TelopDrive. */
   SlewRateLimiter rotationLimiter, translateLimiter, strafeLimiter;
 
+  double targetYaw = 0.0;
+  double translationVal, strafeVal, rotationVal;
+  boolean targetVisible = true;
+
   public TeleopDrive() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.driveTrain);
@@ -27,7 +31,10 @@ public class TeleopDrive extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    targetYaw = 0.0;
+    targetVisible = true;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -36,13 +43,35 @@ public class TeleopDrive extends Command {
     double getX = -RobotContainer.getLeftX();
     double getY = -RobotContainer.getLeftY();
     double getRotation = -RobotContainer.getRightX();
+    double turnKp = 0.01;
 
-    speedMultiplier = Constants.speedMultiTeleop;
+    if(RobotContainer.getDriverA()) { // Driver press a button
+      var results = RobotContainer.photonVision.getUnreadResults();
 
-    // Remember all these values from the stick are negative
-    double translationVal = translateLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getY, .08)); // getY was negativeß
-    double strafeVal = strafeLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getX, .09)); // getX was negative
-    double rotationVal = rotationLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getRotation, .08)); // getRotation was negative
+      if(!results.isEmpty()) {
+        var result = results.get(results.size() - 1);
+        if(result.hasTargets()) {
+          for (var target : result.getTargets()) {
+            if(target.getFiducialId() == 12 || target.getFiducialId() == 13 || target.getFiducialId() == 2 || target.getFiducialId() == 1) {
+              targetYaw = target.getYaw();
+              targetVisible = true;
+            }
+          }
+        }
+      }
+      translationVal = translateLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getY, .08)); // getY was negativeß
+      strafeVal = strafeLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getX, .09)); // getX was negative
+      rotationVal = -1.0 * turnKp * targetYaw * Constants.maxAngularSpd; 
+    }
+    else {
+      speedMultiplier = Constants.speedMultiTeleop;
+
+      // Remember all these values from the stick are negative
+      translationVal = translateLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getY, .08)); // getY was negativeß
+      strafeVal = strafeLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getX, .09)); // getX was negative
+      rotationVal = rotationLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getRotation, .08)); // getRotation was negative  
+    }
+
 
     Translation2d translation = new Translation2d(translationVal, strafeVal);
 
