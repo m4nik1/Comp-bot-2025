@@ -22,7 +22,7 @@ public class AlgaeAlign extends Command {
 
   public AlgaeAlign() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.photonVision);
+    // addRequirements(RobotContainer.photonVision);
   }
 
   // Called when the command is initially scheduled.
@@ -33,29 +33,29 @@ public class AlgaeAlign extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    var results = RobotContainer.photonVision.getUnreadResults();
-    if(!results.isEmpty()) {
+    // var results = RobotContainer.photonVision.getUnreadResults();
+    // if(!results.isEmpty()) {
       
-      // Gets the latest frame since one has been processed since then
-      var latestResult = results.get(results.size() - 1);
-      if(latestResult.hasTargets()) { // At least one tag has been seen by the camera
-        for (var target : latestResult.getTargets()) {
-          int tagId = target.getFiducialId();
+    //   // Gets the latest frame since one has been processed since then
+    //   var latestResult = results.get(results.size() - 1);
+    //   if(latestResult.hasTargets()) { // At least one tag has been seen by the camera
+    //     for (var target : latestResult.getTargets()) {
+    //       int tagId = target.getFiducialId();
 
-          // Finds the tags that are associated with the reef
-          if(Constants.desiredTagIds.contains(tagId)) {
-            double face = Constants.TagToFaceBlue.get(tagId);
+    //       // Finds the tags that are associated with the reef
+    //       if(Constants.desiredTagIds.contains(tagId)) {
+    //         double face = Constants.TagToFaceBlue.get(tagId);
             
-            // Calculates the face angle in radians
-            double thetaCalculate = ((2*Math.PI)*(face/6)+Math.PI) % (2*Math.PI); 
+    //         // Calculates the face angle in radians
+    //         double thetaCalculate = ((2*Math.PI)*(face/6)+Math.PI) % (2*Math.PI); 
 
-            Transform2d calculatedAlgae = Robot.reefPosesGenerate.calculateAlgaePose(thetaCalculate);
+    //         Transform2d calculatedAlgae = Robot.reefPosesGenerate.calculateAlgaePose(thetaCalculate);
 
-            algaePose = RobotContainer.driveTrain.getRobotPose2d().transformBy(calculatedAlgae);
-          }
-        }
-      }
-    }
+    //         algaePose = RobotContainer.driveTrain.getRobotPose2d().transformBy(calculatedAlgae);
+    //       }
+    //     }
+    //   }
+    // }
 
     // RobotContainer.driveTrain.drive(new Translation2d(), 0);
   }

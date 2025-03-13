@@ -40,6 +40,8 @@ public class CoralPivot extends SubsystemBase {
     // pivotClosedLoop = pivotPoint.getClosedLoopController();
     pivotAngleConversion = (1/20) * 180;
 
+    pivotPoint.getEncoder().setPosition(0);
+
     pivotConfig();
   }
 
@@ -61,7 +63,7 @@ public class CoralPivot extends SubsystemBase {
   }
 
   public void runPivotManual(double speed) {
-    pivotPoint.set(speed * 0.15);
+    pivotPoint.set(speed * 0.20);
   }
 
   public boolean getPivotLimit() {
@@ -69,17 +71,15 @@ public class CoralPivot extends SubsystemBase {
   }
 
   public void setPivot(double pos) {
-    double anglePivot = (pivotPoint.getEncoder().getPosition()) * (1/9) * 180;
-    SmartDashboard.putNumber("Pivot Convert Deg", anglePivot);
-    double kP = 0.023; // retune this for new pivot
-    double kG = 0.021; // change this to .027
+    double kP = 0.043; // retune this for new pivot
+    double kG = 0.03; // change this to .027
 
     // Vtot = kp*(Rset - Rfb) + kg*sin(arm_angle)
     // Change the the fromDegrees(anglePivot) to fromDegrees(pivotPoint.getEncoder().getPosition())
     // If pivot tuning is not working just add -40 to the encoder and tune with that value
-    pidCalculate = kP * (pos - pivotPoint.getEncoder().getPosition()) + kG * Math.sin(Rotation2d.fromDegrees(anglePivot).getRadians());
+    pidCalculate = kP * (pos - (pivotPoint.getEncoder().getPosition() + -30)) + kG * Math.sin(Rotation2d.fromDegrees(pivotPoint.getEncoder().getPosition() + -30).getRadians());
 
-    SmartDashboard.putNumber("Pivot PID calculated", pidCalculate);
+    Logger.recordOutput("Pivot PID calculated", pidCalculate);
 
     pivotPoint.setVoltage(pidCalculate);
   }
@@ -88,15 +88,11 @@ public class CoralPivot extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    Logger.recordOutput("Pivot Position", pivotPoint.getEncoder().getPosition());
+    Logger.recordOutput("Pivot Position", pivotPoint.getEncoder().getPosition() + -30);
+    SmartDashboard.putNumber("Pivot Pos", pivotPoint.getEncoder().getPosition() + -30);
+    
     Logger.recordOutput("Pivot Limit", getPivotLimit());
-
-    SmartDashboard.putNumber("Pivot Pos", pivotPoint.getEncoder().getPosition());
-    SmartDashboard.putNumber("Pivot PID calculated", pidCalculate);
-
-    // double anglePivot = (pivotPoint.getEncoder().getPosition()) * (1/9) * 180;
-    // SmartDashboard.putNumber("Pivot Convert Deg", anglePivot);
-
+    Logger.recordOutput("Pivot Volts", pivotPoint.getAppliedOutput());
     SmartDashboard.putNumber("Pivot Spd", pivotPoint.get());
     SmartDashboard.putBoolean("Pivot Limit", getPivotLimit());
 

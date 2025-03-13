@@ -52,7 +52,7 @@ public class RobotContainer {
   public static CoralIntake coralIntake;
   public static CoralPivot coralPivot;
   public static AlgaeIntake algaeIntake;
-  public static Vision photonVision;
+  // public static Vision photonVision;
   public static Climber climber = new Climber();
 
   static CommandXboxController driver = new CommandXboxController(0);
@@ -68,6 +68,7 @@ public class RobotContainer {
     coralIntake = new CoralIntake();
     coralPivot = new CoralPivot();
     algaeIntake = new AlgaeIntake();
+    // photonVision = new Vision(); 
 
     field = new Field2d();
 
@@ -109,7 +110,8 @@ public class RobotContainer {
     driver.rightBumper().whileTrue(new zeroGyro());
     driver.povDown().whileTrue(new RunclimberBack());
     driver.povRight().whileTrue(new StillClimber());
-    driver.a().whileTrue(new AimAndTarget());
+    // driver.a().whileTrue(new AimAndTarget());
+
 
 
   }
@@ -120,7 +122,7 @@ public class RobotContainer {
 
 
   public static boolean getDriverA() {
-    return false; // Add driver A
+    return driver.a().getAsBoolean(); // Add driver A
   }
   
   public static double getRightYOp() {

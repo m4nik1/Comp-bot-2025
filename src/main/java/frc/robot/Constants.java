@@ -68,13 +68,15 @@ public final class Constants {
   public static double elevator_l3 = 62.38;
   public static double elevator_l4  = 124;
   public static double elevator_HP = 11.6;
+  public static double elevator_l3_al = 99.2;
 
-  public static double pivot_HP = -6.7;
-  public static double pivot_down = -76.0;
-  public static double pivot_90 = -50;
-  public static double pivot_up = -7;
+  public static double pivot_HP = -47;
+  public static double pivot_down = -108.0;
+  public static double pivot_90 = -90;
 
-  public static double pivot_l3 = -75;
+  public static double pivot_up = -20;
+
+  public static double pivot_l3 = -100;
 
 
   public static final Mode currentMode = Mode.REAL;

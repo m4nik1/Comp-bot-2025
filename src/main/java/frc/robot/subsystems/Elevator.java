@@ -139,6 +139,7 @@ public class Elevator extends SubsystemBase {
       elevatorMotor.getConfigurator().setPosition(0);
     }
 
+
     SmartDashboard.putBoolean("Top Limit", getTopLimit());
     SmartDashboard.putBoolean("Lower Limit", getLowerLimit());
   }

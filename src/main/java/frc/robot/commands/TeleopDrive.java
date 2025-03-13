@@ -4,9 +4,12 @@
 
 package frc.robot.commands;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -43,25 +46,30 @@ public class TeleopDrive extends Command {
     double getX = -RobotContainer.getLeftX();
     double getY = -RobotContainer.getLeftY();
     double getRotation = -RobotContainer.getRightX();
-    double turnKp = 0.01;
+    double turnKp = 0.025;
+
+
 
     if(RobotContainer.getDriverA()) { // Driver presses the A button
-      var results = RobotContainer.photonVision.getUnreadResults();
+      // var results = RobotContainer.photonVision.getUnreadResults();
+      // Logger.recordOutput("Align on", RobotContainer.getDriverA());
 
-      if(!results.isEmpty()) {
-        var result = results.get(results.size() - 1);
-        if(result.hasTargets()) {
-          for (var target : result.getTargets()) {
-            if(target.getFiducialId() == 12 || target.getFiducialId() == 13 || target.getFiducialId() == 2 || target.getFiducialId() == 1) {
-              targetYaw = target.getYaw();
-              targetVisible = true;
-            }
-          }
-        }
-      }
-      translationVal = translateLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getY, .08)); // getY was negativeß
-      strafeVal = strafeLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getX, .09)); // getX was negative
-      rotationVal = -1.0 * turnKp * targetYaw; 
+      // if(!results.isEmpty()) {
+      //   var result = results.get(results.size() - 1);
+      //   if(result.hasTargets()) {
+      //     for (var target : result.getTargets()) {
+      //       if(target.getFiducialId() == 18 || target.getFiducialId() == 13 || target.getFiducialId() == 2 || target.getFiducialId() == 1) {
+      //         targetYaw = target.getYaw();
+      //         SmartDashboard.putNumber("Target found", target.getFiducialId());
+      //         SmartDashboard.putNumber("18 Yaw", targetYaw);
+      //         targetVisible = true;
+      //       }
+      //     }
+      //   }
+      // }
+      // translationVal = translateLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getY, .08)); // getY was negativeß
+      // strafeVal = strafeLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getX, .09)); // getX was negative
+      // rotationVal = -1.0 * turnKp * targetYaw; 
     }
     else {
       speedMultiplier = Constants.speedMultiTeleop;

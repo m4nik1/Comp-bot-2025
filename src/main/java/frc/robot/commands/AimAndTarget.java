@@ -24,7 +24,7 @@ public class AimAndTarget extends Command {
 
   public AimAndTarget() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.photonVision);
+    // addRequirements(RobotContainer.photonVision);
   }
 
   // Called when the command is initially scheduled.
@@ -47,37 +47,37 @@ public class AimAndTarget extends Command {
     targetVisible = false;
     turn = 0.0;
 
-    var results = RobotContainer.photonVision.getUnreadResults();
+    // var results = RobotContainer.photonVision.getUnreadResults();
 
-    if(!results.isEmpty()) {
+    // if(!results.isEmpty()) {
       
-      // Gets the latest frame since one has been processed since then
-      var result = results.get(results.size() - 1);
-      if(result.hasTargets()) {
-        for (var target : result.getTargets()) {
-          // ID 12 is the HP station
-          if(target.getFiducialId() == 12 || target.getFiducialId() == 13 || target.getFiducialId() == 2 || target.getFiducialId() == 1) {
-            targetYaw = target.getYaw(); // Gets the targets yaw
-            targetVisible = true;
-          }
-        }
-      }
-    }
+    //   // Gets the latest frame since one has been processed since then
+    //   var result = results.get(results.size() - 1);
+    //   if(result.hasTargets()) {
+    //     for (var target : result.getTargets()) {
+    //       // ID 12 is the HP station
+    //       if(target.getFiducialId() == 12 || target.getFiducialId() == 13 || target.getFiducialId() == 2 || target.getFiducialId() == 1) {
+    //         targetYaw = target.getYaw(); // Gets the targets yaw
+    //         targetVisible = true;
+    //       }
+    //     }
+    //   }
+    // }
 
-    if(targetVisible) {
-      // applies p gain to error to get back a turn value
-      turn = -.01 * targetYaw * vision_kP; 
+    // if(targetVisible) {
+    //   // applies p gain to error to get back a turn value
+    //   turn = -.01 * targetYaw * vision_kP; 
 
-      SmartDashboard.putNumber("turn vision", turn);
-    }
+    //   SmartDashboard.putNumber("turn vision", turn);
+    // }
 
-    double translationVal = translateLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(-getY, .08)); // getY was negativeß
-    double strafeVal = strafeLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(-getX, .09)); // getX was negative
+    // double translationVal = translateLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(-getY, .08)); // getY was negativeß
+    // double strafeVal = strafeLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(-getX, .09)); // getX was negative
 
-    Translation2d translationDrive = new Translation2d(translationVal, strafeVal);
+    // Translation2d translationDrive = new Translation2d(translationVal, strafeVal);
 
-    // Set the drivetrain to those speeds
-    RobotContainer.driveTrain.drive(translationDrive.times(Constants.maxSpeed), turn * Constants.maxAngularSpd);
+    // // Set the drivetrain to those speeds
+    // RobotContainer.driveTrain.drive(translationDrive.times(Constants.maxSpeed), turn * Constants.maxAngularSpd);
   }
 
   // Called once the command ends or is interrupted.

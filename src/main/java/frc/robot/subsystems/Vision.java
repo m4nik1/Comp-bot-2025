@@ -8,6 +8,7 @@ import java.lang.StackWalker.Option;
 import java.util.List;
 import java.util.Optional;
 
+import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -138,8 +139,8 @@ public class Vision extends SubsystemBase {
   public void periodic() {
     
     // getEstimatedGlobalPose(); // This updates the pose of the robot
-    SmartDashboard.putNumber("turn vision", turn);
-    SmartDashboard.putNumber("Vision Yaw ", targetYaw);
+    Logger.recordOutput("turn vision", turn);
+    Logger.recordOutput("Vision Yaw ", targetYaw);
 
     // This method will be called once per scheduler run
     // SmartDashboard.putBoolean("Target found", result.hasTargets());

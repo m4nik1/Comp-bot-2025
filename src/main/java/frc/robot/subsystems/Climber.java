@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -15,12 +17,14 @@ public class Climber extends SubsystemBase {
   TalonFX climberMotor = new TalonFX(13);
   public Climber() {
     configClimber();
+    climberMotor.setPosition(0);
   }
 
   public void configClimber() {
     TalonFXConfiguration climbConfig = new TalonFXConfiguration();
 
     climbConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    climbConfig.Feedback.SensorToMechanismRatio =  100/1;
 
     climberMotor.getConfigurator().apply(climbConfig);
   }
@@ -31,6 +35,7 @@ public class Climber extends SubsystemBase {
 
   @Override
   public void periodic() {
+    Logger.recordOutput("Climber Motor", climberMotor.getPosition().getValueAsDouble());
     // This method will be called once per scheduler run
   }
 }
