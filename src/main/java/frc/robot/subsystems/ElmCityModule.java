@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
@@ -57,7 +59,7 @@ public class ElmCityModule extends SubsystemBase {
     nacCoder = new AnalogEncoder(nacID);
 
     velocitySet = 0;
-    resetTimeout_MS = 20;
+    resetTimeout_MS = 250;
 
     // 0 is default position
     anglePosition.Slot = 0;
@@ -70,14 +72,13 @@ public class ElmCityModule extends SubsystemBase {
     configAngleMotor(angleInvert);
 
     driveMotor.setPosition(0.0, resetTimeout_MS);
-    angleMotor.setPosition(0, 20);
-    // resetToAbsolute(); 
+    // angleMotor.setPosition(0, resetTimeout_MS);
     lastAngle = Rotation2d.fromDegrees(0);
+    resetToAbsolute();
   }
 
   public void configDriveMotor(InvertedValue drive) {
     TalonFXConfiguration driveConfig = new TalonFXConfiguration();
-    driveMotor.getConfigurator().apply(new TalonFXConfiguration());
 
     driveConfig.MotorOutput.Inverted = drive;
     driveConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
@@ -103,12 +104,11 @@ public class ElmCityModule extends SubsystemBase {
 
   public void configAngleMotor(InvertedValue invertedValue) {
     TalonFXConfiguration angleConfig = new TalonFXConfiguration();
-    angleMotor.getConfigurator().apply(new TalonFXConfiguration());
 
     angleConfig.MotorOutput.Inverted = invertedValue;
     angleConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
     angleConfig.Feedback.SensorToMechanismRatio = Constants.angleRatio;
-    angleConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+    angleConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     angleConfig.ClosedLoopGeneral.ContinuousWrap = true;
 
     angleConfig.CurrentLimits.StatorCurrentLimitEnable = true;
@@ -211,10 +211,16 @@ public class ElmCityModule extends SubsystemBase {
   }
 
   public void setDesiredState(SwerveModuleState desiredState, boolean openLoop) {
-    desiredState.optimize(getState().angle);
+    SwerveModuleState newState = new SwerveModuleState();
+    newState.speedMetersPerSecond = desiredState.speedMetersPerSecond;
+    newState.angle = desiredState.angle;
 
-    setSpeed(desiredState, openLoop);
-    setAngle(desiredState);
+    newState.optimize(Rotation2d.fromRotations(getAngle()));
+    
+
+
+    setSpeed(newState, openLoop);
+    setAngle(newState);
   }
 
   public void goToAngle(double deg) {
@@ -245,6 +251,10 @@ public class ElmCityModule extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    Logger.recordOutput("Distance (M)" + modNum, getDrivePosMeters());
+    Logger.recordOutput("Mod vel " + modNum, getDriveVelocityConversion());
+    Logger.recordOutput("Module Angle " + modNum, getAngleDegrees());
+
     SmartDashboard.putNumber("Module Angle " + modNum, getAngleDegrees());
     SmartDashboard.putNumber("Distance (M)" + modNum, getDrivePosMeters());
     SmartDashboard.putNumber("Nac coder rot " + modNum, getNac());

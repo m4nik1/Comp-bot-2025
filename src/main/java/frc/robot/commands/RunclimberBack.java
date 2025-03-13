@@ -8,11 +8,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class CoralOut extends Command {
-  /** Creates a new CoralOut. */
-  public CoralOut() {
+public class RunclimberBack extends Command {
+  /** Creates a new Runclimber. */
+  public RunclimberBack() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.coralIntake);
+    addRequirements(RobotContainer.climber);
+
   }
 
   // Called when the command is initially scheduled.
@@ -22,13 +23,13 @@ public class CoralOut extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.coralIntake.runCoral(0.5);
+    RobotContainer.climber.runClimber(0.30);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.coralIntake.runCoral(0);
+    RobotContainer.climber.runClimber(0);
   }
 
   // Returns true when the command should end.

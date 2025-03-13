@@ -4,22 +4,36 @@
 
 package frc.robot;
 
-import frc.robot.commands.AlgaeIn;
-import frc.robot.commands.AlgaeOut;
+import frc.robot.commands.AimAndTarget;
 import frc.robot.commands.AngleSet;
-import frc.robot.commands.CoralIn;
-import frc.robot.commands.CoralOut;
-import frc.robot.commands.Elevator_L2;
 import frc.robot.commands.RunCoralIntake;
-import frc.robot.commands.RunElevatorManual;
-import frc.robot.commands.RunPivotManual;
-import frc.robot.commands.SetCoralPivot;
+import frc.robot.commands.Runclimber;
+import frc.robot.commands.RunclimberBack;
+import frc.robot.commands.StillClimber;
 import frc.robot.commands.TeleopDrive;
+import frc.robot.commands.zeroGyro;
+import frc.robot.commands.CoralPivot.CoralPivot90;
+import frc.robot.commands.CoralPivot.CoralPivotDown;
+import frc.robot.commands.CoralPivot.CoralPivotHP;
+import frc.robot.commands.CoralPivot.CoralPivotUp;
+import frc.robot.commands.CoralPivot.RunPivotManual;
+import frc.robot.commands.Elevator_Postions.Elevator_HP;
+import frc.robot.commands.Elevator_Postions.Elevator_L2;
+import frc.robot.commands.Elevator_Postions.Elevator_L3;
+import frc.robot.commands.Elevator_Postions.Elevator_L4;
+import frc.robot.commands.Elevator_Postions.RunElevatorManual;
+import frc.robot.commands.Intakes.AlgaeIn;
+import frc.robot.commands.Intakes.AlgaeOut;
+import frc.robot.commands.Intakes.CoralIn;
+import frc.robot.commands.Intakes.CoralOut;
 import frc.robot.subsystems.AlgaeIntake;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.CoralIntake;
 import frc.robot.subsystems.CoralPivot;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Vision;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
@@ -32,11 +46,15 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 public class RobotContainer {
   private SendableChooser<Command> autoChooser;
 
-  public static DriveTrain driveTrain = new DriveTrain();
-  public static Elevator elevator = new Elevator();
-  public static CoralIntake coralIntake = new CoralIntake();
-  public static CoralPivot coralPivot = new CoralPivot();
-  public static AlgaeIntake algaeIntake = new AlgaeIntake();
+  // private SendableChooser<Command> autoChooser;
+
+  public static DriveTrain driveTrain;
+  public static Elevator elevator;
+  public static CoralIntake coralIntake;
+  public static CoralPivot coralPivot;
+  public static AlgaeIntake algaeIntake;
+  // public static Vision photonVision;
+  public static Climber climber = new Climber();
 
   static CommandXboxController driver = new CommandXboxController(0);
   static CommandXboxController operator = new CommandXboxController(1);
@@ -47,52 +65,28 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
 
-    field = new Field2d();
-    
-    PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
-      field.setRobotPose(pose);
-    });
-
-    PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
-      field.getObject("target pose").setPose(pose);
-    });
-
-    PathPlannerLogging.setLogActivePathCallback((poses) -> {
-      field.getObject("path").setPoses(poses);
-    });
-
-    SmartDashboard.putData("Field", field);
-
-
-    // Named Commands go under here
-    autoChooser = AutoBuilder.buildAutoChooser("Do Nothing");
-    SmartDashboard.putData("AutoChooser", autoChooser);
-
     driveTrain.setDefaultCommand(new TeleopDrive());
-    // elevator.setDefaultCommand(new RunElevatorManual());
-    // coralIntake.setDefaultCommand(new RunCoralIntake())/;
-    // coralPivot.setDefaultCommand(new RunPivotManual());
-
+    elevator.setDefaultCommand(new RunElevatorManual());
+    // coralIntake.setDefaultCommand(new RunCoralIntake());
+    coralPivot.setDefaultCommand(new RunPivotManual());
     configureBindings();
-
-    // autoChooser = AutoBuilder.buildAutoChooser("Do Nothing");
-    // SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   private void configureBindings() {
-    driver.a().onTrue(new AngleSet());
     // operator.a().onTrue(new SetCoralPivot());
-    // operator.b().whileTrue(new Elevator_L2());
-    // operator.a().whileTrue(new CoralOut());
-    // operator.b().whileTrue(new CoralIn());
-    // operator.y().whileTrue(new AlgaeIn());
-    // operator.x().whileTrue(new AlgaeOut());
+    operator.a().whileTrue(new CoralOut());
+    operator.b().whileTrue(new CoralIn());
+    operator.y().whileTrue(new AlgaeIn());
   }
 
   public static double getLeftYOp() {
     return operator.getLeftY();
   }
 
+
+  public static boolean getDriverA() {
+    return driver.a().getAsBoolean(); // Add driver A
+  }
   
   public static double getRightYOp() {
     return operator.getRightY();
@@ -104,10 +98,6 @@ public class RobotContainer {
 
   public static double getRightX() {
     return driver.getRightX();
-  }
-
-  public static boolean getABtn() {
-    return operator.a().getAsBoolean();
   }
 
   public static double getLeftX() {

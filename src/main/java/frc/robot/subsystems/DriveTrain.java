@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -36,54 +38,23 @@ public class DriveTrain extends SubsystemBase {
   Pigeon2 gyro;
   Pose2d robotPose;
 
-  SwerveDrivePoseEstimator odom;
+  SwerveDriveOdometry odom;
   Field2d field;
   RobotConfig autoConfig;
 
 
   public DriveTrain() {
     elmCityModules = new ElmCityModule[] {
-      new ElmCityModule(0, 8, 7, 0,Constants.angleOffsetMod0,InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive),
-      new ElmCityModule(1, 20, 19, 2, Constants.angleOffsetMod1, InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive),
-      new ElmCityModule(2, 10, 9, 1, Constants.angleOffsetMod2 ,InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive),
-      new ElmCityModule(3, 17, 18, 3, Constants.angleOffsetMod3, InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive),
+      new ElmCityModule(0, 8, 7, 0,Constants.angleOffsetMod0,InvertedValue.CounterClockwise_Positive, InvertedValue.Clockwise_Positive),
+      new ElmCityModule(1, 20, 19, 3, Constants.angleOffsetMod1, InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive),
+      new ElmCityModule(2, 10, 9, 1, Constants.angleOffsetMod2 ,InvertedValue.CounterClockwise_Positive, InvertedValue.Clockwise_Positive),
+      new ElmCityModule(3, 17, 18, 2, Constants.angleOffsetMod3, InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive),
     };
 
     
 
     gyro = new Pigeon2(Constants.pigeonID);
-
-    odom = new SwerveDrivePoseEstimator(Constants.swerveKinematics, getYaw(), getPositions(), new Pose2d());
-
-    try {
-      autoConfig = RobotConfig.fromGUISettings();
-    } catch(Exception e) {
-      e.printStackTrace();
-    }
-
-    AutoBuilder.configure(
-      this::getPose,
-      this::resetPose,
-      this::getRobotSpds,
-      (speeds, feedforwards) -> driveRobotRelative(speeds),
-      new PPHolonomicDriveController(
-            new PIDConstants(0, 0, 0), 
-            new PIDConstants(0, 0, 0)
-      ),
-      autoConfig,
-      () -> {
-        var alliance = DriverStation.getAlliance();
-        if(alliance.isPresent()) {
-          return alliance.get() == DriverStation.Alliance.Red;
-        }
-        return false;
-      },
-      this
-    );
-
-
-    robotPose = getPose();
-
+    
     resetGyro();
   }
 
@@ -149,11 +120,23 @@ public class DriveTrain extends SubsystemBase {
     }
   }
 
+  public SwerveModuleState[] getStates() {
+    SwerveModuleState[] states = new SwerveModuleState[] {
+      elmCityModules[0].getState(),
+      elmCityModules[1].getState(),
+      elmCityModules[2].getState(),
+      elmCityModules[3].getState(),
+    };
+
+    return states;
+  }
+
   public Pose2d getRobotPose2d() {
     Pose2d robotPose = odom.update(getYaw(), getPositions());
 
     return robotPose;
   }
+
 
   public double getRobotAngle() {
     return gyro.getYaw().getValueAsDouble();
@@ -175,11 +158,23 @@ public class DriveTrain extends SubsystemBase {
   }
 
 
+  public void zeroAngles() {
+    for(ElmCityModule m : elmCityModules) {
+      m.setAngleZero();
+    }
+  }
+
   @Override
   public void periodic() {
 
     // First update pose with vision and other sensors
-    updateOdometry();
+    // updatePose();
+    odom.update(getYaw(), getPositions());
+
+    Logger.recordOutput("SwerveStates/Setpoints", getStates());
+    Logger.recordOutput("Robot Yaw", getRobotAngle());
+
+    
 
     // Updates the robot pose for the Robot itself
     SmartDashboard.putNumber("Robot Angle", getRobotAngle());

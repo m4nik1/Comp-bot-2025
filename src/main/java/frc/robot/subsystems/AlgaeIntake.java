@@ -4,8 +4,10 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXSConfiguration;
 import com.ctre.phoenix6.hardware.TalonFXS;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,15 +18,11 @@ public class AlgaeIntake extends SubsystemBase {
   TalonFXS algaeRun;
   DigitalInput algaeDetector;
   DigitalInput algaeDetector2;
+  TalonFXSConfiguration algaeConfig;
   // Make sure elevator is at 8 inches off top of bumper
   
   public AlgaeIntake() {
    algaeRun = new TalonFXS(36);
-   algaeDetector = new DigitalInput(2);
-   algaeDetector2 = new DigitalInput(3);
-
-
-   algaeRun.getConfigurator().apply(new TalonFXSConfiguration());
   }
 
   public void runIntake(double speed) {
@@ -38,6 +36,7 @@ public class AlgaeIntake extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
     SmartDashboard.putBoolean("Detect 1", algaeDetect());
     SmartDashboard.putBoolean("Detect 2", algaeDetector2.get());
   }

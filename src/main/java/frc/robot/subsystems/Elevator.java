@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
@@ -13,8 +15,10 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Elevator extends SubsystemBase {
   /** Creates a new Elevator. */
@@ -23,7 +27,6 @@ public class Elevator extends SubsystemBase {
 
   DigitalInput TopElevatorLimit;
   DigitalInput LowerLimit;
-  TalonFXConfiguration elevatorConfig;
   MotionMagicVoltage elevatorMagic;
 
 
@@ -34,7 +37,6 @@ public class Elevator extends SubsystemBase {
 
     TopElevatorLimit = new DigitalInput(4);
     LowerLimit = new DigitalInput(0);
-    elevatorConfig = new TalonFXConfiguration();
 
     elevatorMotor.setPosition(0);
 
@@ -75,7 +77,7 @@ public class Elevator extends SubsystemBase {
     elevatorConfig.MotionMagic.MotionMagicCruiseVelocity = 100;
 
     elevatorMotor.getConfigurator().apply(elevatorConfig);
-    elevatorMotor.getConfigurator().setPosition(0);
+    elevatorMotor.setPosition(0);
 
   }
 
@@ -95,7 +97,17 @@ public class Elevator extends SubsystemBase {
   }
 
   public void setElevatorMagic(double pos) {
-    elevatorMotor.setControl(elevatorMagic.withPosition(40));
+    elevatorMotor.setControl(elevatorMagic.withPosition(pos));
+  }
+
+  public boolean isElevatorL4() {
+    double elevator_pos = getElevatorPosition();
+    return elevator_pos >= Constants.elevator_l4;
+  }
+
+  public boolean isElevatorL3() {
+    double elevator_pos = getElevatorPosition();
+    return elevator_pos >= Constants.elevator_l3;
   }
 
   public boolean getTopLimit() {
@@ -109,14 +121,24 @@ public class Elevator extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
+    Logger.recordOutput("Elevator Pos", getElevatorPosition());
+    Logger.recordOutput("Elevator Volts", getElevatorMotorVolts());
+    Logger.recordOutput("Top Limit", getTopLimit());
+    Logger.recordOutput("Lower Limit", getLowerLimit());
+
+
     SmartDashboard.putNumber("Position Elevator", getElevatorPosition());
-    SmartDashboard.putNumber("Velocity", elevatorMotor.getVelocity().getValueAsDouble());
-    SmartDashboard.putNumber("Elevator Volts", getElevatorMotorVolts());
 
 
-    if(getLowerLimit() == true) {
-      elevatorMotor.setPosition(0);
+    if(getLowerLimit() == true && DriverStation.isDisabled() && getElevatorPosition() != 0) {
+      elevatorMotor.getConfigurator().setPosition(0);
     }
+
+    if(getLowerLimit() == true && DriverStation.isEnabled() && getElevatorPosition() != 0) {
+      elevatorMotor.getConfigurator().setPosition(0);
+    }
+
 
     SmartDashboard.putBoolean("Top Limit", getTopLimit());
     SmartDashboard.putBoolean("Lower Limit", getLowerLimit());

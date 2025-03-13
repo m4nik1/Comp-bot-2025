@@ -8,11 +8,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class SetCoralPivot extends Command {
-  /** Creates a new SetCoralPivot. */
-  public SetCoralPivot() {
+public class zeroGyro extends Command {
+  /** Creates a new zeroGyro. */
+  public zeroGyro() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.coralPivot);
   }
 
   // Called when the command is initially scheduled.
@@ -22,7 +21,7 @@ public class SetCoralPivot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.coralPivot.setPivot(3);
+    RobotContainer.driveTrain.resetGyro();
   }
 
   // Called once the command ends or is interrupted.
