@@ -63,7 +63,7 @@ public class RobotContainer {
       field.getObject("path").setPoses(poses);
     });
 
-    NamedCommands.registerCommand("Pivot Down", new CoralDownAuto());
+    NamedCommands.registerCommand("Pivot_Down", new CoralDownAuto());
     NamedCommands.registerCommand("Elevator_L4", new ElevatorAuto_l4());
     NamedCommands.registerCommand("Elevator_HP", new ElevatorAuto_HP());
 

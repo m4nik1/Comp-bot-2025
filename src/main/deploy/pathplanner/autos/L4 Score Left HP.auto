@@ -11,6 +11,18 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Elevator_L4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pivot_Down"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "L4 Left Human"
