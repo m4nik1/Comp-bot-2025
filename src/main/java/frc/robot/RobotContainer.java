@@ -90,13 +90,12 @@ public class RobotContainer {
     operator.povUp().onTrue(new CoralPivotUp());
     operator.povLeft().whileTrue(new RunPivotManual());
     operator.povDown().onTrue(new CoralPivotDown());
-    operator.start().whileTrue(new ElevatorAl_l3());
+    operator.start().onTrue(new ElevatorAl_l3());
     
 
     // Elevator Positions - Find out what btn should be elevator ground
     operator.a().onTrue(new Elevator_L2());
     operator.b().onTrue(new Elevator_L3());
-    operator.start().whileTrue(new RunElevatorManual());
     operator.y().onTrue(new Elevator_L4());
     operator.x().onTrue(new Elevator_HP());
 
