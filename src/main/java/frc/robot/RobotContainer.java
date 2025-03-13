@@ -20,11 +20,13 @@ import frc.robot.subsystems.CoralPivot;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -48,6 +50,12 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
+    coralPivot = new CoralPivot(); 
+    coralIntake = new CoralIntake();
+    driveTrain = new DriveTrain();
+    elevator = new Elevator();
+
+    driveTrain.setDefaultCommand(new TeleopDrive());
 
     field = new Field2d();
 
@@ -68,6 +76,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("Elevator_HP", new ElevatorAuto_HP());
 
 
+    autoChooser = AutoBuilder.buildAutoChooser("Do Nothing");
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+
     configureBindings();
   }
 
@@ -78,6 +89,9 @@ public class RobotContainer {
     return operator.getLeftY();
   }
 
+  public Command getAutonomousCommand() {
+    return autoChooser.getSelected();
+  }
 
   public static boolean getDriverA() {
     return driver.a().getAsBoolean(); // Add driver A

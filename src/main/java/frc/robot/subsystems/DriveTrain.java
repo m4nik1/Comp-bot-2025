@@ -57,10 +57,38 @@ public class DriveTrain extends SubsystemBase {
     gyro = new Pigeon2(Constants.pigeonID);
     odom = new SwerveDriveOdometry(Constants.swerveKinematics, getYaw(), getPositions());
 
+    try {
+      autoConfig = RobotConfig.fromGUISettings();
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
+
+    AutoBuilder.configure(
+      this::getPose,
+      this::resetPose,
+      this::getRobotSpds,
+      (speeds, feedforwards) -> driveRobotRelative(speeds),
+      new PPHolonomicDriveController(
+            new PIDConstants(0, 0, 0), 
+            new PIDConstants(0, 0, 0)
+      ),
+      autoConfig,
+      () -> {
+        var alliance = DriverStation.getAlliance();
+        if(alliance.isPresent()) {
+          return alliance.get() == DriverStation.Alliance.Red;
+        }
+        return false;
+      },
+      this
+    );
+
     // odom.resetPosition(getYaw(), getPositions(), new Pose2d());
 
     resetGyro();
   }
+
+  
 
   public Rotation2d getYaw() {
     return Rotation2d.fromDegrees(gyro.getYaw().getValueAsDouble());
