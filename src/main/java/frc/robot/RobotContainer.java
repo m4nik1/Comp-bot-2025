@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.Auto.CoralDownAuto;
+import frc.robot.commands.Auto.ElevatorAuto_HP;
 import frc.robot.commands.Auto.ElevatorAuto_l4;
 import frc.robot.commands.CoralPivot.RunPivotManual;
 import frc.robot.commands.Elevator_Postions.RunElevatorManual;
@@ -64,7 +65,7 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("Pivot Down", new CoralDownAuto());
     NamedCommands.registerCommand("Elevator_L4", new ElevatorAuto_l4());
-    NamedCommands.registerCommand("Elevator_HP", new ElevatorAuto_l4());
+    NamedCommands.registerCommand("Elevator_HP", new ElevatorAuto_HP());
 
 
     configureBindings();
