@@ -88,7 +88,7 @@ public class RobotContainer {
 
     operator.povRight().onTrue(new CoralPivot90());
     operator.povUp().onTrue(new CoralPivotUp());
-    operator.povLeft().whileTrue(new RunCoralIntake());
+    operator.povLeft().whileTrue(new RunPivotManual());
     operator.povDown().onTrue(new CoralPivotDown());
     operator.start().whileTrue(new ElevatorAl_l3());
     
