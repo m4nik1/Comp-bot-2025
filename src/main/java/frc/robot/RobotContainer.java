@@ -32,14 +32,8 @@ import frc.robot.subsystems.CoralIntake;
 import frc.robot.subsystems.CoralPivot;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.Vision;
-
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.util.PathPlannerLogging;
-
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -58,8 +52,6 @@ public class RobotContainer {
 
   static CommandXboxController driver = new CommandXboxController(0);
   static CommandXboxController operator = new CommandXboxController(1);
-
-  private final Field2d field;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
