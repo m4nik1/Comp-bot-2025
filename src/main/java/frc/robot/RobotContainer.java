@@ -17,6 +17,7 @@ import frc.robot.commands.CoralPivot.CoralPivotDown;
 import frc.robot.commands.CoralPivot.CoralPivotHP;
 import frc.robot.commands.CoralPivot.CoralPivotUp;
 import frc.robot.commands.CoralPivot.RunPivotManual;
+import frc.robot.commands.Elevator_Postions.ElevatorAl_l3;
 import frc.robot.commands.Elevator_Postions.Elevator_HP;
 import frc.robot.commands.Elevator_Postions.Elevator_L2;
 import frc.robot.commands.Elevator_Postions.Elevator_L3;
@@ -87,9 +88,9 @@ public class RobotContainer {
 
     operator.povRight().onTrue(new CoralPivot90());
     operator.povUp().onTrue(new CoralPivotUp());
-    operator.povLeft().onTrue(new CoralPivotHP());
+    operator.povLeft().whileTrue(new RunCoralIntake());
     operator.povDown().onTrue(new CoralPivotDown());
-    // operator.start().whileTrue(new RunPivotManual());
+    operator.start().whileTrue(new ElevatorAl_l3());
     
 
     // Elevator Positions - Find out what btn should be elevator ground
