@@ -4,9 +4,9 @@
 
 package frc.robot;
 
-import frc.robot.commands.AimAndTarget;
-import frc.robot.commands.AngleSet;
-import frc.robot.commands.RunCoralIntake;
+
+
+
 import frc.robot.commands.Runclimber;
 import frc.robot.commands.RunclimberBack;
 import frc.robot.commands.StillClimber;
@@ -14,7 +14,6 @@ import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.zeroGyro;
 import frc.robot.commands.CoralPivot.CoralPivot90;
 import frc.robot.commands.CoralPivot.CoralPivotDown;
-import frc.robot.commands.CoralPivot.CoralPivotHP;
 import frc.robot.commands.CoralPivot.CoralPivotUp;
 import frc.robot.commands.CoralPivot.RunPivotManual;
 import frc.robot.commands.Elevator_Postions.ElevatorAl_l3;
@@ -33,15 +32,9 @@ import frc.robot.subsystems.CoralIntake;
 import frc.robot.subsystems.CoralPivot;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.Vision;
-
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class RobotContainer {
