@@ -5,15 +5,14 @@
 package frc.robot.commands.Auto;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ElevatorAuto_HP extends Command {
-  /** Creates a new Elevator_Down. */
-  public ElevatorAuto_HP() {
+public class RunCoralIntakeAuto extends Command {
+  /** Creates a new RunCoralIntakeAuto. */
+  public RunCoralIntakeAuto() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.elevator);
+    addRequirements(RobotContainer.coralIntake);
   }
 
   // Called when the command is initially scheduled.
@@ -23,8 +22,7 @@ public class ElevatorAuto_HP extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.elevator.setElevatorMagic(Constants.elevator_HP);
-    RobotContainer.coralPivot.setPivot(Constants.pivot_HP);
+    RobotContainer.coralIntake.runCoral(.6);
   }
 
   // Called once the command ends or is interrupted.
@@ -34,6 +32,6 @@ public class ElevatorAuto_HP extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotContainer.elevator.isElevatorAt(Constants.elevator_HP);
+    return false;
   }
 }
