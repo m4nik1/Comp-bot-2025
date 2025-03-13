@@ -70,15 +70,12 @@ public class RobotContainer {
 
     driveTrain.setDefaultCommand(new TeleopDrive());
     elevator.setDefaultCommand(new RunElevatorManual());
-    // coralPivot.setDefaultCommand(new RunPivotManual());
 
     configureBindings();
 
   }
 
   private void configureBindings() {
-    // driver.a().onTrue(new AimAndTarget());
-
     operator.povRight().onTrue(new CoralPivot90());
     operator.povUp().onTrue(new CoralPivotUp());
     operator.povLeft().whileTrue(new RunPivotManual());
@@ -95,7 +92,6 @@ public class RobotContainer {
     // Coral and Algae Intakes
     operator.leftTrigger().whileTrue(new AlgaeIn());
     operator.leftBumper().whileTrue(new AlgaeOut());
-
     operator.rightTrigger().whileTrue(new CoralIn());
     operator.rightBumper().whileTrue(new CoralOut());
 
@@ -103,7 +99,6 @@ public class RobotContainer {
     driver.rightBumper().whileTrue(new zeroGyro());
     driver.povDown().whileTrue(new RunclimberBack());
     driver.povRight().whileTrue(new StillClimber());
-    // driver.a().whileTrue(new AimAndTarget());
 
 
 
