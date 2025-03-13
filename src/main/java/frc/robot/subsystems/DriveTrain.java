@@ -57,6 +57,8 @@ public class DriveTrain extends SubsystemBase {
     gyro = new Pigeon2(Constants.pigeonID);
     odom = new SwerveDriveOdometry(Constants.swerveKinematics, getYaw(), getPositions());
 
+    resetGyro();
+
     try {
       autoConfig = RobotConfig.fromGUISettings();
     } catch(Exception e) {
