@@ -7,17 +7,24 @@ package frc.robot.subsystems;
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
   TalonFX climberMotor = new TalonFX(13);
+  DutyCycleOut climbDuty;
+
   public Climber() {
     configClimber();
     climberMotor.setPosition(0);
+
+    climbDuty = new DutyCycleOut(0);
   }
 
   public void configClimber() {
@@ -26,12 +33,18 @@ public class Climber extends SubsystemBase {
     climbConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     climbConfig.Feedback.SensorToMechanismRatio =  100/1;
 
+    climbConfig.Slot0.kP = Constants.climberkP;
+    climbConfig.Slot0.kI = Constants.climberkI;
+    climbConfig.Slot0.kD = Constants.climberkD;
+
     climberMotor.getConfigurator().apply(climbConfig);
   }
 
   public void runClimber(double speed) {
     climberMotor.set(-speed);
   }
+
+
 
   @Override
   public void periodic() {

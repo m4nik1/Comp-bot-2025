@@ -23,6 +23,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class CoralPivot extends SubsystemBase {
   /** Creates a new CoralPivot. */
@@ -68,6 +69,10 @@ public class CoralPivot extends SubsystemBase {
 
   public boolean getPivotLimit() {
     return pivotLimit.get();
+  }
+
+  public boolean isPivotDown() {
+    return pivotPoint.getEncoder().getPosition() <= Constants.pivot_down;
   }
 
   public void setPivot(double pos) {

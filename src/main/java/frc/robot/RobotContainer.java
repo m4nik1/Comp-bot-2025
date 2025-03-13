@@ -4,26 +4,12 @@
 
 package frc.robot;
 
-import frc.robot.commands.AimAndTarget;
-import frc.robot.commands.AngleSet;
-import frc.robot.commands.RunCoralIntake;
-import frc.robot.commands.Runclimber;
-import frc.robot.commands.RunclimberBack;
-import frc.robot.commands.StillClimber;
 import frc.robot.commands.TeleopDrive;
-import frc.robot.commands.zeroGyro;
-import frc.robot.commands.CoralPivot.CoralPivot90;
-import frc.robot.commands.CoralPivot.CoralPivotDown;
-import frc.robot.commands.CoralPivot.CoralPivotHP;
-import frc.robot.commands.CoralPivot.CoralPivotUp;
+import frc.robot.commands.Auto.CoralDownAuto;
+import frc.robot.commands.Auto.ElevatorAuto_l4;
 import frc.robot.commands.CoralPivot.RunPivotManual;
-import frc.robot.commands.Elevator_Postions.Elevator_HP;
-import frc.robot.commands.Elevator_Postions.Elevator_L2;
-import frc.robot.commands.Elevator_Postions.Elevator_L3;
-import frc.robot.commands.Elevator_Postions.Elevator_L4;
 import frc.robot.commands.Elevator_Postions.RunElevatorManual;
 import frc.robot.commands.Intakes.AlgaeIn;
-import frc.robot.commands.Intakes.AlgaeOut;
 import frc.robot.commands.Intakes.CoralIn;
 import frc.robot.commands.Intakes.CoralOut;
 import frc.robot.subsystems.AlgaeIntake;
@@ -32,6 +18,10 @@ import frc.robot.subsystems.CoralIntake;
 import frc.robot.subsystems.CoralPivot;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
+
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.util.PathPlannerLogging;
+
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -49,6 +39,7 @@ public class RobotContainer {
   public static AlgaeIntake algaeIntake;
   // public static Vision photonVision;
   public static Climber climber = new Climber();
+  Field2d field;
 
   static CommandXboxController driver = new CommandXboxController(0);
   static CommandXboxController operator = new CommandXboxController(1);
@@ -57,18 +48,28 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
 
-    driveTrain.setDefaultCommand(new TeleopDrive());
-    elevator.setDefaultCommand(new RunElevatorManual());
-    // coralIntake.setDefaultCommand(new RunCoralIntake());
-    coralPivot.setDefaultCommand(new RunPivotManual());
+    field = new Field2d();
+
+    PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
+      field.setRobotPose(pose);
+    });
+
+    PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
+      field.getObject("target pose").setPose(pose);
+    });
+
+    PathPlannerLogging.setLogActivePathCallback((poses) -> {
+      field.getObject("path").setPoses(poses);
+    });
+
+    NamedCommands.registerCommand("Pivot Down", new CoralDownAuto());
+    NamedCommands.registerCommand("Elevator_L4", new ElevatorAuto_l4());
+
+
     configureBindings();
   }
 
   private void configureBindings() {
-    // operator.a().onTrue(new SetCoralPivot());
-    operator.a().whileTrue(new CoralOut());
-    operator.b().whileTrue(new CoralIn());
-    operator.y().whileTrue(new AlgaeIn());
   }
 
   public static double getLeftYOp() {
