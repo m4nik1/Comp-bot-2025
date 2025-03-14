@@ -78,6 +78,10 @@ public final class Constants {
 
   public static double pivot_l3 = -100;
 
+  public static double climbP = .1;
+  public static double climbI = 0;
+  public static double climbD = 0;
+
 
   public static final Mode currentMode = Mode.REAL;
 

@@ -7,6 +7,7 @@ package frc.robot;
 
 
 
+import frc.robot.commands.ClimberStartSet;
 import frc.robot.commands.Runclimber;
 import frc.robot.commands.RunclimberBack;
 import frc.robot.commands.StillClimber;
@@ -68,7 +69,8 @@ public class RobotContainer {
 
     SmartDashboard.putData("Field", field);
 
-    driveTrain.setDefaultCommand(new TeleopDrive());
+    // driveTrain.setDefaultCommand(new TeleopDrive());
+    
     elevator.setDefaultCommand(new RunElevatorManual());
 
     configureBindings();
@@ -95,11 +97,11 @@ public class RobotContainer {
     operator.rightTrigger().whileTrue(new CoralIn());
     operator.rightBumper().whileTrue(new CoralOut());
 
-    driver.povUp().whileTrue(new Runclimber());
+    driver.povUp().whileTrue(new RunclimberBack());
     driver.rightBumper().whileTrue(new zeroGyro());
-    driver.povDown().whileTrue(new RunclimberBack());
-    driver.povRight().whileTrue(new StillClimber());
+    driver.povDown().whileTrue(new Runclimber());
 
+    driver.povRight().whileTrue(new ClimberStartSet());
 
 
   }

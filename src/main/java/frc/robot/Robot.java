@@ -50,7 +50,7 @@ public class Robot extends LoggedRobot {
         break;
     }
 
-    // Logger.start();
+    Logger.start();
 
     m_robotContainer = new RobotContainer();
     reefPosesGenerate = new GenerateReefPoses();
