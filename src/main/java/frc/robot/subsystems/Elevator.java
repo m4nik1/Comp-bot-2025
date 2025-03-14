@@ -102,13 +102,19 @@ public class Elevator extends SubsystemBase {
 
   public boolean isElevatorL4() {
     double elevator_pos = getElevatorPosition();
-    return elevator_pos >= Constants.elevator_l4;
+    return elevator_pos >= Constants.elevator_l4 + 25;
   }
 
   public boolean isElevatorL3() {
     double elevator_pos = getElevatorPosition();
     return elevator_pos >= Constants.elevator_l3;
   }
+  
+  public boolean isElevatorAt(double pos) {
+    double elevator_pos = getElevatorPosition();
+    return elevator_pos >= pos;
+  }
+
 
   public boolean getTopLimit() {
     return TopElevatorLimit.get();

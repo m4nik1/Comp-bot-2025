@@ -58,7 +58,7 @@ public class TeleopDrive extends Command {
       //   var result = results.get(results.size() - 1);
       //   if(result.hasTargets()) {
       //     for (var target : result.getTargets()) {
-      //       if(target.getFiducialId() == 18 || target.getFiducialId() == 13 || target.getFiducialId() == 2 || target.getFiducialId() == 1) {
+      //       if(target) {
       //         targetYaw = target.getYaw();
       //         SmartDashboard.putNumber("Target found", target.getFiducialId());
       //         SmartDashboard.putNumber("18 Yaw", targetYaw);

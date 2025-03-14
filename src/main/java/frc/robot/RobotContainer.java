@@ -13,6 +13,12 @@ import frc.robot.commands.RunclimberBack;
 import frc.robot.commands.StillClimber;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.zeroGyro;
+import frc.robot.commands.Auto.CoralDownAuto;
+import frc.robot.commands.Auto.ElevatorAuto_HP;
+import frc.robot.commands.Auto.ElevatorAuto_l2;
+import frc.robot.commands.Auto.ElevatorAuto_l4;
+import frc.robot.commands.Auto.PivotAuto90;
+import frc.robot.commands.Auto.RunCoralIntakeAuto;
 import frc.robot.commands.CoralPivot.CoralPivot90;
 import frc.robot.commands.CoralPivot.CoralPivotDown;
 import frc.robot.commands.CoralPivot.CoralPivotUp;
@@ -34,13 +40,20 @@ import frc.robot.subsystems.CoralPivot;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.util.PathPlannerLogging;
+
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class RobotContainer {
 
-  // private SendableChooser<Command> autoChooser;
+  private SendableChooser<Command> autoChooser;
 
   public static DriveTrain driveTrain;
   public static Elevator elevator;
@@ -58,6 +71,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
+      
     driveTrain = new DriveTrain();
     elevator = new Elevator();
     coralIntake = new CoralIntake();
@@ -65,7 +79,30 @@ public class RobotContainer {
     algaeIntake = new AlgaeIntake();
     // photonVision = new Vision(); 
 
+    
     field = new Field2d();
+
+    PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
+      field.setRobotPose(pose);
+    });
+
+    PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
+      field.getObject("target pose").setPose(pose);
+    });
+
+    PathPlannerLogging.setLogActivePathCallback((poses) -> {
+      field.getObject("path").setPoses(poses);
+    });
+
+    NamedCommands.registerCommand("Coral_out", new RunCoralIntakeAuto());
+    NamedCommands.registerCommand("Pivot_Down", new CoralDownAuto());
+    NamedCommands.registerCommand("Pivot_90", new PivotAuto90());
+    NamedCommands.registerCommand("Elevator_L4", new ElevatorAuto_l4());
+    NamedCommands.registerCommand("Elevator_HP", new ElevatorAuto_HP());
+    NamedCommands.registerCommand("Elevator_L2", new ElevatorAuto_l2());
+
+    autoChooser = AutoBuilder.buildAutoChooser("Do Nothing");
+    SmartDashboard.putData("Auto Chooser", autoChooser);
 
     SmartDashboard.putData("Field", field);
 
@@ -100,10 +137,11 @@ public class RobotContainer {
     driver.povUp().whileTrue(new RunclimberBack());
     driver.rightBumper().whileTrue(new zeroGyro());
     driver.povDown().whileTrue(new Runclimber());
-
     driver.povRight().whileTrue(new ClimberStartSet());
+  }
 
-
+  public Command getAutonomousCommand() {
+    return autoChooser.getSelected();
   }
 
   public static double getLeftYOp() {
@@ -112,7 +150,7 @@ public class RobotContainer {
 
 
   public static boolean getDriverA() {
-    return driver.a().getAsBoolean(); // Add driver A
+    return driver.a().getAsBoolean();
   }
   
   public static double getRightYOp() {

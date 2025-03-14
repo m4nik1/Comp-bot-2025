@@ -10,6 +10,10 @@ import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -20,6 +24,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -35,6 +40,7 @@ public class DriveTrain extends SubsystemBase {
 
   SwerveDriveOdometry odom;
   Field2d field;
+  RobotConfig autoConfig;
 
 
   public DriveTrain() {
@@ -51,13 +57,64 @@ public class DriveTrain extends SubsystemBase {
     gyro = new Pigeon2(Constants.pigeonID);
     odom = new SwerveDriveOdometry(Constants.swerveKinematics, getYaw(), getPositions());
 
-    // odom.resetPosition(getYaw(), getPositions(), new Pose2d());
+
+    try {
+      autoConfig = RobotConfig.fromGUISettings();
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
+    
+    AutoBuilder.configure(
+      this::getPose,
+      this::resetPose,
+      this::getRobotSpds,
+      (speeds, feedforwards) -> driveRobotRelative(speeds),
+      new PPHolonomicDriveController(
+            new PIDConstants(0, 0, 0), 
+            new PIDConstants(2.7, 0, 0)
+      ),
+      autoConfig,
+      () -> {
+        var alliance = DriverStation.getAlliance();
+        if(alliance.isPresent()) {
+          return alliance.get() == DriverStation.Alliance.Red;
+        }
+        return false;
+      },
+      this
+    );
 
     resetGyro();
   }
 
   public Rotation2d getYaw() {
     return Rotation2d.fromDegrees(gyro.getYaw().getValueAsDouble());
+  }
+
+  public Pose2d getPose() {
+    return odom.getPoseMeters(); // returns pose in meters
+  }
+
+  public void resetPose(Pose2d pose) {
+    odom.resetPosition(getYaw(), getPositions(), pose);
+  }
+
+  public ChassisSpeeds getRobotSpds() {
+    return Constants.swerveKinematics.toChassisSpeeds(
+      elmCityModules[0].getState(),
+      elmCityModules[1].getState(),
+      elmCityModules[2].getState(),
+      elmCityModules[3].getState()
+    );
+  }
+
+  public void driveRobotRelative(ChassisSpeeds spds) {
+    SwerveModuleState states[] = Constants.swerveKinematics.toSwerveModuleStates(spds);
+    SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.maxSpeed);
+
+    for(ElmCityModule m : elmCityModules) {
+      m.setDesiredState(states[m.modNum], false);
+    }
   }
 
   public SwerveModulePosition[] getPositions() {
