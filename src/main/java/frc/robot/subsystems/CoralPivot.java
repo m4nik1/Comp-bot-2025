@@ -104,6 +104,7 @@ public class CoralPivot extends SubsystemBase {
     Logger.recordOutput("Pivot Volts", pivotPoint.getAppliedOutput());
     SmartDashboard.putNumber("Pivot Spd", pivotPoint.get());
     SmartDashboard.putBoolean("Pivot Limit", getPivotLimit());
+    SmartDashboard.putNumber("pivot pos", pivotPoint.getEncoder().getPosition() + -30);
 
     if(getPivotLimit() == true) {
       pivotPoint.getEncoder().setPosition(0);

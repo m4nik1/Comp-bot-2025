@@ -39,6 +39,7 @@ import frc.robot.subsystems.CoralIntake;
 import frc.robot.subsystems.CoralPivot;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Vision;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -106,7 +107,7 @@ public class RobotContainer {
 
     SmartDashboard.putData("Field", field);
 
-    // driveTrain.setDefaultCommand(new TeleopDrive());
+    driveTrain.setDefaultCommand(new TeleopDrive());
     
     elevator.setDefaultCommand(new RunElevatorManual());
 

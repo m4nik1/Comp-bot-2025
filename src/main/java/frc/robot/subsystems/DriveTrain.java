@@ -70,7 +70,7 @@ public class DriveTrain extends SubsystemBase {
       this::getRobotSpds,
       (speeds, feedforwards) -> driveRobotRelative(speeds),
       new PPHolonomicDriveController(
-            new PIDConstants(0, 0, 0), 
+            new PIDConstants(0.5, 0, 0), 
             new PIDConstants(2.7, 0, 0)
       ),
       autoConfig,

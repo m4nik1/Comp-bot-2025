@@ -4,6 +4,7 @@
 
 package frc.robot.commands.Elevator_Postions;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -11,6 +12,7 @@ import frc.robot.RobotContainer;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Elevator_L4 extends Command {
   /** Creates a new Elevator_L4. */
+  Timer timer;
   public Elevator_L4() {
     addRequirements(RobotContainer.elevator);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -18,12 +20,21 @@ public class Elevator_L4 extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    timer=new Timer();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    timer.start();
     RobotContainer.elevator.setElevatorMagic(Constants.elevator_l4);
+  
+    if (timer.hasElapsed(.2)) {
+      RobotContainer.coralPivot.setPivot(Constants.pivot_down);
+    }
+  
+    
   }
 
   // Called once the command ends or is interrupted.
