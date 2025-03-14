@@ -5,9 +5,11 @@
 package frc.robot;
 
 import frc.robot.commands.TeleopDrive;
+import frc.robot.commands.zeroGyro;
 import frc.robot.commands.Auto.CoralDownAuto;
 import frc.robot.commands.Auto.ElevatorAuto_HP;
 import frc.robot.commands.Auto.ElevatorAuto_l4;
+import frc.robot.commands.Auto.RunCoralIntakeAuto;
 import frc.robot.commands.CoralPivot.RunPivotManual;
 import frc.robot.commands.Elevator_Postions.RunElevatorManual;
 import frc.robot.commands.Intakes.AlgaeIn;
@@ -56,6 +58,7 @@ public class RobotContainer {
     elevator = new Elevator();
 
     driveTrain.setDefaultCommand(new TeleopDrive());
+    elevator.setDefaultCommand(new RunElevatorManual());
 
     field = new Field2d();
 
@@ -71,6 +74,7 @@ public class RobotContainer {
       field.getObject("path").setPoses(poses);
     });
 
+    NamedCommands.registerCommand("Coral_out", new RunCoralIntakeAuto());
     NamedCommands.registerCommand("Pivot_Down", new CoralDownAuto());
     NamedCommands.registerCommand("Elevator_L4", new ElevatorAuto_l4());
     NamedCommands.registerCommand("Elevator_HP", new ElevatorAuto_HP());
@@ -83,6 +87,7 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+    driver.rightBumper().whileTrue(new zeroGyro());
   }
 
   public static double getLeftYOp() {
