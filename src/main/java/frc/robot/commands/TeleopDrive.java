@@ -50,7 +50,7 @@ public class TeleopDrive extends Command {
 
 
 
-    if(RobotContainer.getDriverA()) { // Driver presses the A button
+    // if(RobotContainer.getDriverA()) { // Driver presses the A button
       // var results = RobotContainer.photonVision.getUnreadResults();
       // Logger.recordOutput("Align on", RobotContainer.getDriverA());
 
@@ -70,15 +70,15 @@ public class TeleopDrive extends Command {
       // translationVal = translateLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getY, .08)); // getY was negativeß
       // strafeVal = strafeLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getX, .09)); // getX was negative
       // rotationVal = -1.0 * turnKp * targetYaw; 
-    }
-    else {
+    // }
+    // else {
       speedMultiplier = Constants.speedMultiTeleop;
 
       // Remember all these values from the stick are negative
-      translationVal = translateLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getY, .08)); // getY was negativeß
-      strafeVal = strafeLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getX, .09)); // getX was negative
-      rotationVal = rotationLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getRotation, .08)); // getRotation was negative  
-    }
+      translationVal = translateLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getY, .01)); // getY was negativeß
+      strafeVal = strafeLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getX, .01)); // getX was negative
+      rotationVal = rotationLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getRotation, .01)); // getRotation was negative  
+    // }
 
 
     Translation2d translation = new Translation2d(translationVal, strafeVal);

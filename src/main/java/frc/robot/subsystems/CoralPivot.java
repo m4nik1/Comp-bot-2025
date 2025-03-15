@@ -72,11 +72,11 @@ public class CoralPivot extends SubsystemBase {
   }
 
   public boolean isPivotDown() {
-    return pivotPoint.getEncoder().getPosition() <= Constants.pivot_down;
+    return (pivotPoint.getEncoder().getPosition() + -30) <= Constants.pivot_down+3;
   }
 
   public boolean isPivot90() {
-    return pivotPoint.getEncoder().getPosition() <= Constants.pivot_90;
+    return (pivotPoint.getEncoder().getPosition() + -30) <= Constants.pivot_90;
   }
 
   public void setPivot(double pos) {

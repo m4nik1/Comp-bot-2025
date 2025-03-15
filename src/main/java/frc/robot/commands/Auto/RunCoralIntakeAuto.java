@@ -25,21 +25,24 @@ public class RunCoralIntakeAuto extends Command {
   public void initialize() {
     timer = new Timer();
     finished = false;
+    RobotContainer.coralIntake.runCoral(-.6);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     timer.start();
-    if(timer.hasElapsed(1.5)) {
+    RobotContainer.coralIntake.runCoral( -.6);
+    if(timer.hasElapsed(2.5)) {
       finished = true;
     }
-    RobotContainer.coralIntake.runCoral(.6);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    RobotContainer.coralIntake.runCoral(0);
+  }
 
   // Returns true when the command should end.
   @Override

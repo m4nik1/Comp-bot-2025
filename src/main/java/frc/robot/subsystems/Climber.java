@@ -14,6 +14,7 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -55,14 +56,23 @@ public class Climber extends SubsystemBase {
   }
 
   public void runClimber(double speed) {
-    climberMotor.set(-speed);
+    climberMotor.set(speed);
   }
 
+  public double getClimberPosition() {
+    return climberMotor.getPosition().getValueAsDouble();
+  }
+
+  public double getClimberVolts() {
+    return climberMotor.getMotorVoltage().getValueAsDouble();
+  }
 
 
   @Override
   public void periodic() {
     Logger.recordOutput("Climber Motor", climberMotor.getPosition().getValueAsDouble());
+    Logger.recordOutput("Climber Volts", climberMotor.getMotorVoltage().getValueAsDouble());
+
     // This method will be called once per scheduler run
   }
 }

@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "L4 Left Start"
+            "pathName": "Center Reef"
           }
         },
         {
@@ -17,21 +17,16 @@
           }
         },
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "Coral Intake Out"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Elevator_HP"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "L4 Left Human"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Pivot_Down"
+                }
+              }
+            ]
           }
         }
       ]

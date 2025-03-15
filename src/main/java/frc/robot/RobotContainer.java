@@ -78,8 +78,7 @@ public class RobotContainer {
     coralIntake = new CoralIntake();
     coralPivot = new CoralPivot();
     algaeIntake = new AlgaeIntake();
-    // photonVision = new Vision(); 
-
+    // photonVision = new Vision();
     
     field = new Field2d();
 
@@ -118,7 +117,7 @@ public class RobotContainer {
   private void configureBindings() {
     operator.povRight().onTrue(new CoralPivot90());
     operator.povUp().onTrue(new CoralPivotUp());
-    operator.povLeft().whileTrue(new RunPivotManual());
+    operator.povLeft().onTrue(new RunPivotManual());
     operator.povDown().onTrue(new CoralPivotDown());
     operator.start().onTrue(new ElevatorAl_l3());
     
@@ -138,7 +137,7 @@ public class RobotContainer {
     driver.povUp().whileTrue(new RunclimberBack());
     driver.rightBumper().whileTrue(new zeroGyro());
     driver.povDown().whileTrue(new Runclimber());
-    driver.povRight().whileTrue(new ClimberStartSet());
+    driver.a().whileTrue(new ClimberStartSet());
   }
 
   public Command getAutonomousCommand() {

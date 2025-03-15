@@ -9,6 +9,18 @@
           "data": {
             "pathName": "Right Turned"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Elevator_L4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pivot_Down"
+          }
         }
       ]
     }

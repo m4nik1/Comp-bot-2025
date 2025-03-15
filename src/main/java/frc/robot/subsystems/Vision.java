@@ -21,6 +21,7 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -64,7 +65,7 @@ public class Vision extends SubsystemBase {
     // TODO:
     // Camera position from the center of the Robot
     // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
-    robotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0,0,0)); 
+    robotToCam = new Transform3d(new Translation3d(0.095, -0.3302, 0.6), new Rotation3d(0,0,Rotation2d.fromDegrees(15).getRadians())); 
 
     // This takes all the tags into account for estimating pose
     poseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam);
@@ -141,6 +142,10 @@ public class Vision extends SubsystemBase {
     // getEstimatedGlobalPose(); // This updates the pose of the robot
     Logger.recordOutput("turn vision", turn);
     Logger.recordOutput("Vision Yaw ", targetYaw);
+    // SmartDashboard.putNumber("Global pose X", getEstimatedGlobalPose().get().estimatedPose.getX());
+    // SmartDashboard.putNumber("Global pose Y", getEstimatedGlobalPose().get().estimatedPose.getY());
+
+    // SmartDashboard.putNumber("Global pose Z", getEstimatedGlobalPose().get().estimatedPose.getZ());
 
     // This method will be called once per scheduler run
     // SmartDashboard.putBoolean("Target found", result.hasTargets());
