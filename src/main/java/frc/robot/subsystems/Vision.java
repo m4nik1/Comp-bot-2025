@@ -147,7 +147,7 @@ public class Vision extends SubsystemBase {
 
       boolean singleTarget = robotPose.targetsUsed.size() == 1;
       if(singleTarget) {
-        PhotonTrackedTarget target = robotPose.targetsUsed();
+        PhotonTrackedTarget target = robotPose.targetsUsed.get(0);
         SmartDashboard.putNumber("Pose ambiguity", target.getPoseAmbiguity());
         if(target.getPoseAmbiguity() > MAX_SINGLE_ABIGUITY) {return;}
       }
