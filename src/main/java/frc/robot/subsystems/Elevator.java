@@ -73,8 +73,8 @@ public class Elevator extends SubsystemBase {
 
     
     // Set for speed of elevator
-    elevatorConfig.MotionMagic.MotionMagicAcceleration = 100;
-    elevatorConfig.MotionMagic.MotionMagicCruiseVelocity = 100;
+    elevatorConfig.MotionMagic.MotionMagicAcceleration = 300;
+    elevatorConfig.MotionMagic.MotionMagicCruiseVelocity = 300;
 
     elevatorMotor.getConfigurator().apply(elevatorConfig);
     elevatorMotor.setPosition(0);

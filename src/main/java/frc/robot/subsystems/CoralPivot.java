@@ -84,8 +84,7 @@ public class CoralPivot extends SubsystemBase {
     double kG = 0.03; // change this to .027
 
     // Vtot = kp*(Rset - Rfb) + kg*sin(arm_angle)
-    // Change the the fromDegrees(anglePivot) to fromDegrees(pivotPoint.getEncoder().getPosition())
-    // If pivot tuning is not working just add -40 to the encoder and tune with that value
+    // If you can retune this use the PIDController class
     pidCalculate = kP * (pos - (pivotPoint.getEncoder().getPosition() + -30)) + kG * Math.sin(Rotation2d.fromDegrees(pivotPoint.getEncoder().getPosition() + -30).getRadians());
 
     Logger.recordOutput("Pivot PID calculated", pidCalculate);
