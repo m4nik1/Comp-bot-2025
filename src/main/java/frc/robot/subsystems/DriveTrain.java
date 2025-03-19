@@ -15,6 +15,8 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -24,6 +26,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -37,6 +41,9 @@ public class DriveTrain extends SubsystemBase {
 
   Pigeon2 gyro;
   Pose2d robotPose;
+
+  private Matrix<N3, N1> kSingleTagStdDevs;
+  private Matrix<N3, N1> kMultiTagStdDevs;
 
   SwerveDriveOdometry odom;
   Field2d field;
@@ -57,6 +64,9 @@ public class DriveTrain extends SubsystemBase {
     gyro = new Pigeon2(Constants.pigeonID);
     odom = new SwerveDriveOdometry(Constants.swerveKinematics, getYaw(), getPositions());
 
+
+    kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
+    kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
 
     try {
       autoConfig = RobotConfig.fromGUISettings();
@@ -182,6 +192,15 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void addVisionMeasurment(Pose2d visionRobotPose, double visionTimestamp, boolean isSingleTarget) {
+    Matrix<N3, N1> visionStds = isSingleTarget ? kSingleTagStdDevs : kMultiTagStdDevs;
+
+    // Uncomment these when swerveOdomPoseEstimation
+    // odom.addVisionMeasurement(visionRobotPose, visionTimestamp, visionStds);
+
+    // double visionToDriveTrainPose = visionRobotPose.getTranslation().getDistance(robotPose.getTranslation());
+
+    // Logger.recordOutput("Distance to Vision measurement", visionToDriveTrainPose);
+    // Logger.recordOutput("Is Vision Close to Drivetrain", visionToDriveTrainPose < 0.5);
 
   }
 
