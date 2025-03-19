@@ -23,6 +23,7 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
@@ -30,6 +31,8 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 
 public class Vision extends SubsystemBase {
@@ -85,10 +88,31 @@ public class Vision extends SubsystemBase {
     for(var tagChange : camera.getAllUnreadResults()) {
       // Add std dev. in the update function
       visionEst = poseEstimator.update(tagChange); // Updates the pose estimator with camera updates
-      updateEstimationStdDevs(visionEst, tagChange.targets);
+      // updateEstimationStdDevs(visionEst, tagChange.targets);
     }
 
     return visionEst;
+  }
+
+  public void findReefFace() {
+    var results = camera.getAllUnreadResults();
+
+    if(!results.isEmpty()) {
+      var latestResults = results.get(results.size() - 1);
+      if(latestResults.hasTargets()) {
+        int tagId = latestResults.getBestTarget().getFiducialId();
+        Logger.recordOutput("Face Found", Constants.desiredTagIds.contains(tagId));
+
+        if(Constants.desiredTagIds.contains(tagId)) {
+          double face = Constants.TagToFaceBlue.get(tagId);
+          double thetaFace = ((2*Math.PI)*(face/6)+Math.PI) % (2*Math.PI); 
+
+          Transform2d facePose = Robot.reefPosesGenerate.calculateAlgaePose(thetaFace);
+          
+          Logger.recordOutput("Reef Face number", face);
+
+        }
+    }
   }
 
   public List<PhotonPipelineResult> getUnreadResults() {
@@ -172,6 +196,7 @@ public class Vision extends SubsystemBase {
     //   addVisionMeasurementToDriveTrain(poseEstimator);
     // }
     addVisionMeasurementToDriveTrain(poseEstimator);
+    findReefFace();
 
   }
 }

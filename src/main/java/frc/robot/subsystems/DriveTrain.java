@@ -194,7 +194,7 @@ public class DriveTrain extends SubsystemBase {
   public void addVisionMeasurment(Pose2d visionRobotPose, double visionTimestamp, boolean isSingleTarget) {
     Matrix<N3, N1> visionStds = isSingleTarget ? kSingleTagStdDevs : kMultiTagStdDevs;
 
-    // Uncomment these when swerveOdomPoseEstimation
+    // Uncomment these when swerveOdomPoseEstimation is added
     // odom.addVisionMeasurement(visionRobotPose, visionTimestamp, visionStds);
 
     // double visionToDriveTrainPose = visionRobotPose.getTranslation().getDistance(robotPose.getTranslation());

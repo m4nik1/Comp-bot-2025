@@ -7,10 +7,6 @@ package frc.robot;
 
 
 
-import frc.robot.commands.ClimberStartSet;
-import frc.robot.commands.Runclimber;
-import frc.robot.commands.RunclimberBack;
-import frc.robot.commands.StillClimber;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.zeroGyro;
 import frc.robot.commands.Auto.CoralDownAuto;
@@ -19,6 +15,10 @@ import frc.robot.commands.Auto.ElevatorAuto_l2;
 import frc.robot.commands.Auto.ElevatorAuto_l4;
 import frc.robot.commands.Auto.PivotAuto90;
 import frc.robot.commands.Auto.RunCoralIntakeAuto;
+import frc.robot.commands.Climber.ClimberStartSet;
+import frc.robot.commands.Climber.Runclimber;
+import frc.robot.commands.Climber.RunclimberBack;
+import frc.robot.commands.Climber.StillClimber;
 import frc.robot.commands.CoralPivot.CoralPivot90;
 import frc.robot.commands.CoralPivot.CoralPivotDown;
 import frc.robot.commands.CoralPivot.CoralPivotUp;
