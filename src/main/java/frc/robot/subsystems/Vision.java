@@ -155,9 +155,10 @@ public class Vision extends SubsystemBase {
       Pose2d estimatedRobotPose2d = robotPose.estimatedPose.toPose2d();
       double timestampSeconds = result.get().timestampSeconds;
 
+
+      Logger.recordOutput("Vision Robot Pose", estimatedRobotPose2d);
+      Logger.recordOutput("is Single Target?", singleTarget);
       RobotContainer.driveTrain.addVisionMeasurment(estimatedRobotPose2d, timestampSeconds, singleTarget);
-
-
     }
 
 
