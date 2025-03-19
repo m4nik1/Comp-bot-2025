@@ -181,6 +181,9 @@ public class DriveTrain extends SubsystemBase {
     }
   }
 
+  public void addVisionMeasurment(Pose2d visionRobotPose, double visionTimestamp, boolean isSingleTarget) {
+
+  }
 
   public void zeroAngles() {
     for(ElmCityModule m : elmCityModules) {

@@ -27,6 +27,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
@@ -38,6 +39,8 @@ public class Vision extends SubsystemBase {
   PhotonPipelineResult result;
   PhotonTrackedTarget target;
   PhotonPoseEstimator poseEstimator;
+  double MAX_SINGLE_ABIGUITY = 0.05;
+
   private Matrix<N3, N1> curStdDevs;
   private Matrix<N3, N1> kSingleTagStdDevs;
   private Matrix<N3, N1> kMultiTagStdDevs;
@@ -135,23 +138,39 @@ public class Vision extends SubsystemBase {
     }
 
 
+    public void addVisionMeasurementToDriveTrain(PhotonPoseEstimator photonPoseEstimator) {
+      Optional<EstimatedRobotPose> result = getEstimatedGlobalPose();
+
+      if(!result.isPresent()) {return;}
+
+      EstimatedRobotPose robotPose = result.get();
+
+      boolean singleTarget = robotPose.targetsUsed.size() == 1;
+      if(singleTarget) {
+        PhotonTrackedTarget target = robotPose.targetsUsed();
+        SmartDashboard.putNumber("Pose ambiguity", target.getPoseAmbiguity());
+        if(target.getPoseAmbiguity() > MAX_SINGLE_ABIGUITY) {return;}
+      }
+
+      Pose2d estimatedRobotPose2d = robotPose.estimatedPose.toPose2d();
+      double timestampSeconds = result.get().timestampSeconds;
+
+      RobotContainer.driveTrain.addVisionMeasurment(estimatedRobotPose2d, timestampSeconds, singleTarget);
+
+
+    }
+
 
   @Override
   public void periodic() {
     
-    // getEstimatedGlobalPose(); // This updates the pose of the robot
     Logger.recordOutput("turn vision", turn);
     Logger.recordOutput("Vision Yaw ", targetYaw);
-    // SmartDashboard.putNumber("Global pose X", getEstimatedGlobalPose().get().estimatedPose.getX());
-    // SmartDashboard.putNumber("Global pose Y", getEstimatedGlobalPose().get().estimatedPose.getY());
-
-    // SmartDashboard.putNumber("Global pose Z", getEstimatedGlobalPose().get().estimatedPose.getZ());
-
-    // This method will be called once per scheduler run
-    // SmartDashboard.putBoolean("Target found", result.hasTargets());
-    // SmartDashboard.putNumber("Pose found", target.getPoseAmbiguity());
-    // SmartDashboard.putNumber("Camera Yaw", target.getYaw());
-    // SmartDashboard.putNumber("Camera Pitch", target.getPitch());
+    // Use the below for loop for multiple cameras
+    // for (PhotonPoseEstimator photonEstimator : poseEstimator) {
+    //   addVisionMeasurementToDriveTrain(poseEstimator);
+    // }
+    addVisionMeasurementToDriveTrain(poseEstimator);
 
   }
 }
