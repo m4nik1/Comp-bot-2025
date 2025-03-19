@@ -20,14 +20,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class CoralIntake extends SubsystemBase {
   /** Creates a new CoralIntake. */
   SparkMax coralMax;
-
-  DigitalInput coralDetector;
   
   public CoralIntake() {
     // Change the pivot to its own subsystem
     coralMax = new SparkMax(31, MotorType.kBrushless);
-
-    coralDetector = new DigitalInput(2);
 
     coralMax.configure(new SparkMaxConfig(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
@@ -41,6 +37,5 @@ public class CoralIntake extends SubsystemBase {
     // This method will be called once per scheduler run
     Logger.recordOutput("Coral Power", coralMax.getAppliedOutput());
     SmartDashboard.putNumber("Intake power", coralMax.getAppliedOutput());
-    SmartDashboard.putBoolean("Coral Detector", coralDetector.get());
   }
 }

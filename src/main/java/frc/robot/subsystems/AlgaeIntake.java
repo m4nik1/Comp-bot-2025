@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXSConfiguration;
 import com.ctre.phoenix6.hardware.TalonFXS;
@@ -16,15 +18,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class AlgaeIntake extends SubsystemBase {
   /** Creates a new AlgaeIntake. */
   TalonFXS algaeRun;
+  DigitalInput coralDetector;
   DigitalInput algaeDetector;
-  DigitalInput algaeDetector2;
   TalonFXSConfiguration algaeConfig;
   // Make sure elevator is at 8 inches off top of bumper
   
   public AlgaeIntake() {
    algaeRun = new TalonFXS(36);
-   algaeDetector = new DigitalInput(2);
-   algaeDetector2 = new DigitalInput(3);
+   coralDetector = new DigitalInput(2);
+   algaeDetector = new DigitalInput(3);
 
    algaeConfig = new TalonFXSConfiguration();
    algaeConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
@@ -36,15 +38,15 @@ public class AlgaeIntake extends SubsystemBase {
     algaeRun.set(speed);
   }
 
-  public boolean algaeDetect() {
-    return algaeDetector.get();
-  }
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
 
-    SmartDashboard.putBoolean("Detect 1", algaeDetect());
-    SmartDashboard.putBoolean("Detect 2", algaeDetector2.get());
+    SmartDashboard.putBoolean("Coral Detector", coralDetector.get());
+    SmartDashboard.putBoolean("Algae Detector", algaeDetector.get());
+  
+    
+    Logger.recordOutput("Coral Detector", coralDetector.get());
+    Logger.recordOutput("Algae Detector", algaeDetector.get());
   }
 }
