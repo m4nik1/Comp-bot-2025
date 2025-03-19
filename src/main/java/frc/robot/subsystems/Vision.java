@@ -112,6 +112,7 @@ public class Vision extends SubsystemBase {
           Logger.recordOutput("Reef Face number", face);
 
         }
+      }
     }
   }
 
