@@ -43,9 +43,6 @@ public class Vision extends SubsystemBase {
   PhotonPoseEstimator poseEstimator;
   double MAX_SINGLE_ABIGUITY = 0.05;
 
-  private Matrix<N3, N1> kSingleTagStdDevs;
-  private Matrix<N3, N1> kMultiTagStdDevs;
-
   Transform3d robotToCam;
 
   boolean targetVisible = false;
@@ -55,9 +52,6 @@ public class Vision extends SubsystemBase {
 
   AprilTagFieldLayout aprilTagFieldLayout;
   public Vision() {
-    
-    kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
-    kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
     // result = camera.getLatestResult();
     aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
     // target = result.getBestTarget();

@@ -212,13 +212,17 @@ public class ElmCityModule extends SubsystemBase {
 
   public void setDesiredState(SwerveModuleState desiredState, boolean openLoop) {
     SwerveModuleState newState = new SwerveModuleState();
+
+    Rotation2d currentAngle = Rotation2d.fromRotations(getAngle());
+
     newState.speedMetersPerSecond = desiredState.speedMetersPerSecond;
     newState.angle = desiredState.angle;
 
     newState.optimize(Rotation2d.fromRotations(getAngle()));
+
+    // Test this out for smoother driving
+    // newState.speedMetersPerSecond *  = newState.angle.minus(currentAngle).getCos();
     
-
-
     setSpeed(newState, openLoop);
     setAngle(newState);
   }
