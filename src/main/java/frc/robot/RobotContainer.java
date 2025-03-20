@@ -65,7 +65,7 @@ public class RobotContainer {
   public static CoralIntake coralIntake;
   public static CoralPivot coralPivot;
   public static AlgaeIntake algaeIntake;
-  // public static Vision photonVision;
+  public static Vision photonVision;
   public static Climber climber = new Climber();
 
   static CommandXboxController driver = new CommandXboxController(0);
@@ -82,7 +82,7 @@ public class RobotContainer {
     coralIntake = new CoralIntake();
     coralPivot = new CoralPivot();
     algaeIntake = new AlgaeIntake();
-    // photonVision =  new Vision();
+    photonVision =  new Vision();
     
     field = new Field2d();
 
