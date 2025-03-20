@@ -41,6 +41,7 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Vision;
 
+import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -86,6 +87,7 @@ public class RobotContainer {
     field = new Field2d();
 
     PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
+      Logger.recordOutput("Pathplanner pose", pose);
       field.setRobotPose(pose);
     });
 
@@ -115,7 +117,6 @@ public class RobotContainer {
     SmartDashboard.putData("Field", field);
 
     driveTrain.setDefaultCommand(new TeleopDrive());
-    
     elevator.setDefaultCommand(new RunElevatorManual());
 
     configureBindings();

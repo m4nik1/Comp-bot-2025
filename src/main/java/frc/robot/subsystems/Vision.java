@@ -66,7 +66,7 @@ public class Vision extends SubsystemBase {
     // TODO:
     // Camera position from the center of the Robot
     // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
-    robotToCam = new Transform3d(new Translation3d(0.095, -0.3302, 0.6), new Rotation3d(0,0,Rotation2d.fromDegrees(20).getRadians())); 
+    robotToCam = new Transform3d(new Translation3d(0.095, -0.3302, 0.6), new Rotation3d(0,Rotation2d.fromDegrees(20).getRadians(), Rotation2d.fromDegrees(20).getRadians())); 
 
     // This takes all the tags into account for estimating pose
     // poseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam);
@@ -166,6 +166,8 @@ public class Vision extends SubsystemBase {
       EstimatedRobotPose robotPose = result.get();
 
       boolean singleTarget = robotPose.targetsUsed.size() == 1;
+      
+      // below we are checking if we can trust the single target
       if(singleTarget) {
         PhotonTrackedTarget target = robotPose.targetsUsed.get(0);
         SmartDashboard.putNumber("Pose ambiguity", target.getPoseAmbiguity());
@@ -180,7 +182,6 @@ public class Vision extends SubsystemBase {
       Logger.recordOutput("is Single Target?", singleTarget);
       RobotContainer.driveTrain.addVisionMeasurment(estimatedRobotPose2d, timestampSeconds, singleTarget);
     }
-
 
   @Override
   public void periodic() {

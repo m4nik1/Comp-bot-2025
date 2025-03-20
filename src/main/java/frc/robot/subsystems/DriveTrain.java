@@ -16,6 +16,7 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -44,6 +45,7 @@ public class DriveTrain extends SubsystemBase {
 
   private Matrix<N3, N1> kSingleTagStdDevs;
   private Matrix<N3, N1> kMultiTagStdDevs;
+  private Matrix<N3, N1> kStateDriveStdDevs;
 
   SwerveDrivePoseEstimator odom;
   Field2d field;
@@ -52,9 +54,6 @@ public class DriveTrain extends SubsystemBase {
 
   public DriveTrain() {
     elmCityModules = new ElmCityModule[] {
-
-      // TODO: If drive tuning takes longer than 10 minutes set all drive motors CounterClockwise positive
-      // TODO: Then set the bevel to face left robot relative and then tunee
       new ElmCityModule(0, 8, 7, 0,Constants.angleOffsetMod0,InvertedValue.CounterClockwise_Positive, InvertedValue.Clockwise_Positive),
       new ElmCityModule(1, 20, 19, 2, Constants.angleOffsetMod1, InvertedValue.Clockwise_Positive, InvertedValue.Clockwise_Positive),
       new ElmCityModule(2, 10, 9, 1, Constants.angleOffsetMod2 ,InvertedValue.CounterClockwise_Positive, InvertedValue.Clockwise_Positive),
@@ -62,11 +61,12 @@ public class DriveTrain extends SubsystemBase {
     };
 
     gyro = new Pigeon2(Constants.pigeonID);
-    odom = new SwerveDrivePoseEstimator(Constants.swerveKinematics, getYaw(), getPositions(), new Pose2d());
 
+    kSingleTagStdDevs = new Matrix<>(Nat.N3(), Nat.N1(), new double[] {0.1, 0.1, 0.05});
+    kMultiTagStdDevs = new Matrix<>(Nat.N3(), Nat.N1(), new double[] {0.025, 0.025, 0.0125});
+    kStateDriveStdDevs = new Matrix<>(Nat.N3(), Nat.N1(), new double[] {0.01, 0.01, 0.005});
 
-    kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
-    kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+    odom = new SwerveDrivePoseEstimator(Constants.swerveKinematics, getYaw(), getPositions(), new Pose2d(), kStateDriveStdDevs, kSingleTagStdDevs);
 
     try {
       autoConfig = RobotConfig.fromGUISettings();
@@ -194,13 +194,13 @@ public class DriveTrain extends SubsystemBase {
   public void addVisionMeasurment(Pose2d visionRobotPose, double visionTimestamp, boolean isSingleTarget) {
     Matrix<N3, N1> visionStds = isSingleTarget ? kSingleTagStdDevs : kMultiTagStdDevs;
 
-    // Uncomment these when swerveOdomPoseEstimation is added
+    // Adds the vision measurement for the pose estimation
     odom.addVisionMeasurement(visionRobotPose, visionTimestamp, visionStds);
 
     double visionToDriveTrainPose = visionRobotPose.getTranslation().getDistance(robotPose.getTranslation());
 
     Logger.recordOutput("Distance to Vision measurement", visionToDriveTrainPose);
-    Logger.recordOutput("Is Vision Close to Drivetrain", visionToDriveTrainPose < 0.5);
+    Logger.recordOutput("Trust Vision data?", visionToDriveTrainPose < 0.5);
 
   }
 
@@ -219,6 +219,7 @@ public class DriveTrain extends SubsystemBase {
 
     Logger.recordOutput("SwerveStates/Setpoints", getStates());
     Logger.recordOutput("Robot Yaw", getRobotAngle());
+    Logger.recordOutput("Robot Yaw", getRobotPose2d());
 
     
 
