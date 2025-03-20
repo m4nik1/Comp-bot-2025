@@ -99,12 +99,15 @@ public class RobotContainer {
       field.getObject("path").setPoses(poses);
     });
 
-    NamedCommands.registerCommand("Coral_out", new RunCoralIntakeAuto());
+    // NamedCommands.registerCommand("Coral_out", new RunCoralIntakeAuto());
+    NamedCommands.registerCommand("Coral_out", coralIntake.coralOut());
     NamedCommands.registerCommand("Pivot_Down", new CoralDownAuto());
     NamedCommands.registerCommand("Pivot_90", new PivotAuto90());
-    NamedCommands.registerCommand("Elevator_L4", new ElevatorAuto_l4());
+    // NamedCommands.registerCommand("Elevator_L4", new ElevatorAuto_l4());
+    NamedCommands.registerCommand("Elevator_L4", elevator.setElevatorPos(Constants.elevator_l4));
     NamedCommands.registerCommand("Elevator_HP", new ElevatorAuto_HP());
     NamedCommands.registerCommand("Elevator_L2", new ElevatorAuto_l2());
+
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
     autoChooser.addOption("Right Turned Coral L4", new PathPlannerAuto("Right L4 Facing Coral"));
