@@ -25,7 +25,6 @@ public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
-  public static GenerateReefPoses reefPosesGenerate;
 
 
 
@@ -53,7 +52,6 @@ public class Robot extends LoggedRobot {
     Logger.start();
 
     m_robotContainer = new RobotContainer();
-    reefPosesGenerate = new GenerateReefPoses();
 
     CameraServer.startAutomaticCapture();
   }

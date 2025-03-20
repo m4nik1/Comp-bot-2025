@@ -218,8 +218,8 @@ public class DriveTrain extends SubsystemBase {
     odom.update(getYaw(), getPositions());
 
     Logger.recordOutput("SwerveStates/Setpoints", getStates());
-    Logger.recordOutput("Robot Yaw", getRobotAngle());
-    Logger.recordOutput("Robot Yaw", getRobotPose2d());
+    // Logger.recordOutput("Robot Yaw", getRobotAngle());
+    // Logger.recordOutput("Robot Yaw", getRobotPose2d());
 
     
 
