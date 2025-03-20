@@ -219,7 +219,7 @@ public class DriveTrain extends SubsystemBase {
 
     Logger.recordOutput("SwerveStates/Setpoints", getStates());
     Logger.recordOutput("Robot Yaw", getRobotAngle());
-    Logger.recordOutput("Robot Yaw", getRobotPose2d());
+    // Logger.recordOutput("Robot Yaw", getRobotPose2d());
 
     
 

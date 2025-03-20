@@ -37,7 +37,7 @@ import frc.robot.RobotContainer;
 public class Vision extends SubsystemBase {
   /** Creates a new Vision. */
 
-  PhotonCamera camera = new PhotonCamera("arducam-558");;
+  PhotonCamera camera;
   PhotonPipelineResult result;
   PhotonTrackedTarget target;
   PhotonPoseEstimator poseEstimator;
@@ -52,6 +52,7 @@ public class Vision extends SubsystemBase {
 
   AprilTagFieldLayout aprilTagFieldLayout;
   public Vision() {
+    camera = new PhotonCamera("arducam-558");;
     // result = camera.getLatestResult();
     aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
     // target = result.getBestTarget();
