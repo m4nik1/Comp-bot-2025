@@ -38,17 +38,17 @@ public class Vision extends SubsystemBase {
   /** Creates a new Vision. */
 
   PhotonCamera camera = new PhotonCamera("arducam-558");;
-  PhotonPipelineResult result;
-  PhotonTrackedTarget target;
-  PhotonPoseEstimator poseEstimator;
-  double MAX_SINGLE_ABIGUITY = 0.05;
+  // PhotonPipelineResult result;
+  // PhotonTrackedTarget target;
+  // PhotonPoseEstimator poseEstimator;
+  // double MAX_SINGLE_ABIGUITY = 0.05;
 
-  Transform3d robotToCam;
+  // Transform3d robotToCam;
 
-  boolean targetVisible = false;
-  double targetYaw = 0.0;
-  double turn = 0.0;
-  double vision_kP = 1;
+  // boolean targetVisible = false;
+  // double targetYaw = 0.0;
+  // double turn = 0.0;
+  // double vision_kP = 1;
 
   AprilTagFieldLayout aprilTagFieldLayout;
   public Vision() {
@@ -59,7 +59,7 @@ public class Vision extends SubsystemBase {
     // TODO:
     // Camera position from the center of the Robot
     // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
-    robotToCam = new Transform3d(new Translation3d(0.095, 0.3302, 0.6), new Rotation3d(0, Units.degreesToRadians(20), Units.degreesToRadians(20))); 
+    // robotToCam = new Transform3d(new Translation3d(0.095, 0.3302, 0.6), new Rotation3d(0, Units.degreesToRadians(20), Units.degreesToRadians(20))); 
 
     // This takes all the tags into account for estimating pose
     // poseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam);
@@ -70,43 +70,43 @@ public class Vision extends SubsystemBase {
 
   // Gets the robot pose on the field
   // This should be called once per loop
-  public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
-    Optional<EstimatedRobotPose> visionEst = Optional.empty();
+  // public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
+  //   Optional<EstimatedRobotPose> visionEst = Optional.empty();
 
-    for(var tagChange : camera.getAllUnreadResults()) {
+    // for(var tagChange : camera.getAllUnreadResults()) {
       // Add std dev. in the update function
-      visionEst = poseEstimator.update(tagChange); // Updates the pose estimator with camera updates
+      // visionEst = poseEstimator.update(tagChange); // Updates the pose estimator with camera updates
       // updateEstimationStdDevs(visionEst, tagChange.targets);
-    }
+    // }
 
-    return visionEst;
-  }
+    // return visionEst;
+  // }
 
-  public void findReefFace() {
-    var results = camera.getAllUnreadResults();
+  // public void findReefFace() {
+  //   var results = camera.getAllUnreadResults();
 
-    if(!results.isEmpty()) {
-      var latestResults = results.get(results.size() - 1);
-      if(latestResults.hasTargets()) {
-        int tagId = latestResults.getBestTarget().getFiducialId();
-        Logger.recordOutput("Face Found", Constants.desiredTagIds.contains(tagId));
+  //   if(!results.isEmpty()) {
+  //     var latestResults = results.get(results.size() - 1);
+  //     if(latestResults.hasTargets()) {
+  //       int tagId = latestResults.getBestTarget().getFiducialId();
+  //       Logger.recordOutput("Face Found", Constants.desiredTagIds.contains(tagId));
 
-        if(Constants.desiredTagIds.contains(tagId)) {
-          double face = Constants.TagToFaceBlue.get(tagId);
-          double thetaFace = ((2*Math.PI)*(face/6)+Math.PI) % (2*Math.PI); 
+  //       if(Constants.desiredTagIds.contains(tagId)) {
+  //         double face = Constants.TagToFaceBlue.get(tagId);
+  //         double thetaFace = ((2*Math.PI)*(face/6)+Math.PI) % (2*Math.PI); 
 
-          Transform2d facePose = Robot.reefPosesGenerate.calculateAlgaePose(thetaFace);
+  //         Transform2d facePose = Robot.reefPosesGenerate.calculateAlgaePose(thetaFace);
           
-          Logger.recordOutput("Reef Face number", face);
+  //         Logger.recordOutput("Reef Face number", face);
 
-        }
-      }
-    }
-  }
+  //       }
+  //     }
+  //   }
+  // }
 
-  public List<PhotonPipelineResult> getUnreadResults() {
-    return camera.getAllUnreadResults();
-  }
+  // public List<PhotonPipelineResult> getUnreadResults() {
+  //   return camera.getAllUnreadResults();
+  // }
 
   // private void updateEstimationStdDevs(
   //           Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets) {
@@ -151,30 +151,30 @@ public class Vision extends SubsystemBase {
   //   }
 
 
-    public void addVisionMeasurementToDriveTrain(PhotonPoseEstimator photonPoseEstimator) {
-      Optional<EstimatedRobotPose> result = getEstimatedGlobalPose();
+    // public void addVisionMeasurementToDriveTrain(PhotonPoseEstimator photonPoseEstimator) {
+    //   Optional<EstimatedRobotPose> result = getEstimatedGlobalPose();
 
-      if(!result.isPresent()) {return;}
+    //   if(!result.isPresent()) {return;}
 
-      EstimatedRobotPose robotPose = result.get();
+    //   EstimatedRobotPose robotPose = result.get();
 
-      boolean singleTarget = robotPose.targetsUsed.size() == 1;
+    //   boolean singleTarget = robotPose.targetsUsed.size() == 1;
       
-      // below we are checking if we can trust the single target
-      if(singleTarget) {
-        PhotonTrackedTarget target = robotPose.targetsUsed.get(0);
-        SmartDashboard.putNumber("Pose ambiguity", target.getPoseAmbiguity());
-        if(target.getPoseAmbiguity() > MAX_SINGLE_ABIGUITY) {return;}
-      }
+    //   // below we are checking if we can trust the single target
+    //   if(singleTarget) {
+    //     PhotonTrackedTarget target = robotPose.targetsUsed.get(0);
+    //     SmartDashboard.putNumber("Pose ambiguity", target.getPoseAmbiguity());
+    //     if(target.getPoseAmbiguity() > MAX_SINGLE_ABIGUITY) {return;}
+    //   }
 
-      Pose2d estimatedRobotPose2d = robotPose.estimatedPose.toPose2d();
-      double timestampSeconds = result.get().timestampSeconds;
+    //   Pose2d estimatedRobotPose2d = robotPose.estimatedPose.toPose2d();
+    //   double timestampSeconds = result.get().timestampSeconds;
 
 
-      Logger.recordOutput("Vision Robot Pose", estimatedRobotPose2d);
-      Logger.recordOutput("is Single Target?", singleTarget);
-      RobotContainer.driveTrain.addVisionMeasurment(estimatedRobotPose2d, timestampSeconds, singleTarget);
-    }
+    //   Logger.recordOutput("Vision Robot Pose", estimatedRobotPose2d);
+    //   Logger.recordOutput("is Single Target?", singleTarget);
+    //   RobotContainer.driveTrain.addVisionMeasurment(estimatedRobotPose2d, timestampSeconds, singleTarget);
+    // }
 
   @Override
   public void periodic() {
