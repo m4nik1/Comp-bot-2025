@@ -45,7 +45,7 @@ public class DriveTrain extends SubsystemBase {
   private Matrix<N3, N1> kSingleTagStdDevs;
   private Matrix<N3, N1> kMultiTagStdDevs;
 
-  SwerveDriveOdometry odom;
+  SwerveDrivePoseEstimator odom;
   Field2d field;
   RobotConfig autoConfig;
 
@@ -62,7 +62,7 @@ public class DriveTrain extends SubsystemBase {
     };
 
     gyro = new Pigeon2(Constants.pigeonID);
-    odom = new SwerveDriveOdometry(Constants.swerveKinematics, getYaw(), getPositions());
+    odom = new SwerveDrivePoseEstimator(Constants.swerveKinematics, getYaw(), getPositions(), new Pose2d());
 
 
     kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
@@ -102,7 +102,7 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public Pose2d getPose() {
-    return odom.getPoseMeters(); // returns pose in meters
+    return odom.getEstimatedPosition(); // returns pose in meters
   }
 
   public void resetPose(Pose2d pose) {
@@ -195,12 +195,12 @@ public class DriveTrain extends SubsystemBase {
     Matrix<N3, N1> visionStds = isSingleTarget ? kSingleTagStdDevs : kMultiTagStdDevs;
 
     // Uncomment these when swerveOdomPoseEstimation is added
-    // odom.addVisionMeasurement(visionRobotPose, visionTimestamp, visionStds);
+    odom.addVisionMeasurement(visionRobotPose, visionTimestamp, visionStds);
 
-    // double visionToDriveTrainPose = visionRobotPose.getTranslation().getDistance(robotPose.getTranslation());
+    double visionToDriveTrainPose = visionRobotPose.getTranslation().getDistance(robotPose.getTranslation());
 
-    // Logger.recordOutput("Distance to Vision measurement", visionToDriveTrainPose);
-    // Logger.recordOutput("Is Vision Close to Drivetrain", visionToDriveTrainPose < 0.5);
+    Logger.recordOutput("Distance to Vision measurement", visionToDriveTrainPose);
+    Logger.recordOutput("Is Vision Close to Drivetrain", visionToDriveTrainPose < 0.5);
 
   }
 

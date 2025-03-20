@@ -253,11 +253,11 @@ public class ElmCityModule extends SubsystemBase {
     // This method will be called once per scheduler run
     Logger.recordOutput("Distance (M)" + modNum, getDrivePosMeters());
     Logger.recordOutput("Mod vel " + modNum, getDriveVelocityConversion());
-    Logger.recordOutput("Module Angle " + modNum, getAngleDegrees());
+    // Logger.recordOutput("Module Angle " + modNum, getAngleDegrees());
 
     SmartDashboard.putNumber("Module Angle " + modNum, getAngleDegrees());
     SmartDashboard.putNumber("Distance (M)" + modNum, getDrivePosMeters());
-    SmartDashboard.putNumber("Nac coder rot " + modNum, getNac());
+    // SmartDashboard.putNumber("Nac coder rot " + modNum, getNac());
     SmartDashboard.putNumber("Mod vel " + modNum, getDriveVelocityConversion());
   }
 }

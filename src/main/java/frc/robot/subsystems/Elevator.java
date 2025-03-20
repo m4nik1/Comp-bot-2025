@@ -130,8 +130,8 @@ public class Elevator extends SubsystemBase {
 
     Logger.recordOutput("Elevator Pos", getElevatorPosition());
     Logger.recordOutput("Elevator Volts", getElevatorMotorVolts());
-    Logger.recordOutput("Top Limit", getTopLimit());
-    Logger.recordOutput("Lower Limit", getLowerLimit());
+    // Logger.recordOutput("Top Limit", getTopLimit());
+    // Logger.recordOutput("Lower Limit", getLowerLimit());
 
 
     SmartDashboard.putNumber("Position Elevator", getElevatorPosition());

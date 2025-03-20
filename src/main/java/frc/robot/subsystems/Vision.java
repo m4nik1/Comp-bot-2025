@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.lang.StackWalker.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +27,6 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -38,13 +36,12 @@ import frc.robot.RobotContainer;
 public class Vision extends SubsystemBase {
   /** Creates a new Vision. */
 
-  PhotonCamera camera;
+  PhotonCamera camera = new PhotonCamera("arducam-558");;
   PhotonPipelineResult result;
   PhotonTrackedTarget target;
   PhotonPoseEstimator poseEstimator;
   double MAX_SINGLE_ABIGUITY = 0.05;
 
-  private Matrix<N3, N1> curStdDevs;
   private Matrix<N3, N1> kSingleTagStdDevs;
   private Matrix<N3, N1> kMultiTagStdDevs;
 
@@ -59,24 +56,22 @@ public class Vision extends SubsystemBase {
 
   AprilTagFieldLayout aprilTagFieldLayout;
   public Vision() {
-
-    camera = new PhotonCamera("Arducam_OV9281");
     
     kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
     kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
     // result = camera.getLatestResult();
-    aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+    aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
     // target = result.getBestTarget();
     
     // TODO:
     // Camera position from the center of the Robot
     // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
-    robotToCam = new Transform3d(new Translation3d(0.095, -0.3302, 0.6), new Rotation3d(0,0,Rotation2d.fromDegrees(15).getRadians())); 
+    robotToCam = new Transform3d(new Translation3d(0.095, -0.3302, 0.6), new Rotation3d(0,0,Rotation2d.fromDegrees(20).getRadians())); 
 
     // This takes all the tags into account for estimating pose
-    poseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam);
+    // poseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam);
 
-    poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+    // poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
   }
 
@@ -120,47 +115,47 @@ public class Vision extends SubsystemBase {
     return camera.getAllUnreadResults();
   }
 
-  private void updateEstimationStdDevs(
-            Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets) {
-        if (estimatedPose.isEmpty()) {
-            // No pose input. Default to single-tag std devs
-            curStdDevs = kSingleTagStdDevs;
+  // private void updateEstimationStdDevs(
+  //           Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets) {
+  //       if (estimatedPose.isEmpty()) {
+  //           // No pose input. Default to single-tag std devs
+  //           curStdDevs = kSingleTagStdDevs;
 
-        } else {
-            // Pose present. Start running Heuristic
-            var estStdDevs = kSingleTagStdDevs;
-            int numTags = 0;
-            double avgDist = 0;
+  //       } else {
+  //           // Pose present. Start running Heuristic
+  //           var estStdDevs = kSingleTagStdDevs;
+  //           int numTags = 0;
+  //           double avgDist = 0;
 
-            // Precalculation - see how many tags we found, and calculate an average-distance metric
-            for (var tgt : targets) {
-                var tagPose = poseEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
-                if (tagPose.isEmpty()) continue;
-                numTags++;
-                avgDist +=
-                        tagPose
-                                .get()
-                                .toPose2d()
-                                .getTranslation()
-                                .getDistance(estimatedPose.get().estimatedPose.toPose2d().getTranslation());
-            }
+  //           // Precalculation - see how many tags we found, and calculate an average-distance metric
+  //           for (var tgt : targets) {
+  //               var tagPose = poseEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
+  //               if (tagPose.isEmpty()) continue;
+  //               numTags++;
+  //               avgDist +=
+  //                       tagPose
+  //                               .get()
+  //                               .toPose2d()
+  //                               .getTranslation()
+  //                               .getDistance(estimatedPose.get().estimatedPose.toPose2d().getTranslation());
+  //           }
 
-            if (numTags == 0) {
-                // No tags visible. Default to single-tag std devs
-                curStdDevs = kSingleTagStdDevs;
-            } else {
-                // One or more tags visible, run the full heuristic.
-                avgDist /= numTags;
-                // Decrease std devs if multiple targets are visible
-                if (numTags > 1) estStdDevs = kMultiTagStdDevs;
-                // Increase std devs based on (average) distance
-                if (numTags == 1 && avgDist > 4)
-                    estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-                else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
-                curStdDevs = estStdDevs;
-            }
-        }
-    }
+  //           if (numTags == 0) {
+  //               // No tags visible. Default to single-tag std devs
+  //               curStdDevs = kSingleTagStdDevs;
+  //           } else {
+  //               // One or more tags visible, run the full heuristic.
+  //               avgDist /= numTags;
+  //               // Decrease std devs if multiple targets are visible
+  //               if (numTags > 1) estStdDevs = kMultiTagStdDevs;
+  //               // Increase std devs based on (average) distance
+  //               if (numTags == 1 && avgDist > 4)
+  //                   estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+  //               else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
+  //               curStdDevs = estStdDevs;
+  //           }
+  //       }
+  //   }
 
 
     public void addVisionMeasurementToDriveTrain(PhotonPoseEstimator photonPoseEstimator) {
@@ -190,14 +185,14 @@ public class Vision extends SubsystemBase {
   @Override
   public void periodic() {
     
-    Logger.recordOutput("turn vision", turn);
-    Logger.recordOutput("Vision Yaw ", targetYaw);
+    // Logger.recordOutput("turn vision", turn);
+    // Logger.recordOutput("Vision Yaw ", targetYaw);
     // Use the below for loop for multiple cameras
     // for (PhotonPoseEstimator photonEstimator : poseEstimator) {
     //   addVisionMeasurementToDriveTrain(poseEstimator);
     // }
-    addVisionMeasurementToDriveTrain(poseEstimator);
-    findReefFace();
+    // addVisionMeasurementToDriveTrain(poseEstimator);
+    // findReefFace();
 
   }
 }
