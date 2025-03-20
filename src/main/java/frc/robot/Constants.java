@@ -70,6 +70,8 @@ public final class Constants {
   public static double elevator_HP = 11.6;
   public static double elevator_l3_al = 99.2;
 
+  public static double TopElevatorLimit = 126;
+
   public static double pivot_HP = -47;
   public static double pivot_down = -108.0;
   public static double pivot_90 = -90;

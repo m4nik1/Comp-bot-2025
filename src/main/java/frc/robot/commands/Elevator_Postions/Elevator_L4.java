@@ -30,10 +30,9 @@ public class Elevator_L4 extends Command {
     timer.start();
     RobotContainer.elevator.setElevatorMagic(Constants.elevator_l4);
   
-    if (timer.hasElapsed(.2)) {
+    if (timer.hasElapsed(.4)) {
       RobotContainer.coralPivot.setPivot(Constants.pivot_down);
     }
-  
     
   }
 

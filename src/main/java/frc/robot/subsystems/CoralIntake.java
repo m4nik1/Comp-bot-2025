@@ -40,6 +40,7 @@ public class CoralIntake extends SubsystemBase {
       .raceWith(new SuppliedWait(() -> 0.7));
   }
 
+  // Runs the intake in until elapsed time
   public Command coralIn() {
     return run(() -> runCoral(-0.7))
       .raceWith(new SuppliedWait(() -> 0.7));
