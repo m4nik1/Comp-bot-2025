@@ -41,8 +41,11 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Vision;
 
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.util.sendable.Sendable;
@@ -54,7 +57,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class RobotContainer {
 
-  private SendableChooser<Command> autoChooser;
+  private LoggedDashboardChooser<Command> autoChooser;
 
   public static DriveTrain driveTrain;
   public static Elevator elevator;
@@ -101,8 +104,13 @@ public class RobotContainer {
     NamedCommands.registerCommand("Elevator_HP", new ElevatorAuto_HP());
     NamedCommands.registerCommand("Elevator_L2", new ElevatorAuto_l2());
 
-    autoChooser = AutoBuilder.buildAutoChooser("Do Nothing");
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+    autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+    autoChooser.addOption("Right Turned Coral L4", new PathPlannerAuto("Right L4 Facing Coral"));
+    autoChooser.addOption("Left Turned Coral L4", new PathPlannerAuto("Right L4 Facing Coral", true));
+    autoChooser.addOption("Center L4 Coral", new PathPlannerAuto("Center L4 Coral"));
+    autoChooser.addOption("Right Two Piece L4", new PathPlannerAuto("Right Two Piece L4"));
+    autoChooser.addOption("Left Two Piece L4", new PathPlannerAuto("Right Two Piece L4", true ));
+    autoChooser.addOption("Distance Tuning", new PathPlannerAuto("Distance Tuning"));
 
     SmartDashboard.putData("Field", field);
 
