@@ -27,6 +27,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -44,8 +45,6 @@ public class Vision extends SubsystemBase {
 
   private Matrix<N3, N1> kSingleTagStdDevs;
   private Matrix<N3, N1> kMultiTagStdDevs;
-
-
 
   Transform3d robotToCam;
 
@@ -66,7 +65,7 @@ public class Vision extends SubsystemBase {
     // TODO:
     // Camera position from the center of the Robot
     // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
-    robotToCam = new Transform3d(new Translation3d(0.095, -0.3302, 0.6), new Rotation3d(0,Rotation2d.fromDegrees(20).getRadians(), Rotation2d.fromDegrees(20).getRadians())); 
+    robotToCam = new Transform3d(new Translation3d(0.095, 0.3302, 0.6), new Rotation3d(0, Units.degreesToRadians(20), Units.degreesToRadians(20))); 
 
     // This takes all the tags into account for estimating pose
     // poseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam);
