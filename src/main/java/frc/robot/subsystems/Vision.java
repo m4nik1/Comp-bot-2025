@@ -63,9 +63,9 @@ public class Vision extends SubsystemBase {
     robotToCam = new Transform3d(new Translation3d(0.095, 0.3302, 0.6), new Rotation3d(0, Units.degreesToRadians(20), Units.degreesToRadians(20))); 
 
     // This takes all the tags into account for estimating pose
-    // poseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam);
+    poseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam);
 
-    // poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+    poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
   }
 
@@ -96,9 +96,10 @@ public class Vision extends SubsystemBase {
           double face = Constants.TagToFaceBlue.get(tagId);
           double thetaFace = ((2*Math.PI)*(face/6)+Math.PI) % (2*Math.PI); 
 
-          Transform2d facePose = Robot.reefPosesGenerate.calculateAlgaePose(thetaFace);
+          // Transform2d facePose = Robot.reefPosesGenerate.calculateAlgaePose(thetaFace);
           
-          Logger.recordOutput("Reef Face number", face);
+          // Logger.recordOutput("Reef Face number", face);
+          SmartDashboard.putNumber("Reef Face", face);
 
         }
       }
@@ -172,22 +173,19 @@ public class Vision extends SubsystemBase {
       double timestampSeconds = result.get().timestampSeconds;
 
 
-      Logger.recordOutput("Vision Robot Pose", estimatedRobotPose2d);
-      Logger.recordOutput("is Single Target?", singleTarget);
+      // Logger.recordOutput("is Single Target?", singleTarget);
       RobotContainer.driveTrain.addVisionMeasurment(estimatedRobotPose2d, timestampSeconds, singleTarget);
     }
 
   @Override
   public void periodic() {
     
-    // Logger.recordOutput("turn vision", turn);
-    // Logger.recordOutput("Vision Yaw ", targetYaw);
     // Use the below for loop for multiple cameras
     // for (PhotonPoseEstimator photonEstimator : poseEstimator) {
     //   addVisionMeasurementToDriveTrain(poseEstimator);
     // }
-    // addVisionMeasurementToDriveTrain(poseEstimator);
-    // findReefFace();
+    addVisionMeasurementToDriveTrain(poseEstimator);
+    findReefFace();
 
   }
 }

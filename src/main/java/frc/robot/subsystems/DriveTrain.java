@@ -197,10 +197,10 @@ public class DriveTrain extends SubsystemBase {
     // Adds the vision measurement for the pose estimation
     odom.addVisionMeasurement(visionRobotPose, visionTimestamp, visionStds);
 
-    double visionToDriveTrainPose = visionRobotPose.getTranslation().getDistance(robotPose.getTranslation());
+    // double visionToDriveTrainPose = visionRobotPose.getTranslation().getDistance(robotPose.getTranslation());
 
-    Logger.recordOutput("Distance to Vision measurement", visionToDriveTrainPose);
-    Logger.recordOutput("Trust Vision data?", visionToDriveTrainPose < 0.5);
+    // Logger.recordOutput("Distance to Vision measurement", visionToDriveTrainPose);
+    // Logger.recordOutput("Trust Vision data?", visionToDriveTrainPose < 0.5);
 
   }
 
@@ -215,16 +215,17 @@ public class DriveTrain extends SubsystemBase {
 
     // First update pose with vision and other sensors
     // updatePose();
+    // getRobotPose2d();
     odom.update(getYaw(), getPositions());
 
-    Logger.recordOutput("SwerveStates/Setpoints", getStates());
-    Logger.recordOutput("Robot Yaw", getRobotAngle());
-    // Logger.recordOutput("Robot Yaw", getRobotPose2d());
+    // Logger.recordOutput("SwerveStates/Setpoints", getStates());
+    // Logger.recordOutput("Robot Yaw", getRobotAngle());
+    // Logger.recordOutput("Robot Yaw", getPose());
 
     
 
     // Updates the robot pose for the Robot itself
-    SmartDashboard.putNumber("Robot Angle", getRobotAngle());
+    // SmartDashboard.putNumber("Robot Angle", getRobotAngle());
 
 
 

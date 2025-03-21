@@ -7,6 +7,7 @@ package frc.robot;
 
 
 
+import frc.robot.commands.AlgaeAlign;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.zeroGyro;
 import frc.robot.commands.Auto.CoralDownAuto;
@@ -58,7 +59,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class RobotContainer {
 
-  private LoggedDashboardChooser<Command> autoChooser;
+  private SendableChooser<Command> autoChooser;
 
   public static DriveTrain driveTrain;
   public static Elevator elevator;
@@ -87,7 +88,7 @@ public class RobotContainer {
     field = new Field2d();
 
     PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
-      Logger.recordOutput("Pathplanner pose", pose);
+      // Logger.recordOutput("Pathplanner pose", pose);
       field.setRobotPose(pose);
     });
 
@@ -103,13 +104,13 @@ public class RobotContainer {
     NamedCommands.registerCommand("Coral_out", coralIntake.coralOut());
     NamedCommands.registerCommand("Pivot_Down", new CoralDownAuto());
     NamedCommands.registerCommand("Pivot_90", new PivotAuto90());
-    // NamedCommands.registerCommand("Elevator_L4", new ElevatorAuto_l4());
-    NamedCommands.registerCommand("Elevator_L4", elevator.setElevatorPos(Constants.elevator_l4));
+    NamedCommands.registerCommand("Elevator_L4", new ElevatorAuto_l4());
+    // NamedCommands.registerCommand("Elevator_L4", elevator.setElevatorPos(Constants.elevator_l4));
     NamedCommands.registerCommand("Elevator_HP", new ElevatorAuto_HP());
     NamedCommands.registerCommand("Elevator_L2", new ElevatorAuto_l2());
 
 
-    autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+    autoChooser = new SendableChooser<Command>();
     autoChooser.addOption("Right Turned Coral L4", new PathPlannerAuto("Right L4 Facing Coral"));
     autoChooser.addOption("Left Turned Coral L4", new PathPlannerAuto("Right L4 Facing Coral", true));
     autoChooser.addOption("Center L4 Coral", new PathPlannerAuto("Center L4 Coral"));
@@ -118,6 +119,7 @@ public class RobotContainer {
     autoChooser.addOption("Distance Tuning", new PathPlannerAuto("Distance Tuning"));
 
     SmartDashboard.putData("Field", field);
+    SmartDashboard.putData("autoChooser", autoChooser);
 
     driveTrain.setDefaultCommand(new TeleopDrive());
     elevator.setDefaultCommand(new RunElevatorManual());
@@ -150,10 +152,11 @@ public class RobotContainer {
     driver.rightBumper().whileTrue(new zeroGyro());
     driver.povDown().whileTrue(new Runclimber());
     driver.a().whileTrue(new ClimberStartSet());
+    driver.x().onTrue(new AlgaeAlign());
   }
 
   public Command getAutonomousCommand() {
-    return autoChooser.get();
+    return autoChooser.getSelected();
   }
 
   public static double getLeftYOp() {
@@ -163,6 +166,10 @@ public class RobotContainer {
 
   public static boolean getDriverA() {
     return driver.a().getAsBoolean();
+  }
+
+  public static boolean getDriverX() {
+    return driver.x().getAsBoolean();
   }
   
   public static double getRightYOp() {

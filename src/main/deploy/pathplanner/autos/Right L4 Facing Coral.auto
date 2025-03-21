@@ -21,6 +21,18 @@
           "data": {
             "name": "Pivot_Down"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Coral_out"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Elevator_HP"
+          }
         }
       ]
     }

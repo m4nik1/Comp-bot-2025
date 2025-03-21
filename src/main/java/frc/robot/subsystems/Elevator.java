@@ -135,10 +135,8 @@ public class Elevator extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    Logger.recordOutput("Elevator Pos", getElevatorPosition());
-    Logger.recordOutput("Elevator Volts", getElevatorMotorVolts());
-    // Logger.recordOutput("Top Limit", getTopLimit());
-    // Logger.recordOutput("Lower Limit", getLowerLimit());
+    // Logger.recordOutput("Elevator Pos", getElevatorPosition());
+    // Logger.recordOutput("Elevator Volts", getElevatorMotorVolts());
 
 
     SmartDashboard.putNumber("Position Elevator", getElevatorPosition());

@@ -36,7 +36,7 @@ public class CoralIntake extends SubsystemBase {
 
   // .raceWith is the simpler way to state parallel command
   public Command coralOut() {
-    return run(() -> runCoral(0.7))
+    return run(() -> runCoral(-0.7))
       .raceWith(new SuppliedWait(() -> 0.7));
   }
 
@@ -49,7 +49,7 @@ public class CoralIntake extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    Logger.recordOutput("Coral Power", coralMax.getAppliedOutput());
+    // Logger.recordOutput("Coral Power", coralMax.getAppliedOutput());
     SmartDashboard.putNumber("Intake power", coralMax.getAppliedOutput());
   }
 }

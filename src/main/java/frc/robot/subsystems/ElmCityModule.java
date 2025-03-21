@@ -88,9 +88,13 @@ public class ElmCityModule extends SubsystemBase {
     driveConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     driveConfig.CurrentLimits.StatorCurrentLimit = 60;
 
-    driveConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = 0.1;
-    driveConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = 0.1;
-    driveConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.1;
+    driveConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+    driveConfig.CurrentLimits.SupplyCurrentLimit = 60;
+
+
+    driveConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = 0.15;
+    driveConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = 0.15;
+    driveConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.15;
 
     driveConfig.Slot0.kP = Constants.driveKp;
     driveConfig.Slot0.kI = Constants.driveKi;
@@ -221,7 +225,7 @@ public class ElmCityModule extends SubsystemBase {
     newState.optimize(Rotation2d.fromRotations(getAngle()));
 
     // Test this out for smoother driving
-    // newState.speedMetersPerSecond *  = newState.angle.minus(currentAngle).getCos();
+    newState.speedMetersPerSecond *= newState.angle.minus(currentAngle).getCos();
     
     setSpeed(newState, openLoop);
     setAngle(newState);
@@ -255,13 +259,13 @@ public class ElmCityModule extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    Logger.recordOutput("Distance (M)" + modNum, getDrivePosMeters());
-    Logger.recordOutput("Mod vel " + modNum, getDriveVelocityConversion());
+    // Logger.recordOutput("Distance (M)" + modNum, getDrivePosMeters());
+    // Logger.recordOutput("Mod vel " + modNum, getDriveVelocityConversion());
     // Logger.recordOutput("Module Angle " + modNum, getAngleDegrees());
 
-    SmartDashboard.putNumber("Module Angle " + modNum, getAngleDegrees());
+    // SmartDashboard.putNumber("Module Angle " + modNum, getAngleDegrees());
     SmartDashboard.putNumber("Distance (M)" + modNum, getDrivePosMeters());
-    // SmartDashboard.putNumber("Nac coder rot " + modNum, getNac());
-    SmartDashboard.putNumber("Mod vel " + modNum, getDriveVelocityConversion());
+    SmartDashboard.putNumber("Nac coder rot " + modNum, getNac());
+    // SmartDashboard.putNumber("Mod vel " + modNum, getDriveVelocityConversion());
   }
 }

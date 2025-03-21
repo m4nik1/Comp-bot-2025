@@ -46,7 +46,7 @@ public class AlgaeIntake extends SubsystemBase {
     SmartDashboard.putBoolean("Algae Detector", algaeDetector.get());
   
     
-    Logger.recordOutput("Coral Detector", coralDetector.get());
-    Logger.recordOutput("Algae Detector", algaeDetector.get());
+    // Logger.recordOutput("Coral Detector", coralDetector.get());
+    // Logger.recordOutput("Algae Detector", algaeDetector.get());
   }
 }

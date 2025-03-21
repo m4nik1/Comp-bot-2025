@@ -27,53 +27,54 @@ public class AlgaeAlign extends Command {
 
   public AlgaeAlign() {
     // Use addRequirements() here to declare subsystem dependencies.
-    // addRequirements(RobotContainer.photonVision);
+    addRequirements(RobotContainer.photonVision);
+    addRequirements(RobotContainer.driveTrain);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // xTranslation = new PIDController(.5, 0, 0);
-    // yTranslation = new PIDController(.5, 0, 0);
-    // rotation = new PIDController(.5, 0, 0);
-    // rotation.enableContinuousInput(-Math.PI, Math.PI);
+    xTranslation = new PIDController(.5, 0, 0);
+    yTranslation = new PIDController(.5, 0, 0);
+    rotation = new PIDController(.5, 0, 0);
+    rotation.enableContinuousInput(-Math.PI, Math.PI);
 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // var results = RobotContainer.photonVision.getUnreadResults();
+    var results = RobotContainer.photonVision.getUnreadResults();
 
-    // if(!results.isEmpty()) {
+    if(!results.isEmpty()) {
       
-    //   // Gets the latest frame since one has been processed since then
-    //   var latestResult = results.get(results.size() - 1);
-    //   if(latestResult.hasTargets()) { // At least one tag has been seen by the camera
-    //     for (var target : latestResult.getTargets()) {
-    //       int tagId = target.getFiducialId();
+      // Gets the latest frame since one has been processed since then
+      var latestResult = results.get(results.size() - 1);
+      if(latestResult.hasTargets()) { // At least one tag has been seen by the camera
+        for (var target : latestResult.getTargets()) {
+          int tagId = target.getFiducialId();
 
-    //       // Finds the tags that are associated with the reef
-    //       if(Constants.desiredTagIds.contains(tagId)) {
-    //         double face = Constants.TagToFaceBlue.get(tagId);
+          // Finds the tags that are associated with the reef
+          if(Constants.desiredTagIds.contains(tagId)) {
+            double face = Constants.TagToFaceBlue.get(tagId);
             
-    //         // Calculates the face angle in radians
-    //         double thetaCalculate = ((2*Math.PI)*(face/6)+Math.PI) % (2*Math.PI); 
+            // Calculates the face angle in radians
+            double thetaCalculate = ((2*Math.PI)*(face/6)+Math.PI) % (2*Math.PI); 
 
-    //         Transform2d calculatedAlgae = Robot.reefPosesGenerate.calculateAlgaePose(thetaCalculate);
+            Transform2d calculatedAlgae = Robot.reefPosesGenerate.calculateAlgaePose(thetaCalculate);
 
-    //         algaePose = RobotContainer.driveTrain.getRobotPose2d().transformBy(calculatedAlgae);
-    //         Logger.recordOutput("calculated align Pose", algaePose);
-    //       }
-    //     }
-    //   }
-    // }
+            algaePose = RobotContainer.driveTrain.getRobotPose2d().transformBy(calculatedAlgae);
+            // Logger.recordOutput("calculated align Pose", algaePose);
+          }
+        }
+      }
+    }
 
-    // double xOutput = xTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), algaePose.getX()) * Constants.speedMultiTeleop;
-    // double yOutput = yTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getY(), algaePose.getY()) * Constants.speedMultiTeleop;
-    // double rotOutput = rotation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), algaePose.getX()) * Constants.speedMultiTeleop;
+    double xOutput = xTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), algaePose.getX()) * Constants.speedMultiTeleop;
+    double yOutput = yTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getY(), algaePose.getY()) * Constants.speedMultiTeleop;
+    double rotOutput = rotation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), algaePose.getX()) * Constants.speedMultiTeleop;
 
-    // RobotContainer.driveTrain.drive(new Translation2d(xOutput, yOutput).times(Constants.maxSpeed), rotOutput * Constants.maxAngularSpd);
+    RobotContainer.driveTrain.drive(new Translation2d(xOutput, yOutput).times(Constants.maxSpeed), rotOutput * Constants.maxAngularSpd);
   }
 
   // Called once the command ends or is interrupted.

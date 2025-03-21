@@ -96,7 +96,7 @@ public class CoralPivot extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    Logger.recordOutput("Pivot Position", pivotPoint.getEncoder().getPosition() + -30);
+    // Logger.recordOutput("Pivot Position", pivotPoint.getEncoder().getPosition() + -30);
     SmartDashboard.putNumber("Pivot Pos", pivotPoint.getEncoder().getPosition() + -30);
     
     Logger.recordOutput("Pivot Limit", getPivotLimit());

@@ -68,8 +68,8 @@ public class Climber extends SubsystemBase {
 
   @Override
   public void periodic() {
-    Logger.recordOutput("Climber Motor", climberMotor.getPosition().getValueAsDouble());
-    Logger.recordOutput("Climber Volts", climberMotor.getMotorVoltage().getValueAsDouble());
+    // Logger.recordOutput("Climber Motor", climberMotor.getPosition().getValueAsDouble());
+    // Logger.recordOutput("Climber Volts", climberMotor.getMotorVoltage().getValueAsDouble());
 
     // This method will be called once per scheduler run
   }
