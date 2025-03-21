@@ -9,14 +9,10 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import org.littletonrobotics.junction.Logger;
 
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.ClosedLoopSlot;
-import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
-import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkFlexConfig;
-import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -38,7 +34,6 @@ public class CoralPivot extends SubsystemBase {
     pivotPoint = new SparkFlex(35, MotorType.kBrushless);
     pivotLimit = new DigitalInput(1);
     pivotEncoder = pivotPoint.getEncoder();
-    // pivotClosedLoop = pivotPoint.getClosedLoopController();
     pivotAngleConversion = (1/20) * 180;
 
     pivotPoint.getEncoder().setPosition(0);
@@ -57,8 +52,6 @@ public class CoralPivot extends SubsystemBase {
 
     // configPivot.encoder.positionConversionFactor(pivotAngleConversion).velocityConversionFactor(1);
     configPivot.encoder.positionConversionFactor(18).velocityConversionFactor(1);
-
-    // configPivot.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).pidf(0, 0, 0, 0);
 
     pivotPoint.configure(configPivot, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
   }
@@ -87,23 +80,14 @@ public class CoralPivot extends SubsystemBase {
     // If you can retune this use the PIDController class
     pidCalculate = kP * (pos - (pivotPoint.getEncoder().getPosition() + -30)) + kG * Math.sin(Rotation2d.fromDegrees(pivotPoint.getEncoder().getPosition() + -30).getRadians());
 
-    Logger.recordOutput("Pivot PID calculated", pidCalculate);
-
     pivotPoint.setVoltage(pidCalculate);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
-    // Logger.recordOutput("Pivot Position", pivotPoint.getEncoder().getPosition() + -30);
     SmartDashboard.putNumber("Pivot Pos", pivotPoint.getEncoder().getPosition() + -30);
-    
-    Logger.recordOutput("Pivot Limit", getPivotLimit());
-    Logger.recordOutput("Pivot Volts", pivotPoint.getAppliedOutput());
-    SmartDashboard.putNumber("Pivot Spd", pivotPoint.get());
     SmartDashboard.putBoolean("Pivot Limit", getPivotLimit());
-    SmartDashboard.putNumber("pivot pos", pivotPoint.getEncoder().getPosition() + -30);
 
     if(getPivotLimit() == true) {
       pivotPoint.getEncoder().setPosition(0);

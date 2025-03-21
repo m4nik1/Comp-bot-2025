@@ -4,21 +4,13 @@
 
 package frc.robot.commands;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AlgaeAlign extends Command {
 
   Pose2d algaePose;
@@ -64,7 +56,6 @@ public class AlgaeAlign extends Command {
             Transform2d calculatedAlgae = Robot.reefPosesGenerate.calculateAlgaePose(thetaCalculate);
 
             algaePose = RobotContainer.driveTrain.getRobotPose2d().transformBy(calculatedAlgae);
-            // Logger.recordOutput("calculated align Pose", algaePose);
           }
         }
       }

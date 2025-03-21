@@ -29,7 +29,6 @@ public class ClimberStartSet extends Command {
   @Override
   public void execute() {
     press = true;
-    Logger.recordOutput("Climber set pressed", press);
     RobotContainer.climber.climbPosition(.617);
   }
 

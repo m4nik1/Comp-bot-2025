@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
@@ -167,6 +165,7 @@ public class ElmCityModule extends SubsystemBase {
       driveOpenLoop.Output = desiredState.speedMetersPerSecond / Constants.maxSpeed;
       driveMotor.setControl(driveOpenLoop); // change this to a set speed if its not smooth
     }
+    
     // add closed loop for driveController
     else {
       // converts velocity to Rotation per second with wheel curcumfirence
@@ -259,10 +258,6 @@ public class ElmCityModule extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    // Logger.recordOutput("Distance (M)" + modNum, getDrivePosMeters());
-    // Logger.recordOutput("Mod vel " + modNum, getDriveVelocityConversion());
-    // Logger.recordOutput("Module Angle " + modNum, getAngleDegrees());
-
     // SmartDashboard.putNumber("Module Angle " + modNum, getAngleDegrees());
     SmartDashboard.putNumber("Distance (M)" + modNum, getDrivePosMeters());
     SmartDashboard.putNumber("Nac coder rot " + modNum, getNac());

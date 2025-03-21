@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -68,9 +66,6 @@ public class Climber extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // Logger.recordOutput("Climber Motor", climberMotor.getPosition().getValueAsDouble());
-    // Logger.recordOutput("Climber Volts", climberMotor.getMotorVoltage().getValueAsDouble());
-
     // This method will be called once per scheduler run
   }
 }

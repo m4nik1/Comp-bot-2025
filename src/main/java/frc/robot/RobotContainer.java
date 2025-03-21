@@ -10,50 +10,18 @@ package frc.robot;
 import frc.robot.commands.AlgaeAlign;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.zeroGyro;
-import frc.robot.commands.Auto.CoralDownAuto;
-import frc.robot.commands.Auto.ElevatorAuto_HP;
-import frc.robot.commands.Auto.ElevatorAuto_l2;
-import frc.robot.commands.Auto.ElevatorAuto_l4;
-import frc.robot.commands.Auto.PivotAuto90;
-import frc.robot.commands.Auto.RunCoralIntakeAuto;
-import frc.robot.commands.Climber.ClimberStartSet;
-import frc.robot.commands.Climber.Runclimber;
-import frc.robot.commands.Climber.RunclimberBack;
-import frc.robot.commands.Climber.StillClimber;
-import frc.robot.commands.CoralPivot.CoralPivot90;
-import frc.robot.commands.CoralPivot.CoralPivotDown;
-import frc.robot.commands.CoralPivot.CoralPivotUp;
-import frc.robot.commands.CoralPivot.RunPivotManual;
-import frc.robot.commands.Elevator_Postions.ElevatorAl_l3;
-import frc.robot.commands.Elevator_Postions.Elevator_HP;
-import frc.robot.commands.Elevator_Postions.Elevator_L2;
-import frc.robot.commands.Elevator_Postions.Elevator_L3;
-import frc.robot.commands.Elevator_Postions.Elevator_L4;
-import frc.robot.commands.Elevator_Postions.RunElevatorManual;
-import frc.robot.commands.Intakes.AlgaeIn;
-import frc.robot.commands.Intakes.AlgaeOut;
-import frc.robot.commands.Intakes.CoralIn;
-import frc.robot.commands.Intakes.CoralOut;
-import frc.robot.subsystems.AlgaeIntake;
-import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.CoralIntake;
-import frc.robot.subsystems.CoralPivot;
-import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.Vision;
-
-import org.littletonrobotics.junction.Logger;
-import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
-
-import com.pathplanner.lib.auto.AutoBuilder;
+import frc.robot.commands.Auto.*;
+import frc.robot.commands.Climber.*;
+import frc.robot.commands.CoralPivot.*;
+import frc.robot.commands.Elevator_Positions.*;
+import frc.robot.commands.Intakes.*;
+import frc.robot.subsystems.*;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.util.sendable.Sendable;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -88,7 +56,6 @@ public class RobotContainer {
     field = new Field2d();
 
     PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
-      // Logger.recordOutput("Pathplanner pose", pose);
       field.setRobotPose(pose);
     });
 

@@ -2,38 +2,38 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Elevator_Postions;
+package frc.robot.commands.Elevator_Positions;
 
-import edu.wpi.first.wpilibj.Timer;
+
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class Elevator_L4 extends Command {
-  /** Creates a new Elevator_L4. */
-  Timer timer;
-  public Elevator_L4() {
+public class Elevator_HP extends Command {
+  /** Creates a new Elevatorhp. */
+
+  boolean stop = false;
+  public Elevator_HP() {
     addRequirements(RobotContainer.elevator);
+    addRequirements(RobotContainer.coralPivot);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    timer=new Timer();
+    stop = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    timer.start();
-    RobotContainer.elevator.setElevatorMagic(Constants.elevator_l4);
-  
-    if (timer.hasElapsed(.4)) {
-      RobotContainer.coralPivot.setPivot(Constants.pivot_down);
-    }
-    
+    RobotContainer.coralPivot.setPivot(Constants.pivot_HP);
+
+
+    RobotContainer.elevator.setElevatorMagic(Constants.elevator_HP);
   }
 
   // Called once the command ends or is interrupted.

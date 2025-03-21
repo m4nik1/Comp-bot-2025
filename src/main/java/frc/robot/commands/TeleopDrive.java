@@ -4,15 +4,12 @@
 
 package frc.robot.commands;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Robot;
@@ -60,13 +57,12 @@ public class TeleopDrive extends Command {
     double getX = -RobotContainer.getLeftX();
     double getY = -RobotContainer.getLeftY();
     double getRotation = -RobotContainer.getRightX();
-    double turnKp = 0.015;
+    // double turnKp = 0.015;
 
 
 
     // if(RobotContainer.getDriverA()) { // Driver presses the A button
     //   var results = RobotContainer.photonVision.getUnreadResults();
-    //   Logger.recordOutput("Align on", RobotContainer.getDriverA());
 
     //   if(!results.isEmpty()) {
     //     var result = results.get(results.size() - 1);
@@ -107,7 +103,6 @@ public class TeleopDrive extends Command {
               Transform2d calculatedAlgae = Robot.reefPosesGenerate.calculateAlgaePose(thetaCalculate);
 
               algaePose = RobotContainer.driveTrain.getRobotPose2d().transformBy(calculatedAlgae);
-              // Logger.recordOutput("calculated align Pose", algaePose);
             }
           }
         }

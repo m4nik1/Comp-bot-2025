@@ -12,26 +12,18 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-import org.photonvision.targeting.PhotonPipelineResult;
-import org.photonvision.targeting.PhotonTrackedTarget;
+import org.photonvision.targeting.*;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.numbers.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Robot;
 import frc.robot.RobotContainer;
 
 public class Vision extends SubsystemBase {
@@ -94,15 +86,13 @@ public class Vision extends SubsystemBase {
       var latestResults = results.get(results.size() - 1);
       if(latestResults.hasTargets()) {
         int tagId = latestResults.getBestTarget().getFiducialId();
-        Logger.recordOutput("Face Found", Constants.desiredTagIds.contains(tagId));
+
 
         if(Constants.desiredTagIds.contains(tagId)) {
           double face = Constants.TagToFaceBlue.get(tagId);
-          double thetaFace = ((2*Math.PI)*(face/6)+Math.PI) % (2*Math.PI); 
+          // double thetaFace = ((2*Math.PI)*(face/6)+Math.PI) % (2*Math.PI); 
 
           // Transform2d facePose = Robot.reefPosesGenerate.calculateAlgaePose(thetaFace);
-          
-          // Logger.recordOutput("Reef Face number", face);
           SmartDashboard.putNumber("Reef Face", face);
 
         }
@@ -176,22 +166,13 @@ public class Vision extends SubsystemBase {
       Pose2d estimatedRobotPose2d = robotPose.estimatedPose.toPose2d();
       double timestampSeconds = result.get().timestampSeconds;
 
-
-      // Logger.recordOutput("is Single Target?", singleTarget);
       RobotContainer.driveTrain.addVisionMeasurment(estimatedRobotPose2d, timestampSeconds, singleTarget);
     }
 
   @Override
   public void periodic() {
-    
-    // Use the below for loop for multiple cameras
-    // for (PhotonPoseEstimator photonEstimator : poseEstimator) {
-    //   addVisionMeasurementToDriveTrain(poseEstimator);
-    // }
     addVisionMeasurementToDriveTrain(poseEstimator);
-    findReefFace();
-
-    Logger.recordOutput("Vision Estimator", getEstimatedGlobalPose().estimatedPose.getPose2d());
+    // findReefFace();
 
   }
 }

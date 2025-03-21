@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
@@ -134,11 +132,6 @@ public class Elevator extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
-    // Logger.recordOutput("Elevator Pos", getElevatorPosition());
-    // Logger.recordOutput("Elevator Volts", getElevatorMotorVolts());
-
-
     SmartDashboard.putNumber("Position Elevator", getElevatorPosition());
 
 

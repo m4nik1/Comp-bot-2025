@@ -4,10 +4,6 @@
 
 package frc.robot.subsystems;
 
-
-
-import org.littletonrobotics.junction.Logger;
-
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -17,21 +13,18 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -199,9 +192,6 @@ public class DriveTrain extends SubsystemBase {
 
     // double visionToDriveTrainPose = visionRobotPose.getTranslation().getDistance(robotPose.getTranslation());
 
-    // Logger.recordOutput("Distance to Vision measurement", visionToDriveTrainPose);
-    // Logger.recordOutput("Trust Vision data?", visionToDriveTrainPose < 0.5);
-
   }
 
   public void zeroAngles() {
@@ -212,23 +202,8 @@ public class DriveTrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-
     // First update pose with vision and other sensors
-    // updatePose();
-    // getRobotPose2d();
     odom.update(getYaw(), getPositions());
-
-    // Logger.recordOutput("SwerveStates/Setpoints", getStates());
-    // Logger.recordOutput("Robot Yaw", getRobotAngle());
-    // Logger.recordOutput("Robot Yaw", getPose());
-
-    
-
-    // Updates the robot pose for the Robot itself
-    // SmartDashboard.putNumber("Robot Angle", getRobotAngle());
-
-
-
   }
 }
  
