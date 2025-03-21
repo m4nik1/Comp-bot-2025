@@ -184,8 +184,8 @@ public class DriveTrain extends SubsystemBase {
     }
   }
 
-  public void addVisionMeasurment(Pose2d visionRobotPose, double visionTimestamp, boolean isSingleTarget) {
-    Matrix<N3, N1> visionStds = isSingleTarget ? kSingleTagStdDevs : kMultiTagStdDevs;
+  public void addVisionMeasurment(Pose2d visionRobotPose, double visionTimestamp, Matrix<N3, N1> visionStds) {
+    // Matrix<N3, N1> visionStds = isSingleTarget ? kSingleTagStdDevs : kMultiTagStdDevs;
 
     // Adds the vision measurement for the pose estimation
     odom.addVisionMeasurement(visionRobotPose, visionTimestamp, visionStds);
