@@ -41,6 +41,7 @@ public class Vision extends SubsystemBase {
   PhotonPipelineResult result;
   PhotonTrackedTarget target;
   PhotonPoseEstimator poseEstimator;
+  private Matrix<N3, N1> curStdDevs;
   double MAX_SINGLE_ABIGUITY = 0.05;
 
   Transform3d robotToCam;
@@ -49,17 +50,16 @@ public class Vision extends SubsystemBase {
   double targetYaw = 0.0;
   double turn = 0.0;
   double vision_kP = 1;
+  Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
+  Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
 
   AprilTagFieldLayout aprilTagFieldLayout;
   public Vision() {
     camera = new PhotonCamera("arducam-558");;
-    // result = camera.getLatestResult();
+
     aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
-    // target = result.getBestTarget();
     
-    // TODO:
-    // Camera position from the center of the Robot
-    // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
+
     robotToCam = new Transform3d(new Translation3d(0.095, 0.3302, 0.6), new Rotation3d(0, Units.degreesToRadians(20), Units.degreesToRadians(20))); 
 
     // This takes all the tags into account for estimating pose
@@ -77,11 +77,15 @@ public class Vision extends SubsystemBase {
     for(var tagChange : camera.getAllUnreadResults()) {
       // Add std dev. in the update function
       visionEst = poseEstimator.update(tagChange); // Updates the pose estimator with camera updates
-      // updateEstimationStdDevs(visionEst, tagChange.targets);
+      updateEstimationStdDevs(visionEst, tagChange.targets); // Calculates new std dev's 
     }
 
     return visionEst;
   }
+
+  public Matrix<N3, N1> getEstimationStdDevs() {
+    return curStdDevs;
+}
 
   public void findReefFace() {
     var results = camera.getAllUnreadResults();
@@ -110,47 +114,47 @@ public class Vision extends SubsystemBase {
     return camera.getAllUnreadResults();
   }
 
-  // private void updateEstimationStdDevs(
-  //           Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets) {
-  //       if (estimatedPose.isEmpty()) {
-  //           // No pose input. Default to single-tag std devs
-  //           curStdDevs = kSingleTagStdDevs;
+  private void updateEstimationStdDevs(
+            Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets) {
+        if (estimatedPose.isEmpty()) {
+            // No pose input. Default to single-tag std devs
+            curStdDevs = kSingleTagStdDevs;
 
-  //       } else {
-  //           // Pose present. Start running Heuristic
-  //           var estStdDevs = kSingleTagStdDevs;
-  //           int numTags = 0;
-  //           double avgDist = 0;
+        } else {
+            // Pose present. Start running Heuristic
+            var estStdDevs = kSingleTagStdDevs;
+            int numTags = 0;
+            double avgDist = 0;
 
-  //           // Precalculation - see how many tags we found, and calculate an average-distance metric
-  //           for (var tgt : targets) {
-  //               var tagPose = poseEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
-  //               if (tagPose.isEmpty()) continue;
-  //               numTags++;
-  //               avgDist +=
-  //                       tagPose
-  //                               .get()
-  //                               .toPose2d()
-  //                               .getTranslation()
-  //                               .getDistance(estimatedPose.get().estimatedPose.toPose2d().getTranslation());
-  //           }
+            // Precalculation - see how many tags we found, and calculate an average-distance metric
+            for (var tgt : targets) {
+                var tagPose = poseEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
+                if (tagPose.isEmpty()) continue;
+                numTags++;
+                avgDist +=
+                        tagPose
+                                .get()
+                                .toPose2d()
+                                .getTranslation()
+                                .getDistance(estimatedPose.get().estimatedPose.toPose2d().getTranslation());
+            }
 
-  //           if (numTags == 0) {
-  //               // No tags visible. Default to single-tag std devs
-  //               curStdDevs = kSingleTagStdDevs;
-  //           } else {
-  //               // One or more tags visible, run the full heuristic.
-  //               avgDist /= numTags;
-  //               // Decrease std devs if multiple targets are visible
-  //               if (numTags > 1) estStdDevs = kMultiTagStdDevs;
-  //               // Increase std devs based on (average) distance
-  //               if (numTags == 1 && avgDist > 4)
-  //                   estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-  //               else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
-  //               curStdDevs = estStdDevs;
-  //           }
-  //       }
-  //   }
+            if (numTags == 0) {
+                // No tags visible. Default to single-tag std devs
+                curStdDevs = kSingleTagStdDevs;
+            } else {
+                // One or more tags visible, run the full heuristic.
+                avgDist /= numTags;
+                // Decrease std devs if multiple targets are visible
+                if (numTags > 1) estStdDevs = kMultiTagStdDevs;
+                // Increase std devs based on (average) distance
+                if (numTags == 1 && avgDist > 4)
+                    estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+                else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
+                curStdDevs = estStdDevs;
+            }
+        }
+    }
 
 
     public void addVisionMeasurementToDriveTrain(PhotonPoseEstimator photonPoseEstimator) {
@@ -186,6 +190,8 @@ public class Vision extends SubsystemBase {
     // }
     addVisionMeasurementToDriveTrain(poseEstimator);
     findReefFace();
+
+    Logger.recordOutput("Vision Estimator", getEstimatedGlobalPose().estimatedPose.getPose2d());
 
   }
 }
