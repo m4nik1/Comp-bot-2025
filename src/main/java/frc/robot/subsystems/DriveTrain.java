@@ -37,7 +37,6 @@ public class DriveTrain extends SubsystemBase {
   Pose2d robotPose;
 
   private Matrix<N3, N1> kSingleTagStdDevs;
-  private Matrix<N3, N1> kMultiTagStdDevs;
   private Matrix<N3, N1> kStateDriveStdDevs;
 
   SwerveDrivePoseEstimator odom;

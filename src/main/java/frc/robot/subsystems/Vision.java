@@ -16,6 +16,7 @@ import org.photonvision.targeting.*;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.numbers.*;
@@ -41,8 +42,10 @@ public class Vision extends SubsystemBase {
   double targetYaw = 0.0;
   double turn = 0.0;
   double vision_kP = 1;
-  Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
-  Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+  
+  Matrix<N3, N1> kSingleTagStdDevs = new Matrix<>(Nat.N3(), Nat.N1(), new double[] {0.1, 0.1, 0.05});
+  Matrix<N3, N1> kMultiTagStdDevs = new Matrix<>(Nat.N3(), Nat.N1(), new double[] {0.025, 0.025, 0.0125});
+  Matrix<N3, N1> kStateDriveStdDevs = new Matrix<>(Nat.N3(), Nat.N1(), new double[] {0.01, 0.01, 0.005});
 
   AprilTagFieldLayout aprilTagFieldLayout;
   public Vision() {
