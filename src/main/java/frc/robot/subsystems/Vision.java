@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import java.util.List;
 import java.util.Optional;
 
+import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -166,6 +167,8 @@ public class Vision extends SubsystemBase {
       }
 
       Pose2d estimatedRobotPose2d = robotPose.estimatedPose.toPose2d();
+
+      Logger.recordOutput("Vision Pose", estimatedRobotPose2d);
       double timestampSeconds = result.get().timestampSeconds;
 
       RobotContainer.driveTrain.addVisionMeasurment(estimatedRobotPose2d, timestampSeconds, curStdDevs);
@@ -175,6 +178,5 @@ public class Vision extends SubsystemBase {
   public void periodic() {
     addVisionMeasurementToDriveTrain(poseEstimator);
     // findReefFace();
-
   }
 }
