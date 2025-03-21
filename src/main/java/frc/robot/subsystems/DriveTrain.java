@@ -19,6 +19,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
@@ -39,7 +40,7 @@ public class DriveTrain extends SubsystemBase {
   private Matrix<N3, N1> kSingleTagStdDevs;
   private Matrix<N3, N1> kStateDriveStdDevs;
 
-  SwerveDrivePoseEstimator odom;
+  SwerveDriveOdometry odom;
   Field2d field;
   RobotConfig autoConfig;
 
@@ -55,10 +56,10 @@ public class DriveTrain extends SubsystemBase {
     gyro = new Pigeon2(Constants.pigeonID);
 
     kSingleTagStdDevs = new Matrix<>(Nat.N3(), Nat.N1(), new double[] {0.1, 0.1, 0.05});
-    kMultiTagStdDevs = new Matrix<>(Nat.N3(), Nat.N1(), new double[] {0.025, 0.025, 0.0125});
     kStateDriveStdDevs = new Matrix<>(Nat.N3(), Nat.N1(), new double[] {0.01, 0.01, 0.005});
 
-    odom = new SwerveDrivePoseEstimator(Constants.swerveKinematics, getYaw(), getPositions(), new Pose2d(), kStateDriveStdDevs, kSingleTagStdDevs);
+    // odom = new SwerveDrivePoseEstimator(Constants.swerveKinematics, getYaw(), getPositions(), new Pose2d(), kStateDriveStdDevs, kSingleTagStdDevs);
+    odom = new SwerveDriveOdometry(Constants.swerveKinematics, getYaw(), getPositions());
 
     try {
       autoConfig = RobotConfig.fromGUISettings();
@@ -72,8 +73,8 @@ public class DriveTrain extends SubsystemBase {
       this::getRobotSpds,
       (speeds, feedforwards) -> driveRobotRelative(speeds),
       new PPHolonomicDriveController(
-            new PIDConstants(0.5, 0, 0), 
-            new PIDConstants(2.7, 0, 0)
+            new PIDConstants(0.5, 0, 0),  // new PIDConstants(5, 0, 0), // translation pid default is 5.0
+            new PIDConstants(2.7, 0, 0) // new PIDConstants(12, 0, 0), // rotation PID default is 5.0
       ),
       autoConfig,
       () -> {
@@ -94,7 +95,8 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public Pose2d getPose() {
-    return odom.getEstimatedPosition(); // returns pose in meters
+    // return odom.getEstimatedPosition(); // returns pose in meters
+    return odom.getPoseMeters();
   }
 
   public void resetPose(Pose2d pose) {
@@ -187,7 +189,7 @@ public class DriveTrain extends SubsystemBase {
     // Matrix<N3, N1> visionStds = isSingleTarget ? kSingleTagStdDevs : kMultiTagStdDevs;
 
     // Adds the vision measurement for the pose estimation
-    odom.addVisionMeasurement(visionRobotPose, visionTimestamp, visionStds);
+    // odom.addVisionMeasurement(visionRobotPose, visionTimestamp, visionStds);
 
     // double visionToDriveTrainPose = visionRobotPose.getTranslation().getDistance(robotPose.getTranslation());
 
