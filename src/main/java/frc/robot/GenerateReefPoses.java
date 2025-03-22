@@ -17,7 +17,7 @@ public class GenerateReefPoses {
     double FieldWidth = 317;
     double ReefWidth = 65.5;
     double coralBranchSpacing = 13;
-    double robotCoralIntake = 10; // This is the offset of the coral intake length wise
+    double robotCoralIntake = 20.0787; // This is the offset of the coral intake length wise
 
 
     double radius_reef = (ReefWidth/2) + robotCoralIntake;
@@ -44,15 +44,15 @@ public class GenerateReefPoses {
     }
 
     public Translation2d calculateCoralLeft(double theta) {
-        double coralX = (reefX + (radius_reef * Math.cos(theta))) + ((coralBranchSpacing/2)*Math.cos(theta-Math.PI/2));
-        double coralY = (reefX + (radius_reef * Math.sin(theta))) + ((coralBranchSpacing/2)*Math.sin(theta-Math.PI/2));
+        double coralX = reefX + (radius_reef * Math.cos(theta)) + ((coralBranchSpacing/2)*Math.cos(theta-Math.PI/2));
+        double coralY = reefX + (radius_reef * Math.sin(theta)) + ((coralBranchSpacing/2)*Math.sin(theta-Math.PI/2));
 
         return new Translation2d(coralX, coralY);
     }
 
     public Translation2d calculateCoralRight(double theta) {
-        double coralX = (reefX + (radius_reef * Math.cos(theta))) + ((coralBranchSpacing/2)*Math.cos(theta+Math.PI/2));
-        double coralY = (reefX + (radius_reef * Math.sin(theta))) + ((coralBranchSpacing/2)*Math.sin(theta+Math.PI/2));
+        double coralX = reefX + (radius_reef * Math.cos(theta)) + ((coralBranchSpacing/2)*Math.cos(theta+Math.PI/2));
+        double coralY = reefX + (radius_reef * Math.sin(theta)) + ((coralBranchSpacing/2)*Math.sin(theta+Math.PI/2));
 
         return new Translation2d(coralX, coralY);
     }

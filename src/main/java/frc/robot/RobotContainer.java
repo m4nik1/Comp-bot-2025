@@ -136,6 +136,14 @@ public class RobotContainer {
     return driver.a().getAsBoolean();
   }
 
+  public static boolean getDriverY() {
+    return driver.y().getAsBoolean();
+  }
+
+  public static boolean getDriverB() {
+    return driver.b().getAsBoolean();
+  }
+
   public static boolean getDriverX() {
     return driver.x().getAsBoolean();
   }

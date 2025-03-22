@@ -24,7 +24,7 @@ public class TeleopDrive extends Command {
   /** Creates a new TelopDrive. */
   SlewRateLimiter rotationLimiter, translateLimiter, strafeLimiter;
 
-  Pose2d algaePose;
+  Pose2d algaePose, coralLeftPose, coralRightPose;
 
   PIDController xTranslation, yTranslation, rotOutput;
 
@@ -60,34 +60,87 @@ public class TeleopDrive extends Command {
   public void execute() {
     double speedMultiplier = Constants.speedMultiTeleop;
     double getRotation = -RobotContainer.getRightX();
-    // double turnKp = 0.015;
 
 
-
-    // if(RobotContainer.getDriverA()) { // Driver presses the A button
-    //   var results = RobotContainer.photonVision.getUnreadResults();
-
-    //   if(!results.isEmpty()) {
-    //     var result = results.get(results.size() - 1);
-    //     if(result.hasTargets()) {
-    //       for (var target : result.getTargets()) {
-    //         int tagId = target.getFiducialId();
-    //         if(Constants.desiredTagIds.contains(tagId)) {
-    //           targetYaw = target.getYaw();
-    //           SmartDashboard.putNumber("Target found", target.getFiducialId());
-    //           SmartDashboard.putNumber("18 Yaw", targetYaw);
-    //           targetVisible = true;
-    //         }
-    //       }
-    //     }
-    //   }
-    //   SmartDashboard.putNumber("target vision Yaw", targetYaw);
-    //   translationVal = translateLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getY, .01)); // getY was negativeß
-    //   strafeVal = strafeLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getX, .01)); // getX was negative
-    //   rotationVal = -1.0 * turnKp * targetYaw;
-    // }
     var results = RobotContainer.photonVision.getUnreadResults();
-    if(RobotContainer.getDriverX()) {
+
+    if(RobotContainer.getDriverB()) {
+      if(!results.isEmpty()) {
+        // Gets the latest frame since one has been processed since then
+        var latestResult = results.get(results.size() - 1);
+        if(latestResult.hasTargets()) { // At least one tag has been seen by the camera
+          for (var target : latestResult.getTargets()) {
+            int tagId = target.getFiducialId();
+
+            Logger.recordOutput("Found reef tag", Constants.desiredTagIds.contains(tagId));
+            // Finds the tags that are associated with the reef
+            if(Constants.desiredTagIds.contains(tagId)) {
+              double face = Constants.TagToFaceBlue.get(tagId);
+              
+              // Calculates the face angle in radians
+              double thetaCalculate = ((2*Math.PI)*(face/6)+Math.PI) % (2*Math.PI); 
+
+              Translation2d calculatedAlgae = Robot.reefPosesGenerate.calculateCoralRight(thetaCalculate);
+
+              Logger.recordOutput("Face reef", face);
+              coralRightPose = new Pose2d(new Translation2d(Units.inchesToMeters(calculatedAlgae.getX()), Units.inchesToMeters(calculatedAlgae.getY())), Rotation2d.fromRadians(thetaCalculate));
+            }
+          }
+        }
+      }
+
+      if(coralRightPose != null) {
+        xOutput = xTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), coralRightPose.getX()) * Constants.speedMultiTeleop;
+        yOutput = yTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getY(), coralRightPose.getY()) * Constants.speedMultiTeleop;
+        // rotOutput = rotation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), algaePose.getX()) * Constants.speedMultiTeleop;
+
+        // translationVal = xOutput;
+        // strafeVal = yOutput;
+        // rotation = 0;
+
+        Logger.recordOutput("Coral Right Pose", coralRightPose);
+      }
+    }
+
+    else if(RobotContainer.getDriverX()) {
+      if(!results.isEmpty()) {
+        // Gets the latest frame since one has been processed since then
+        var latestResult = results.get(results.size() - 1);
+        if(latestResult.hasTargets()) { // At least one tag has been seen by the camera
+          for (var target : latestResult.getTargets()) {
+            int tagId = target.getFiducialId();
+
+            Logger.recordOutput("Found reef tag", Constants.desiredTagIds.contains(tagId));
+            // Finds the tags that are associated with the reef
+            if(Constants.desiredTagIds.contains(tagId)) {
+              double face = Constants.TagToFaceBlue.get(tagId);
+              
+              // Calculates the face angle in radians
+              double thetaCalculate = ((2*Math.PI)*(face/6)+Math.PI) % (2*Math.PI); 
+
+              Translation2d calculatedAlgae = Robot.reefPosesGenerate.calculateCoralLeft(thetaCalculate);
+
+              Logger.recordOutput("Face reef", face);
+              coralLeftPose = new Pose2d(new Translation2d(Units.inchesToMeters(calculatedAlgae.getX()), Units.inchesToMeters(calculatedAlgae.getY())), Rotation2d.fromRadians(thetaCalculate));
+            }
+          }
+        }
+      }
+
+      if(coralLeftPose != null) {
+        xOutput = xTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), coralLeftPose.getX()) * Constants.speedMultiTeleop;
+        yOutput = yTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getY(), coralLeftPose.getY()) * Constants.speedMultiTeleop;
+        // rotOutput = rotation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), algaePose.getX()) * Constants.speedMultiTeleop;
+
+        // translationVal = xOutput;
+        // strafeVal = yOutput;
+        // rotation = 0;
+
+        Logger.recordOutput("Coral Left Pose", coralLeftPose);
+      }
+    }
+
+    else if(RobotContainer.getDriverY()) {
       if(!results.isEmpty()) {
         // Gets the latest frame since one has been processed since then
         var latestResult = results.get(results.size() - 1);
@@ -126,7 +179,7 @@ public class TeleopDrive extends Command {
         Logger.recordOutput("AlgaePose", algaePose);
         // SmartDashboard.putNumber("xOutput", xOutput);
         // SmartDashboard.putNumber("yOutput", yOutput);
-    }
+      }
 
     }
     else {
