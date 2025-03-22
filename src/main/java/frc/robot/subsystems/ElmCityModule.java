@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
@@ -261,6 +263,9 @@ public class ElmCityModule extends SubsystemBase {
     // SmartDashboard.putNumber("Module Angle " + modNum, getAngleDegrees());
     SmartDashboard.putNumber("Distance (M)" + modNum, getDrivePosMeters());
     SmartDashboard.putNumber("Nac coder rot " + modNum, getNac());
+
+    Logger.recordOutput("Distance (M)" + modNum, getDrivePosMeters());
+    Logger.recordOutput("Module Angle " + modNum, getAngleDegrees());
     // SmartDashboard.putNumber("Mod vel " + modNum, getDriveVelocityConversion());
   }
 }

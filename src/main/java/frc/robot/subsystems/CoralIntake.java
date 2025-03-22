@@ -18,7 +18,7 @@ import frc.robot.utils.SuppliedWait;
 public class CoralIntake extends SubsystemBase {
   /** Creates a new CoralIntake. */
   SparkMax coralMax;
-  
+
   public CoralIntake() {
     // Change the pivot to its own subsystem
     coralMax = new SparkMax(31, MotorType.kBrushless);

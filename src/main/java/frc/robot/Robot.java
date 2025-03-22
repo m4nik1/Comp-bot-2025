@@ -40,7 +40,9 @@ public class Robot extends LoggedRobot {
     m_robotContainer = new RobotContainer();
     reefPosesGenerate = new GenerateReefPoses();
 
-    CameraServer.startAutomaticCapture();
+    CameraServer.startAutomaticCapture(0);
+    CameraServer.startAutomaticCapture(1);
+
   }
 
 

@@ -82,6 +82,7 @@ public class RobotContainer {
     autoChooser.addOption("Right Two Piece L4", new PathPlannerAuto("Right Two Piece L4"));
     autoChooser.addOption("Left Two Piece L4", new PathPlannerAuto("Right Two Piece L4", true ));
     autoChooser.addOption("Distance Tuning", new PathPlannerAuto("Distance Tuning"));
+    autoChooser.addOption("Right turn test", new PathPlannerAuto("Right Turn Test"));
 
     SmartDashboard.putData("Field", field);
     SmartDashboard.putData("autoChooser", autoChooser);
@@ -117,7 +118,7 @@ public class RobotContainer {
     driver.rightBumper().whileTrue(new zeroGyro());
     driver.povDown().whileTrue(new Runclimber());
     driver.a().whileTrue(new ClimberStartSet());
-    driver.x().onTrue(new AlgaeAlign());
+    // driver.x().onTrue(new AlgaeAlign());
   }
 
   public Command getAutonomousCommand() {

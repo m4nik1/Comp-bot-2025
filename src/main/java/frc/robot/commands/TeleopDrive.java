@@ -4,12 +4,16 @@
 
 package frc.robot.commands;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Robot;
@@ -44,8 +48,8 @@ public class TeleopDrive extends Command {
   public void initialize() {
     targetYaw = 0.0;
     targetVisible = true;
-    xTranslation = new PIDController(.5, 0, 0);
-    yTranslation = new PIDController(.5, 0, 0);
+    xTranslation = new PIDController(.3, 0, 0);
+    yTranslation = new PIDController(.3, 0, 0);
     // rotation = new PIDController(.5, 0, 0);
     // rotation.enableContinuousInput(-Math.PI, Math.PI);
   }
@@ -54,8 +58,6 @@ public class TeleopDrive extends Command {
   @Override
   public void execute() {
     double speedMultiplier = Constants.speedMultiTeleop;
-    double getX = -RobotContainer.getLeftX();
-    double getY = -RobotContainer.getLeftY();
     double getRotation = -RobotContainer.getRightX();
     // double turnKp = 0.015;
 
@@ -83,16 +85,16 @@ public class TeleopDrive extends Command {
     //   strafeVal = strafeLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getX, .01)); // getX was negative
     //   rotationVal = -1.0 * turnKp * targetYaw;
     // }
-        var results = RobotContainer.photonVision.getUnreadResults();
+    var results = RobotContainer.photonVision.getUnreadResults();
     if(RobotContainer.getDriverX()) {
       if(!results.isEmpty()) {
-        
         // Gets the latest frame since one has been processed since then
         var latestResult = results.get(results.size() - 1);
         if(latestResult.hasTargets()) { // At least one tag has been seen by the camera
           for (var target : latestResult.getTargets()) {
             int tagId = target.getFiducialId();
 
+            Logger.recordOutput("Found reef tag", Constants.desiredTagIds.contains(tagId));
             // Finds the tags that are associated with the reef
             if(Constants.desiredTagIds.contains(tagId)) {
               double face = Constants.TagToFaceBlue.get(tagId);
@@ -102,21 +104,34 @@ public class TeleopDrive extends Command {
 
               Transform2d calculatedAlgae = Robot.reefPosesGenerate.calculateAlgaePose(thetaCalculate);
 
-              algaePose = RobotContainer.driveTrain.getRobotPose2d().transformBy(calculatedAlgae);
+              // algaePose = RobotContainer.driveTrain.getRobotPose2d().transformBy(calculatedAlgae);
+              Logger.recordOutput("Face reef", face);
+              algaePose = new Pose2d(new Translation2d(calculatedAlgae.getX(), calculatedAlgae.getY()), Rotation2d.fromDegrees(0));
             }
           }
         }
       }
-      xOutput = xTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), algaePose.getX()) * Constants.speedMultiTeleop;
-      yOutput = yTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getY(), algaePose.getY()) * Constants.speedMultiTeleop;
-      // rotOutput = rotation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), algaePose.getX()) * Constants.speedMultiTeleop;
+      Logger.recordOutput("Found reef tag", false);
 
-      translationVal = xOutput;
-      strafeVal = yOutput;
-      rotation = 0;
+      if(algaePose != null) {
+        xOutput = xTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), algaePose.getX()) * Constants.speedMultiTeleop;
+        yOutput = yTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getY(), algaePose.getY()) * Constants.speedMultiTeleop;
+        // rotOutput = rotation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), algaePose.getX()) * Constants.speedMultiTeleop;
+
+        // translationVal = xOutput;
+        // strafeVal = yOutput;
+        // rotation = 0;
+
+        Logger.recordOutput("AlgaePose", algaePose);
+        // SmartDashboard.putNumber("xOutput", xOutput);
+        // SmartDashboard.putNumber("yOutput", yOutput);
+    }
+
     }
     else {
       speedMultiplier = Constants.speedMultiTeleop;
+      double getX = -RobotContainer.getLeftX();
+      double getY = -RobotContainer.getLeftY();
 
       // Remember all these values from the stick are negative
       translationVal = translateLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getY, .01)); // getY was negativeß
