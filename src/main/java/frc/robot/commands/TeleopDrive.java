@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -106,7 +107,7 @@ public class TeleopDrive extends Command {
 
               // algaePose = RobotContainer.driveTrain.getRobotPose2d().transformBy(calculatedAlgae);
               Logger.recordOutput("Face reef", face);
-              algaePose = new Pose2d(new Translation2d(calculatedAlgae.getX(), calculatedAlgae.getY()), Rotation2d.fromDegrees(0));
+              algaePose = new Pose2d(new Translation2d(Units.inchesToMeters(calculatedAlgae.getX()), Units.inchesToMeters(calculatedAlgae.getY())), Rotation2d.fromDegrees(0));
             }
           }
         }
