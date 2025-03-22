@@ -9,12 +9,12 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ElevatorAuto_HP extends Command {
+public class ElevatorAuto_HPCenter extends Command {
   /** Creates a new Elevator_Down. */
 
   boolean stop = false;
 
-  public ElevatorAuto_HP() {
+  public ElevatorAuto_HPCenter() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.elevator);
     addRequirements(RobotContainer.coralPivot);

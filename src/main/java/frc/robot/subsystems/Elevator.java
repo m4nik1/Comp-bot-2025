@@ -7,6 +7,8 @@ package frc.robot.subsystems;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
@@ -108,7 +110,7 @@ public class Elevator extends SubsystemBase {
 
   public boolean isElevatorL4() {
     double elevator_pos = getElevatorPosition();
-    return elevator_pos >= Constants.elevator_l4 + -4;
+    return elevator_pos >= (Constants.elevator_l4 + -7);
   }
 
   public BooleanSupplier isElevatorL4Supplier() {
@@ -123,10 +125,15 @@ public class Elevator extends SubsystemBase {
     double elevator_pos = getElevatorPosition();
     return elevator_pos >= Constants.elevator_l3;
   }
+
+  public boolean isElevatorHP() {
+    double elevator_pos = getElevatorPosition();
+    return elevator_pos >= (Constants.elevator_HP + -5);
+  }
   
   public boolean isElevatorAt(double pos) {
     double elevator_pos = getElevatorPosition();
-    return elevator_pos >= pos;
+    return elevator_pos >= (pos + -5);
   }
 
   public Command setElevatorPos(double pos) {
@@ -169,7 +176,7 @@ public class Elevator extends SubsystemBase {
       elevatorMotor.getConfigurator().setPosition(0);
     }
 
-
+    Logger.recordOutput("Is at l4", isElevatorL4());
     SmartDashboard.putBoolean("Top Limit", getTopLimit());
     SmartDashboard.putBoolean("Lower Limit", getLowerLimit());
   }

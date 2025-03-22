@@ -55,7 +55,7 @@ public class Vision extends SubsystemBase {
     aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
     
 
-    robotToCam = new Transform3d(new Translation3d(0.095, 0.3302, 0.6), new Rotation3d(0, Units.degreesToRadians(20), Units.degreesToRadians(20))); 
+    robotToCam = new Transform3d(new Translation3d(-0.095, 0.3302, 0.6), new Rotation3d(0, Rotation2d.fromDegrees(-25).getRadians(), Rotation2d.fromDegrees(-20).getRadians())); 
 
     // This takes all the tags into account for estimating pose
     poseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam);
@@ -177,6 +177,7 @@ public class Vision extends SubsystemBase {
   @Override
   public void periodic() {
     addVisionMeasurementToDriveTrain(poseEstimator);
+    // Logger.recordOutput("Vision Pose", getEstimatedGlobalPose().get().estimatedPose);
     // findReefFace();
   }
 }

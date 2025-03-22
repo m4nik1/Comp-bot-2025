@@ -49,8 +49,8 @@ public class TeleopDrive extends Command {
   public void initialize() {
     targetYaw = 0.0;
     targetVisible = true;
-    xTranslation = new PIDController(.15, 0, 0);
-    yTranslation = new PIDController(.15, 0, 0);
+    xTranslation = new PIDController(.06, 0, 0);
+    yTranslation = new PIDController(.06, 0, 0);
     // rotation = new PIDController(.5, 0, 0);
     // rotation.enableContinuousInput(-Math.PI, Math.PI);
   }
@@ -173,11 +173,13 @@ public class TeleopDrive extends Command {
         yOutput = yTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getY(), algaePose.getY()) * Constants.speedMultiTeleop;
         // rotOutput = rotation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), algaePose.getX()) * Constants.speedMultiTeleop;
 
-        // translationVal = xOutput;
-        // strafeVal = yOutput;
+        translationVal = xOutput;
+        strafeVal = yOutput;
         // rotation = 0;
 
         Logger.recordOutput("AlgaePose", algaePose);
+        Logger.recordOutput("xOutputAlgae", xOutput);
+        Logger.recordOutput("yOutputAlgae", yOutput);
         // SmartDashboard.putNumber("xOutput", xOutput);
         // SmartDashboard.putNumber("yOutput", yOutput);
       }

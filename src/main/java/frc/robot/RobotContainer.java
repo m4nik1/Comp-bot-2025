@@ -77,6 +77,7 @@ public class RobotContainer {
 
     autoChooser = new SendableChooser<Command>();
     autoChooser.addOption("Right Turned Coral L4", new PathPlannerAuto("Right L4 Facing Coral"));
+    autoChooser.addOption("Test Elevator", new ElevatorAuto_HP());
     autoChooser.addOption("Left Turned Coral L4", new PathPlannerAuto("Right L4 Facing Coral", true));
     autoChooser.addOption("Center L4 Coral", new PathPlannerAuto("Center L4 Coral"));
     autoChooser.addOption("Right Two Piece L4", new PathPlannerAuto("Right Two Piece L4"));

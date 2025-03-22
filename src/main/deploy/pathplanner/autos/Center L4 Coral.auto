@@ -15,19 +15,6 @@
           "data": {
             "name": "Elevator_L4"
           }
-        },
-        {
-          "type": "sequential",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Pivot_Down"
-                }
-              }
-            ]
-          }
         }
       ]
     }

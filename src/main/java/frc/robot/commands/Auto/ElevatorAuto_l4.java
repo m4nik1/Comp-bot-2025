@@ -4,6 +4,8 @@
 
 package frc.robot.commands.Auto;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -18,8 +20,9 @@ public class ElevatorAuto_l4 extends Command {
   Timer timer;
 
   public ElevatorAuto_l4() {
-    // Use addRequirements() here to declare subsystem dependencies.
+    // Use addRequirements() here to declare subsystem dependenc\ies.
     addRequirements(RobotContainer.elevator);
+    addRequirements(RobotContainer.coralIntake);
   }
 
   // Called when the command is initially scheduled.
@@ -27,24 +30,29 @@ public class ElevatorAuto_l4 extends Command {
   public void initialize() {
     timer = new Timer();
     stop = false;
+
+    timer.reset();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    timer.reset();
     RobotContainer.elevator.setElevatorMagic(Constants.elevator_l4);
 
     if(RobotContainer.elevator.isElevatorL4()) {
       RobotContainer.coralPivot.setPivot(Constants.pivot_down);
       timer.start();
+      Logger.recordOutput("Timer", timer.get());
       if(timer.hasElapsed(0.2)) {
-        RobotContainer.coralIntake.coralOut();
+        RobotContainer.coralIntake.runCoral(-0.7);
       }
     }
-    if(timer.hasElapsed(1)) {
+    if(timer.hasElapsed(1.25)) {
+      RobotContainer.coralIntake.runCoral(0);
       stop = true;
+
     }
+    Logger.recordOutput("Stop l4", stop);
   }
 
   // Called once the command ends or is interrupted.
