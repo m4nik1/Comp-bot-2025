@@ -49,8 +49,8 @@ public class TeleopDrive extends Command {
   public void initialize() {
     targetYaw = 0.0;
     targetVisible = true;
-    xTranslation = new PIDController(.3, 0, 0);
-    yTranslation = new PIDController(.3, 0, 0);
+    xTranslation = new PIDController(.15, 0, 0);
+    yTranslation = new PIDController(.15, 0, 0);
     // rotation = new PIDController(.5, 0, 0);
     // rotation.enableContinuousInput(-Math.PI, Math.PI);
   }
@@ -80,10 +80,10 @@ public class TeleopDrive extends Command {
               // Calculates the face angle in radians
               double thetaCalculate = ((2*Math.PI)*(face/6)+Math.PI) % (2*Math.PI); 
 
-              Translation2d calculatedAlgae = Robot.reefPosesGenerate.calculateCoralRight(thetaCalculate);
+              Translation2d calculatedCoralRight = Robot.reefPosesGenerate.calculateCoralRight(thetaCalculate);
 
               Logger.recordOutput("Face reef", face);
-              coralRightPose = new Pose2d(new Translation2d(Units.inchesToMeters(calculatedAlgae.getX()), Units.inchesToMeters(calculatedAlgae.getY())), Rotation2d.fromRadians(thetaCalculate));
+              coralRightPose = new Pose2d(new Translation2d(Units.inchesToMeters(calculatedCoralRight.getX()), Units.inchesToMeters(calculatedCoralRight.getY())), Rotation2d.fromRadians(thetaCalculate));
             }
           }
         }
@@ -94,8 +94,9 @@ public class TeleopDrive extends Command {
         yOutput = yTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getY(), coralRightPose.getY()) * Constants.speedMultiTeleop;
         // rotOutput = rotation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), algaePose.getX()) * Constants.speedMultiTeleop;
 
-        // translationVal = xOutput;
-        // strafeVal = yOutput;
+        translationVal = xOutput;
+        strafeVal = yOutput;
+        rotationVal = rotationLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getRotation, .01)); // getRotation was negative  
         // rotation = 0;
 
         Logger.recordOutput("Coral Right Pose", coralRightPose);

@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
+
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
@@ -12,12 +15,15 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class Elevator extends SubsystemBase {
   /** Creates a new Elevator. */
@@ -105,6 +111,14 @@ public class Elevator extends SubsystemBase {
     return elevator_pos >= Constants.elevator_l4 + -4;
   }
 
+  public BooleanSupplier isElevatorL4Supplier() {
+    double elevator_pos = getElevatorPosition();
+
+    BooleanSupplier l4_supplier = () -> elevator_pos >= Constants.elevator_l4 + -4;
+
+    return l4_supplier;
+  }
+
   public boolean isElevatorL3() {
     double elevator_pos = getElevatorPosition();
     return elevator_pos >= Constants.elevator_l3;
@@ -118,6 +132,18 @@ public class Elevator extends SubsystemBase {
   public Command setElevatorPos(double pos) {
     return run(() -> setElevatorMagic(pos))
       .until(() -> getElevatorPosition() <= pos + 5);
+  }
+
+  public Command setElevatorL4() {
+    return run(() -> setElevatorMagic(Constants.elevator_l4))
+      .until(isElevatorL4Supplier());
+  }
+
+  public Command scoreL4() {
+    return new SequentialCommandGroup(
+      setElevatorL4(),
+      RobotContainer.coralIntake.coralOut()
+    );
   }
 
 

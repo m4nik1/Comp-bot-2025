@@ -12,6 +12,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.SuppliedWait;
 
@@ -33,12 +34,13 @@ public class CoralIntake extends SubsystemBase {
   // .raceWith is the simpler way to state parallel command
   public Command coralOut() {
     return run(() -> runCoral(-0.7))
-      .raceWith(new SuppliedWait(() -> 0.7));
+      .raceWith(new SuppliedWait(() -> 0.7))
+      .finallyDo(() -> runCoral(0));
   }
 
   // Runs the intake in until elapsed time
   public Command coralIn() {
-    return run(() -> runCoral(-0.7))
+    return run(() -> runCoral(0.7))
       .raceWith(new SuppliedWait(() -> 0.7));
   }
 
