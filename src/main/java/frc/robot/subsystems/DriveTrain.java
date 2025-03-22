@@ -28,6 +28,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -73,7 +74,7 @@ public class DriveTrain extends SubsystemBase {
       this::getPose,
       this::resetPose,
       this::getRobotSpds,
-      (speeds, feedforwards) -> driveRobotRelative(speeds),
+      this::driveRobotRelative,
       new PPHolonomicDriveController(
             new PIDConstants(5, 0, 0),  // new PIDConstants(5, 0, 0), (was 0.5)
             new PIDConstants(2.7, 0, 0) // new PIDConstants(12, 0, 0), // rotation PID default is 5.0
@@ -131,6 +132,10 @@ public class DriveTrain extends SubsystemBase {
     }
 
     return positions;
+  }
+
+  public Command velTest() {
+    return run(() -> elmCityModules[0].setVel(1.5));
   }
 
 

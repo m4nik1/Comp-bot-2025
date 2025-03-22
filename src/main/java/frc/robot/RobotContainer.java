@@ -118,7 +118,9 @@ public class RobotContainer {
     driver.rightBumper().whileTrue(new zeroGyro());
     driver.povDown().whileTrue(new Runclimber());
     driver.a().whileTrue(new ClimberStartSet());
+    // driver.a().onTrue(driveTrain.velTest());
     // driver.x().onTrue(new AlgaeAlign());
+
   }
 
   public Command getAutonomousCommand() {

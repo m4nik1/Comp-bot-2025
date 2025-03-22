@@ -256,6 +256,19 @@ public class ElmCityModule extends SubsystemBase {
     return velocity;
   }
 
+  public void setVel(double vel) {
+    // converts velocity to Rotation per second with wheel curcumfirence
+    driveVelocity.Velocity = vel / Constants.wheelCircum;
+
+     driveVelocity.Slot = 0;
+    
+    // sets the feedforward to simple feedforward calculation with the requested speed
+    driveVelocity.FeedForward = driveKfCalc.calculate(vel);
+    
+    // Calculate using feedforward
+    driveMotor.setControl(driveVelocity);
+  }
+
 
   @Override
   public void periodic() {
@@ -265,6 +278,7 @@ public class ElmCityModule extends SubsystemBase {
     SmartDashboard.putNumber("Nac coder rot " + modNum, getNac());
 
     Logger.recordOutput("Distance (M)" + modNum, getDrivePosMeters());
+    Logger.recordOutput("Velocity " + modNum , getDriveVelocityConversion());
     Logger.recordOutput("Module Angle " + modNum, getAngleDegrees());
     // SmartDashboard.putNumber("Mod vel " + modNum, getDriveVelocityConversion());
   }

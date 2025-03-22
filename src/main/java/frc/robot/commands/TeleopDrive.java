@@ -107,7 +107,7 @@ public class TeleopDrive extends Command {
 
               // algaePose = RobotContainer.driveTrain.getRobotPose2d().transformBy(calculatedAlgae);
               Logger.recordOutput("Face reef", face);
-              algaePose = new Pose2d(new Translation2d(Units.inchesToMeters(calculatedAlgae.getX()), Units.inchesToMeters(calculatedAlgae.getY())), Rotation2d.fromDegrees(0));
+              algaePose = new Pose2d(new Translation2d(Units.inchesToMeters(calculatedAlgae.getX()), Units.inchesToMeters(calculatedAlgae.getY())), Rotation2d.fromRadians(thetaCalculate));
             }
           }
         }

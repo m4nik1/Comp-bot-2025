@@ -77,7 +77,7 @@ public final class Constants {
 
   public static double pivot_l3 = -100;
 
-  public static double climbP = 2;
+  public static double climbP = 5;
   public static double climbI = 0;
   public static double climbD = 0;
 
@@ -106,7 +106,7 @@ public final class Constants {
       REPLAY
   }
 
-  public static final double driveKp = 2;
+  public static final double driveKp = 1.5;
   public static final double driveKi = 0.0;
   public static final double driveKd = 0;
 
