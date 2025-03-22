@@ -44,15 +44,15 @@ public class GenerateReefPoses {
     }
 
     public Translation2d calculateCoralLeft(double theta) {
-        double coralX = reefX + (radius_reef * Math.cos(theta)) + ((coralBranchSpacing/2)*Math.cos(theta-Math.PI/2));
-        double coralY = reefX + (radius_reef * Math.sin(theta)) + ((coralBranchSpacing/2)*Math.sin(theta-Math.PI/2));
+        double coralX = reefX + (radius_reef * Math.cos(theta)) + ((coralBranchSpacing/2)*Math.cos(theta-(Math.PI/2)));
+        double coralY = reefY + (radius_reef * Math.sin(theta)) + ((coralBranchSpacing/2)*Math.sin(theta-(Math.PI/2)));
 
         return new Translation2d(coralX, coralY);
     }
 
     public Translation2d calculateCoralRight(double theta) {
         double coralX = reefX + (radius_reef * Math.cos(theta)) + ((coralBranchSpacing/2)*Math.cos(theta+Math.PI/2));
-        double coralY = reefX + (radius_reef * Math.sin(theta)) + ((coralBranchSpacing/2)*Math.sin(theta+Math.PI/2));
+        double coralY = reefY + (radius_reef * Math.sin(theta)) + ((coralBranchSpacing/2)*Math.sin(theta+Math.PI/2));
 
         return new Translation2d(coralX, coralY);
     }
