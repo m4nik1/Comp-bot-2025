@@ -81,6 +81,7 @@ public final class Constants {
   public static double climbI = 0;
   public static double climbD = 0;
 
+  public static int numCameras = 2;
 
   public static final Mode currentMode = Mode.REAL;
 

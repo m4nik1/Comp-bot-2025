@@ -33,7 +33,22 @@ public class Vision extends SubsystemBase {
   PhotonCamera camera;
   PhotonPipelineResult result;
   PhotonTrackedTarget target;
-  PhotonPoseEstimator poseEstimator;
+  PhotonPoseEstimator poseEstimator_reef;
+
+  // PhotonPoseEstimator[] poseEstimators = new PhotonPoseEstimator[2];
+  
+  // final String[] camera_names = {
+  //   "arducam-558",
+  //   "high-arducam-558"
+  // }
+
+  // final Transform3d[] robotToCamTransforms = {
+  //   new Transform3d(new Translation3d(-0.095, 0.3302, 0.6), 
+  //                   new Rotation3d(0, Rotation2d.fromDegrees(-25).getRadians(), Rotation2d.fromDegrees(-20).getRadians())),
+  //                   new Transform3d(new Translation3d(-0.095, 0.3302, 0.6), 
+  //                                   new Rotation3d(0, 0, 0))
+  // };
+
   private Matrix<N3, N1> curStdDevs;
   double MAX_SINGLE_ABIGUITY = 0.05;
 
@@ -50,29 +65,42 @@ public class Vision extends SubsystemBase {
 
   AprilTagFieldLayout aprilTagFieldLayout;
   public Vision() {
+
     camera = new PhotonCamera("arducam-558");;
 
     aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
     
-
     robotToCam = new Transform3d(new Translation3d(-0.095, 0.3302, 0.6), new Rotation3d(0, Rotation2d.fromDegrees(-25).getRadians(), Rotation2d.fromDegrees(-20).getRadians())); 
 
     // This takes all the tags into account for estimating pose
-    poseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam);
+    poseEstimator_reef = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam);
 
-    poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+    poseEstimator_reef.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+
+    
+    // Making multiple cameras
+    // for (int i = 0; i < Constants.numCameras; i++) {
+    //   PhotonCamera camera = new PhotonCamera(camera_names[i]);
+
+    //   poseEstimators[i] = new PhotonPoseEstimator(
+    //     aprilTagFieldLayout, 
+    //     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, 
+    //     robotToCamTransforms[i]);
+      
+    //   poseEstimators[i].setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+    // }
 
   }
 
   // Gets the robot pose on the field
   // This should be called once per loop
-  public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
+  public Optional<EstimatedRobotPose> getEstimatedGlobalPose(PhotonPoseEstimator poseEstimator) {
     Optional<EstimatedRobotPose> visionEst = Optional.empty();
 
     for(var tagChange : camera.getAllUnreadResults()) {
       // Add std dev. in the update function
       visionEst = poseEstimator.update(tagChange); // Updates the pose estimator with camera updates
-      updateEstimationStdDevs(visionEst, tagChange.targets); // Calculates new std dev's 
+      updateEstimationStdDevs(visionEst, tagChange.targets, poseEstimator); // Calculates new std dev's 
     }
 
     return visionEst;
@@ -108,7 +136,9 @@ public class Vision extends SubsystemBase {
   }
 
   private void updateEstimationStdDevs(
-            Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets) {
+    Optional<EstimatedRobotPose> estimatedPose, 
+    List<PhotonTrackedTarget> targets, 
+    PhotonPoseEstimator poseEstimator) {
         if (estimatedPose.isEmpty()) {
             // No pose input. Default to single-tag std devs
             curStdDevs = kSingleTagStdDevs;
@@ -150,8 +180,8 @@ public class Vision extends SubsystemBase {
     }
 
 
-    public void addVisionMeasurementToDriveTrain(PhotonPoseEstimator photonPoseEstimator) {
-      Optional<EstimatedRobotPose> result = getEstimatedGlobalPose();
+    public void addVisionMeasurementToDriveTrain(PhotonPoseEstimator photonPoseEstimator) { 
+      Optional<EstimatedRobotPose> result = getEstimatedGlobalPose(photonPoseEstimator);
 
       if(!result.isPresent()) {return;}
 
@@ -176,8 +206,12 @@ public class Vision extends SubsystemBase {
 
   @Override
   public void periodic() {
-    addVisionMeasurementToDriveTrain(poseEstimator);
-    // Logger.recordOutput("Vision Pose", getEstimatedGlobalPose().get().estimatedPose);
+
+    // for(int k = 0; k < Constants.numCameras; k++) {
+    //   addVisionMeasurementToDriveTrain(poseEstimators[k]);
+    // }
+    addVisionMeasurementToDriveTrain(poseEstimator_reef);
+    
     // findReefFace();
   }
 }
