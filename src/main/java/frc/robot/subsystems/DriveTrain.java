@@ -41,9 +41,6 @@ public class DriveTrain extends SubsystemBase {
   Pigeon2 gyro;
   Pose2d robotPose;
 
-  private Matrix<N3, N1> kSingleTagStdDevs;
-  private Matrix<N3, N1> kStateDriveStdDevs;
-
   SwerveDrivePoseEstimator odom;
   Field2d field;
   RobotConfig autoConfig;
@@ -58,9 +55,6 @@ public class DriveTrain extends SubsystemBase {
     };
 
     gyro = new Pigeon2(Constants.pigeonID);
-
-    kSingleTagStdDevs = new Matrix<>(Nat.N3(), Nat.N1(), new double[] {0.1, 0.1, 0.05});
-    kStateDriveStdDevs = new Matrix<>(Nat.N3(), Nat.N1(), new double[] {0.01, 0.01, 0.005});
 
     odom = new SwerveDrivePoseEstimator(Constants.swerveKinematics, 
                                         getYaw(), 
