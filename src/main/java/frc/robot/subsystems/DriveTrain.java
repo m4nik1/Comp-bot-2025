@@ -61,7 +61,13 @@ public class DriveTrain extends SubsystemBase {
     kSingleTagStdDevs = new Matrix<>(Nat.N3(), Nat.N1(), new double[] {0.1, 0.1, 0.05});
     kStateDriveStdDevs = new Matrix<>(Nat.N3(), Nat.N1(), new double[] {0.01, 0.01, 0.005});
 
-    odom = new SwerveDrivePoseEstimator(Constants.swerveKinematics, getYaw(), getPositions(), new Pose2d(), kStateDriveStdDevs, kSingleTagStdDevs);
+    odom = new SwerveDrivePoseEstimator(Constants.swerveKinematics, 
+                                        getYaw(), 
+                                        getPositions(), 
+                                        new Pose2d(), 
+                                        VecBuilder.fill(0.01, 0.01, 0.01),
+                                        VecBuilder.fill(0.04, 0.04, 0.06));
+                                        
     // odom = new SwerveDriveOdometry(Constants.swerveKinematics, getYaw(), getPositions());
 
     try {
