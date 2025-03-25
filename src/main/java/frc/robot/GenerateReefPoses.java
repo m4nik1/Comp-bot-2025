@@ -17,7 +17,7 @@ public class GenerateReefPoses {
     double FieldWidth = 317;
     double ReefWidth = 65.5;
     double coralBranchSpacing = 13;
-    double robotCoralIntake = 20.0787; // This is the offset of the coral intake length wise
+    double robotCoralIntake = 18.5; // This is the offset of the coral intake length wise
 
 
     double radius_reef = (ReefWidth/2) + robotCoralIntake;

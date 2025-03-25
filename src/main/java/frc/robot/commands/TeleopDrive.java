@@ -49,8 +49,8 @@ public class TeleopDrive extends Command {
   public void initialize() {
     targetYaw = 0.0;
     targetVisible = true;
-    xTranslation = new PIDController(.06, 0, 0);
-    yTranslation = new PIDController(.06, 0, 0);
+    xTranslation = new PIDController(.03, 0, 0);
+    yTranslation = new PIDController(.03, 0, 0);
     // rotation = new PIDController(.5, 0, 0);
     // rotation.enableContinuousInput(-Math.PI, Math.PI);
   }
