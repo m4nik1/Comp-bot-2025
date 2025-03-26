@@ -42,17 +42,15 @@ public class Vision extends SubsystemBase {
   };
 
   final Transform3d[] robotToCamTransforms = {
-    new Transform3d(new Translation3d(0.095, 0.3302, 0.6), 
-                    new Rotation3d(0, Rotation2d.fromDegrees(-20).getRadians(), Rotation2d.fromDegrees(-20).getRadians())),
+    new Transform3d(new Translation3d(0.095, 0.3302, 0.6), // Pitch is positive 20 degrees check that though
+                    new Rotation3d(0, Rotation2d.fromDegrees(20).getRadians(), Rotation2d.fromDegrees(-20).getRadians())),
 
-    new Transform3d(new Translation3d(0.095, 0.3302, 0.75), 
+    new Transform3d(new Translation3d(0.095, 0.3302, 0.75),  // Higher camera
                     new Rotation3d(0, 0, 0))
   };
 
   private Matrix<N3, N1> curStdDevs;
-  double MAX_SINGLE_ABIGUITY = 0.05;
-
-  Transform3d robotToCam;
+  double MAX_SINGLE_ABIGUITY = 0.05; // These are for single targets only
 
   boolean targetVisible = false;
   double targetYaw = 0.0;
@@ -69,10 +67,6 @@ public class Vision extends SubsystemBase {
     camera = new PhotonCamera("arducam-558");;
 
     aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
-    
-
-    robotToCam = new Transform3d(new Translation3d(0.095, 0.3302, 0.6), new Rotation3d(0, Rotation2d.fromDegrees(20).getRadians(), Rotation2d.fromDegrees(-20).getRadians())); 
-
     // This takes all the tags into account for estimating pose
     // poseEstimator_reef = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam);
 
