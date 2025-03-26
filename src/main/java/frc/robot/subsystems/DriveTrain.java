@@ -14,7 +14,6 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -22,7 +21,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
@@ -63,8 +61,6 @@ public class DriveTrain extends SubsystemBase {
                                         VecBuilder.fill(0.01, 0.01, 0.01),
                                         VecBuilder.fill(0.04, 0.04, 0.06));
                                         
-    // odom = new SwerveDriveOdometry(Constants.swerveKinematics, getYaw(), getPositions());
-
     try {
       autoConfig = RobotConfig.fromGUISettings();
     } catch(Exception e) {
@@ -194,8 +190,6 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void addVisionMeasurment(Pose2d visionRobotPose, double visionTimestamp, Matrix<N3, N1> visionStds) {
-    // Matrix<N3, N1> visionStds = isSingleTarget ? kSingleTagStdDevs : kMultiTagStdDevs;
-
     // Adds the vision measurement for the pose estimation
     odom.addVisionMeasurement(visionRobotPose, visionTimestamp, visionStds);
 

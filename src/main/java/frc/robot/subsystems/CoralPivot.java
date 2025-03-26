@@ -48,7 +48,6 @@ public class CoralPivot extends SubsystemBase {
     configPivot.inverted(false).idleMode(IdleMode.kBrake);
     SmartDashboard.putNumber("Conversion pivot", pivotAngleConversion);
 
-    // configPivot.encoder.positionConversionFactor(pivotAngleConversion).velocityConversionFactor(1);
     configPivot.encoder.positionConversionFactor(18).velocityConversionFactor(1);
 
     pivotPoint.configure(configPivot, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);

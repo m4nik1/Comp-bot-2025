@@ -5,10 +5,6 @@
 package frc.robot.subsystems;
 
 import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
-
-import org.littletonrobotics.junction.Logger;
-
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
@@ -17,7 +13,6 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -165,7 +160,7 @@ public class Elevator extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Position Elevator", getElevatorPosition());
+    SmartDashboard.putNumber("Elevator Position", getElevatorPosition());
 
 
     if(getLowerLimit() == true && DriverStation.isDisabled() && getElevatorPosition() != 0) {
@@ -176,7 +171,6 @@ public class Elevator extends SubsystemBase {
       elevatorMotor.getConfigurator().setPosition(0);
     }
 
-    Logger.recordOutput("Is at l4", isElevatorL4());
     SmartDashboard.putBoolean("Top Limit", getTopLimit());
     SmartDashboard.putBoolean("Lower Limit", getLowerLimit());
   }

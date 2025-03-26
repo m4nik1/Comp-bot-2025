@@ -21,7 +21,6 @@ import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.numbers.*;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -43,14 +42,15 @@ public class Vision extends SubsystemBase {
   };
 
   final Transform3d[] robotToCamTransforms = {
-    new Transform3d(new Translation3d(-0.095, 0.3302, 0.6), 
+    new Transform3d(new Translation3d(0.095, 0.3302, 0.6), 
                     new Rotation3d(0, Rotation2d.fromDegrees(-20).getRadians(), Rotation2d.fromDegrees(-20).getRadians())),
-                    new Transform3d(new Translation3d(-0.095, 0.3302, 0.75), 
-                                    new Rotation3d(0, 0, 0))
+
+    new Transform3d(new Translation3d(0.095, 0.3302, 0.75), 
+                    new Rotation3d(0, 0, 0))
   };
 
   private Matrix<N3, N1> curStdDevs;
-  double MAX_SINGLE_ABIGUITY = 0.02;
+  double MAX_SINGLE_ABIGUITY = 0.05;
 
   Transform3d robotToCam;
 
@@ -193,7 +193,8 @@ public class Vision extends SubsystemBase {
       // below we are checking if we can trust the single target
       if(singleTarget) {
         PhotonTrackedTarget target = robotPose.targetsUsed.get(0);
-        SmartDashboard.putNumber("Pose ambiguity", target.getPoseAmbiguity());
+
+        // This is only when single targets are detected
         if(target.getPoseAmbiguity() > MAX_SINGLE_ABIGUITY) {return;}
       }
     //  Logger.recordOutput("Vision abiluity", target.getPoseAmbiguity());
@@ -212,7 +213,6 @@ public class Vision extends SubsystemBase {
       addVisionMeasurementToDriveTrain(poseEstimators[k]);
     }
     // addVisionMeasurementToDriveTrain(poseEstimator_reef);
-    
     // findReefFace();
   }
 }
