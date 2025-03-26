@@ -32,18 +32,19 @@ public class ElevatorAuto_l4 extends Command {
     stop = false;
 
     timer.reset();
+    RobotContainer.coralPivot.setPivot(Constants.pivot_down);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     RobotContainer.elevator.setElevatorMagic(Constants.elevator_l4);
+    RobotContainer.coralPivot.setPivot(Constants.pivot_down);
 
     if(RobotContainer.elevator.isElevatorL4()) {
-      RobotContainer.coralPivot.setPivot(Constants.pivot_down);
       timer.start();
       Logger.recordOutput("Timer", timer.get());
-      if(timer.hasElapsed(0.2)) {
+      if(timer.hasElapsed(0.35)) {
         RobotContainer.coralIntake.runCoral(-0.7);
       }
     }

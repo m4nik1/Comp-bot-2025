@@ -114,7 +114,7 @@ public class TeleopDrive extends Command {
             Logger.recordOutput("Found reef tag", Constants.desiredTagIds.contains(tagId));
             // Finds the tags that are associated with the reef
             if(Constants.desiredTagIds.contains(tagId)) {
-              double face = Constants.TagToFaceBlue.get(tagId);
+              double face = Constants.TagToFaceRed.get(tagId);
               
               // Calculates the face angle in radians
               double thetaCalculate = ((2*Math.PI)*(face/6)+Math.PI) % (2*Math.PI); 
@@ -177,9 +177,9 @@ public class TeleopDrive extends Command {
         strafeVal = yOutput;
         // rotation = 0;
 
-        Logger.recordOutput("AlgaePose", algaePose);
-        Logger.recordOutput("xOutputAlgae", xOutput);
-        Logger.recordOutput("yOutputAlgae", yOutput);
+        // Logger.recordOutput("AlgaePose", algaePose);
+        // Logger.recordOutput("xOutputAlgae", xOutput);
+        // Logger.recordOutput("yOutputAlgae", yOutput);
         // SmartDashboard.putNumber("xOutput", xOutput);
         // SmartDashboard.putNumber("yOutput", yOutput);
       }

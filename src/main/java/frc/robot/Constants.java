@@ -49,7 +49,7 @@ public final class Constants {
   
   public static final Rotation2d angleOffsetMod0 = Rotation2d.fromRotations(.0352);
   public static final Rotation2d angleOffsetMod1 = Rotation2d.fromRotations(.4845);
-  public static final Rotation2d angleOffsetMod2 = Rotation2d.fromRotations(.6401);
+  public static final Rotation2d angleOffsetMod2 = Rotation2d.fromRotations(.6407);
   public static final Rotation2d angleOffsetMod3 = Rotation2d.fromRotations(.2003);
 
   public static final boolean driveStatorEnable = true;
@@ -95,6 +95,16 @@ public final class Constants {
     20, 4,
     19, 5
   );
+
+  public static final Map<Integer, Integer> TagToFaceRed = Map.of(
+    7, 0,
+    8, 1,
+    9, 2,
+    10, 3,
+    11, 4,
+    6, 5
+  );
+
 
   public static enum Mode {
       /** Running on a real robot. */

@@ -33,24 +33,24 @@ public class Vision extends SubsystemBase {
   PhotonCamera camera;
   PhotonPipelineResult result;
   PhotonTrackedTarget target;
-  PhotonPoseEstimator poseEstimator_reef;
+  // PhotonPoseEstimator poseEstimator_reef;
 
-  // PhotonPoseEstimator[] poseEstimators = new PhotonPoseEstimator[2];
+  PhotonPoseEstimator[] poseEstimators = new PhotonPoseEstimator[2];
   
-  // final String[] camera_names = {
-  //   "arducam-558",
-  //   "high-arducam-558"
-  // }
+  final String[] camera_names = {
+    "arducam-558",
+    "high-arducam-558"
+  };
 
-  // final Transform3d[] robotToCamTransforms = {
-  //   new Transform3d(new Translation3d(-0.095, 0.3302, 0.6), 
-  //                   new Rotation3d(0, Rotation2d.fromDegrees(-25).getRadians(), Rotation2d.fromDegrees(-20).getRadians())),
-  //                   new Transform3d(new Translation3d(-0.095, 0.3302, 0.6), 
-  //                                   new Rotation3d(0, 0, 0))
-  // };
+  final Transform3d[] robotToCamTransforms = {
+    new Transform3d(new Translation3d(-0.095, 0.3302, 0.6), 
+                    new Rotation3d(0, Rotation2d.fromDegrees(-20).getRadians(), Rotation2d.fromDegrees(-20).getRadians())),
+                    new Transform3d(new Translation3d(-0.095, 0.3302, 0.75), 
+                                    new Rotation3d(0, 0, 0))
+  };
 
   private Matrix<N3, N1> curStdDevs;
-  double MAX_SINGLE_ABIGUITY = 0.05;
+  double MAX_SINGLE_ABIGUITY = 0.02;
 
   Transform3d robotToCam;
 
@@ -71,25 +71,25 @@ public class Vision extends SubsystemBase {
     aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
     
 
-    robotToCam = new Transform3d(new Translation3d(0.095, 0.3302, 0.6), new Rotation3d(0, Rotation2d.fromDegrees(-20).getRadians(), Rotation2d.fromDegrees(-20).getRadians())); 
+    robotToCam = new Transform3d(new Translation3d(0.095, 0.3302, 0.6), new Rotation3d(0, Rotation2d.fromDegrees(20).getRadians(), Rotation2d.fromDegrees(-20).getRadians())); 
 
     // This takes all the tags into account for estimating pose
-    poseEstimator_reef = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam);
+    // poseEstimator_reef = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam);
 
-    poseEstimator_reef.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+    // poseEstimator_reef.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
     
     // Making multiple cameras
-    // for (int i = 0; i < Constants.numCameras; i++) {
-    //   PhotonCamera camera = new PhotonCamera(camera_names[i]);
+    for (int i = 0; i < Constants.numCameras; i++) {
+      PhotonCamera camera = new PhotonCamera(camera_names[i]);
 
-    //   poseEstimators[i] = new PhotonPoseEstimator(
-    //     aprilTagFieldLayout, 
-    //     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, 
-    //     robotToCamTransforms[i]);
+      poseEstimators[i] = new PhotonPoseEstimator(
+        aprilTagFieldLayout, 
+        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, 
+        robotToCamTransforms[i]);
       
-    //   poseEstimators[i].setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
-    // }
+      poseEstimators[i].setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+    }
 
   }
 
@@ -196,7 +196,7 @@ public class Vision extends SubsystemBase {
         SmartDashboard.putNumber("Pose ambiguity", target.getPoseAmbiguity());
         if(target.getPoseAmbiguity() > MAX_SINGLE_ABIGUITY) {return;}
       }
-
+    //  Logger.recordOutput("Vision abiluity", target.getPoseAmbiguity());
       Pose2d estimatedRobotPose2d = robotPose.estimatedPose.toPose2d();
 
       Logger.recordOutput("Vision Pose", estimatedRobotPose2d);
@@ -208,10 +208,10 @@ public class Vision extends SubsystemBase {
   @Override
   public void periodic() {
 
-    // for(int k = 0; k < Constants.numCameras; k++) {
-    //   addVisionMeasurementToDriveTrain(poseEstimators[k]);
-    // }
-    addVisionMeasurementToDriveTrain(poseEstimator_reef);
+    for(int k = 0; k < Constants.numCameras; k++) {
+      addVisionMeasurementToDriveTrain(poseEstimators[k]);
+    }
+    // addVisionMeasurementToDriveTrain(poseEstimator_reef);
     
     // findReefFace();
   }

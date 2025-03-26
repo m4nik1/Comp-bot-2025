@@ -203,7 +203,7 @@ public class DriveTrain extends SubsystemBase {
     // Matrix<N3, N1> visionStds = isSingleTarget ? kSingleTagStdDevs : kMultiTagStdDevs;
 
     // Adds the vision measurement for the pose estimation
-    // odom.addVisionMeasurement(visionRobotPose, visionTimestamp, visionStds);
+    odom.addVisionMeasurement(visionRobotPose, visionTimestamp, visionStds);
 
     // double visionToDriveTrainPose = visionRobotPose.getTranslation().getDistance(robotPose.getTranslation());
 
