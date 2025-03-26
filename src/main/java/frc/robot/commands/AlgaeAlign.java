@@ -36,7 +36,7 @@ public class AlgaeAlign extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    var results = RobotContainer.photonVision.getUnreadResults();
+    var results = RobotContainer.photonVision.getUnreadResults(0);
 
     if(!results.isEmpty()) {
       

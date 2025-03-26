@@ -28,8 +28,6 @@ import frc.robot.RobotContainer;
 
 public class Vision extends SubsystemBase {
   /** Creates a new Vision. */
-
-  PhotonCamera camera;
   PhotonPipelineResult result;
   PhotonTrackedTarget target;
   // PhotonPoseEstimator poseEstimator_reef;
@@ -40,6 +38,8 @@ public class Vision extends SubsystemBase {
     "arducam-558",
     "high-arducam-558"
   };
+
+  PhotonCamera[] cameras = new PhotonCamera[2];
 
   final Transform3d[] robotToCamTransforms = {
     new Transform3d(new Translation3d(0.095, 0.3302, 0.6), // Pitch is positive 20 degrees check that though
@@ -64,18 +64,15 @@ public class Vision extends SubsystemBase {
   AprilTagFieldLayout aprilTagFieldLayout;
   public Vision() {
 
-    camera = new PhotonCamera("arducam-558");;
-
     aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
     // This takes all the tags into account for estimating pose
     // poseEstimator_reef = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam);
 
     // poseEstimator_reef.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
-    
-    // Making multiple cameras
+    // Making multiple Pose Estimators and cameras
     for (int i = 0; i < Constants.numCameras; i++) {
-      PhotonCamera camera = new PhotonCamera(camera_names[i]);
+      cameras[i] = new PhotonCamera(camera_names[i]);
 
       poseEstimators[i] = new PhotonPoseEstimator(
         aprilTagFieldLayout, 
@@ -89,10 +86,10 @@ public class Vision extends SubsystemBase {
 
   // Gets the robot pose on the field
   // This should be called once per loop
-  public Optional<EstimatedRobotPose> getEstimatedGlobalPose(PhotonPoseEstimator poseEstimator) {
+  public Optional<EstimatedRobotPose> getEstimatedGlobalPose(PhotonPoseEstimator poseEstimator, int cameraNum) {
     Optional<EstimatedRobotPose> visionEst = Optional.empty();
 
-    for(var tagChange : camera.getAllUnreadResults()) {
+    for(var tagChange : cameras[cameraNum].getAllUnreadResults()) {
       // Add std dev. in the update function
       visionEst = poseEstimator.update(tagChange); // Updates the pose estimator with camera updates
       updateEstimationStdDevs(visionEst, tagChange.targets, poseEstimator); // Calculates new std dev's 
@@ -103,10 +100,11 @@ public class Vision extends SubsystemBase {
 
   public Matrix<N3, N1> getEstimationStdDevs() {
     return curStdDevs;
-}
+  }
 
-  public void findReefFace() {
-    var results = camera.getAllUnreadResults();
+
+  public void findReefFace(int cameraNum) {
+    var results = cameras[cameraNum].getAllUnreadResults();
 
     if(!results.isEmpty()) {
       var latestResults = results.get(results.size() - 1);
@@ -120,14 +118,13 @@ public class Vision extends SubsystemBase {
 
           // Transform2d facePose = Robot.reefPosesGenerate.calculateAlgaePose(thetaFace);
           SmartDashboard.putNumber("Reef Face", face);
-
         }
       }
     }
   }
 
-  public List<PhotonPipelineResult> getUnreadResults() {
-    return camera.getAllUnreadResults();
+  public List<PhotonPipelineResult> getUnreadResults(int cameraNum) {
+    return cameras[cameraNum].getAllUnreadResults();
   }
 
   private void updateEstimationStdDevs(
@@ -166,7 +163,7 @@ public class Vision extends SubsystemBase {
                 // Decrease std devs if multiple targets are visible
                 if (numTags > 1) estStdDevs = kMultiTagStdDevs;
                 // Increase std devs based on (average) distance
-                if (numTags == 1 && avgDist > 4)
+                if (numTags == 1 && avgDist > 3) // Checks if the distance is more than 4 meters away
                     estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
                 else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
                 curStdDevs = estStdDevs;
@@ -175,8 +172,8 @@ public class Vision extends SubsystemBase {
     }
 
 
-    public void addVisionMeasurementToDriveTrain(PhotonPoseEstimator photonPoseEstimator) { 
-      Optional<EstimatedRobotPose> result = getEstimatedGlobalPose(photonPoseEstimator);
+    public void addVisionMeasurementToDriveTrain(PhotonPoseEstimator photonPoseEstimator, int cameraNum) { 
+      Optional<EstimatedRobotPose> result = getEstimatedGlobalPose(photonPoseEstimator, cameraNum);
 
       if(!result.isPresent()) {return;}
 
@@ -204,7 +201,7 @@ public class Vision extends SubsystemBase {
   public void periodic() {
 
     for(int k = 0; k < Constants.numCameras; k++) {
-      addVisionMeasurementToDriveTrain(poseEstimators[k]);
+      addVisionMeasurementToDriveTrain(poseEstimators[k], k);
     }
     // addVisionMeasurementToDriveTrain(poseEstimator_reef);
     // findReefFace();
