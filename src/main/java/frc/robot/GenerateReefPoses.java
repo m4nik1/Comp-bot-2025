@@ -28,7 +28,9 @@ public class GenerateReefPoses {
     double reefX;
     double reefY = 158.5;
 
-    Pose2d[] coralLeftPositions, coralRightPositions, algaePositions;
+    Pose2d[] coralLeftPositions = new Pose2d[6];
+    Pose2d[] coralRightPositions = new Pose2d[6];
+    Pose2d[] algaePositions = new Pose2d[6];
     
     public GenerateReefPoses() {
         var alliance = DriverStation.getAlliance();
