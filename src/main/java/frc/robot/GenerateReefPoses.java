@@ -28,7 +28,7 @@ public class GenerateReefPoses {
     double reefX;
     double reefY = 158.5;
 
-    Transform2d[] coralLeftPositions, coralRightPositions, algaePositions;
+    Pose2d[] coralLeftPositions, coralRightPositions, algaePositions;
     
     public GenerateReefPoses() {
         var alliance = DriverStation.getAlliance();
@@ -49,15 +49,15 @@ public class GenerateReefPoses {
         }
     }
 
-    public Transform2d[] getAlgaePoses() {
+    public Pose2d[] getAlgaePoses() {
         return algaePositions;
     }
 
-    public Transform2d[] getCoralLeftPositions() {
+    public Pose2d[] getCoralLeftPositions() {
         return coralLeftPositions;
     }
 
-    public Transform2d[] getCoralRightPositions() {
+    public Pose2d[] getCoralRightPositions() {
         return coralRightPositions;
     }
 
@@ -67,24 +67,24 @@ public class GenerateReefPoses {
         return theta;
     }
 
-    public Transform2d calculateAlgaePose(double theta) {
+    public Pose2d calculateAlgaePose(double theta) {
         double algaeX = reefX + (radius_reef * Math.cos(theta));
         double algaeY = reefY + (radius_reef * Math.sin(theta));
 
-        return new Transform2d(algaeX, algaeY, Rotation2d.fromRadians(theta));
+        return new Pose2d(algaeX, algaeY, Rotation2d.fromRadians(theta));
     }
 
-    public Transform2d calculateCoralLeft(double theta) {
+    public Pose2d calculateCoralLeft(double theta) {
         double coralX = reefX + (radius_reef * Math.cos(theta)) + ((coralBranchSpacing/2)*Math.cos(theta-(Math.PI/2)));
         double coralY = reefY + (radius_reef * Math.sin(theta)) + ((coralBranchSpacing/2)*Math.sin(theta-(Math.PI/2)));
 
-        return new Transform2d(coralX, coralY, Rotation2d.fromRadians(theta));
+        return new Pose2d(coralX, coralY, Rotation2d.fromRadians(theta));
     }
 
-    public Transform2d calculateCoralRight(double theta) {
+    public Pose2d calculateCoralRight(double theta) {
         double coralX = reefX + (radius_reef * Math.cos(theta)) + ((coralBranchSpacing/2)*Math.cos(theta+Math.PI/2));
         double coralY = reefY + (radius_reef * Math.sin(theta)) + ((coralBranchSpacing/2)*Math.sin(theta+Math.PI/2));
 
-        return new Transform2d(coralX, coralY, Rotation2d.fromRadians(theta));
+        return new Pose2d(coralX, coralY, Rotation2d.fromRadians(theta));
     }
 }

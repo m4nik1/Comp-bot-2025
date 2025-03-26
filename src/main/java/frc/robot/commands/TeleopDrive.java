@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import java.util.Arrays;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
@@ -87,7 +89,7 @@ public class TeleopDrive extends Command {
               // Calculates the face angle in radians
               double thetaCalculate = ((2*Math.PI)*(face/6)+Math.PI) % (2*Math.PI); 
 
-              Transform2d calculatedCoralRight = Robot.reefPosesGenerate.calculateCoralRight(thetaCalculate);
+              Pose2d calculatedCoralRight = Robot.reefPosesGenerate.calculateCoralRight(thetaCalculate);
 
               Logger.recordOutput("Face reef", face);
               coralRightPose = new Pose2d(new Translation2d(Units.inchesToMeters(calculatedCoralRight.getX()), Units.inchesToMeters(calculatedCoralRight.getY())), Rotation2d.fromRadians(thetaCalculate));
@@ -130,7 +132,7 @@ public class TeleopDrive extends Command {
               // Calculates the face angle in radians
               double thetaCalculate = ((2*Math.PI)*(face/6)+Math.PI) % (2*Math.PI); 
 
-              Transform2d calculatedAlgae = Robot.reefPosesGenerate.calculateCoralLeft(thetaCalculate);
+              Pose2d calculatedAlgae = Robot.reefPosesGenerate.calculateCoralLeft(thetaCalculate);
 
               Logger.recordOutput("Face reef", face);
               coralLeftPose = new Pose2d(new Translation2d(Units.inchesToMeters(calculatedAlgae.getX()), Units.inchesToMeters(calculatedAlgae.getY())), Rotation2d.fromRadians(thetaCalculate));
@@ -155,10 +157,41 @@ public class TeleopDrive extends Command {
     else if(RobotContainer.getDriverY()) {
       xTranslation.reset();
       yTranslation.reset();
-      
+      Pose2d[] algaePoses = Robot.reefPosesGenerate.getAlgaePoses();
+
+
+      // Drive to this pose that finds nearest pose to current pose
+      algaePose = RobotContainer.driveTrain.getPose().nearest(Arrays.asList(algaePoses));
+
+      // RobotContainer.driveTrain.getPose().getTranslation().getDistance(
+      //   RobotContainer.driveTrain.getPose().nearest(Arrays.asList(algaePoses)).getTranslation()
+      // );
+
+      // if(algaePoses != null) {
+      //   Pose2d getCurrentRobotPose = RobotContainer.driveTrain.getPose();
+      //   Pose2d poseDriveTo = algaePoses[0];
+
+      //   Pose2d nearestAlgae;
+      //   double nearDist = getCurrentRobotPose.getTranslation().getDistance(poseDriveTo.getTranslation());
+
+      //   if(getCurrentRobotPose != null) {
+      //     for(int j = 1; j < algaePoses.length; j++) {
+      //       poseDriveTo = algaePoses[j];
+      //       double distance = getCurrentRobotPose.getTranslation().getDistance(algaePoses[j].getTranslation());
+
+      //       // if the distance calculated to new pose is less then that is the new pose
+      //       if(nearDist > distance) {
+      //         nearDist = distance;
+      //       }
+      //     }
+      //   }
+      // }
+
+
       Logger.recordOutput("Found reef tag", false);
 
       if(algaePose != null) {
+        Logger.recordOutput("AlgaePose", algaePose);
         xOutput = xTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), algaePose.getX()) * Constants.speedMultiTeleop;
         yOutput = yTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getY(), algaePose.getY()) * Constants.speedMultiTeleop;
         // rotOutput = rotation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), algaePose.getX()) * Constants.speedMultiTeleop;
@@ -166,12 +199,6 @@ public class TeleopDrive extends Command {
         // translationVal = xOutput;
         // strafeVal = yOutput;
         // rotation = 0;
-
-        Logger.recordOutput("AlgaePose", algaePose);
-        // Logger.recordOutput("xOutputAlgae", xOutput);
-        // Logger.recordOutput("yOutputAlgae", yOutput);
-        // SmartDashboard.putNumber("xOutput", xOutput);
-        // SmartDashboard.putNumber("yOutput", yOutput);
       }
 
     }
