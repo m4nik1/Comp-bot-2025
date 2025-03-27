@@ -12,11 +12,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Robot;
@@ -159,36 +155,8 @@ public class TeleopDrive extends Command {
       yTranslation.reset();
       Pose2d[] algaePoses = Robot.reefPosesGenerate.getAlgaePoses();
 
-
-      // Drive to this pose that finds nearest pose to current pose
-      // algaePose = RobotContainer.driveTrain.getPose().nearest(Arrays.asList(algaePoses));
-
-      // RobotContainer.driveTrain.getPose().getTranslation().getDistance(
-      //   RobotContainer.driveTrain.getPose().nearest(Arrays.asList(algaePoses)).getTranslation()
-      // );
-
-      if(algaePoses != null) {
-        Pose2d getCurrentRobotPose = RobotContainer.driveTrain.getPose();
-        Pose2d poseDriveTo = algaePoses[0];
-        Logger.recordOutput("Len algaePoses", algaePoses.length);
-
-        Pose2d nearestAlgae;
-        double nearDist = getCurrentRobotPose.getTranslation().getDistance(poseDriveTo.getTranslation());
-
-        if(getCurrentRobotPose != null) {
-          for(int j = 1; j < algaePoses.length; j++) {
-            poseDriveTo = algaePoses[j];
-            double distance = getCurrentRobotPose.getTranslation().getDistance(algaePoses[j].getTranslation());
-
-            // if the distance calculated to new pose is less then that is the new pose
-            if(nearDist > distance) {
-              poseDriveTo = algaePoses[j];
-              nearDist = distance;
-            }
-          }
-        }
-        algaePose = poseDriveTo;
-      }
+      // Drive to this pose that finds nearest pose from current pose
+      algaePose = RobotContainer.driveTrain.getPose().nearest(Arrays.asList(algaePoses));
 
 
       Logger.recordOutput("Found reef tag", false);
