@@ -159,33 +159,8 @@ public class TeleopDrive extends Command {
       yTranslation.reset();
       Pose2d[] algaePoses = Robot.reefPosesGenerate.getAlgaePoses();
 
-
-      // Drive to this pose that finds nearest pose to current pose
+      // Drive to this pose that finds nearest pose from current pose
       algaePose = RobotContainer.driveTrain.getPose().nearest(Arrays.asList(algaePoses));
-
-      // RobotContainer.driveTrain.getPose().getTranslation().getDistance(
-      //   RobotContainer.driveTrain.getPose().nearest(Arrays.asList(algaePoses)).getTranslation()
-      // );
-
-      // if(algaePoses != null) {
-      //   Pose2d getCurrentRobotPose = RobotContainer.driveTrain.getPose();
-      //   Pose2d poseDriveTo = algaePoses[0];
-
-      //   Pose2d nearestAlgae;
-      //   double nearDist = getCurrentRobotPose.getTranslation().getDistance(poseDriveTo.getTranslation());
-
-      //   if(getCurrentRobotPose != null) {
-      //     for(int j = 1; j < algaePoses.length; j++) {
-      //       poseDriveTo = algaePoses[j];
-      //       double distance = getCurrentRobotPose.getTranslation().getDistance(algaePoses[j].getTranslation());
-
-      //       // if the distance calculated to new pose is less then that is the new pose
-      //       if(nearDist > distance) {
-      //         nearDist = distance;
-      //       }
-      //     }
-      //   }
-      // }
 
 
       Logger.recordOutput("Found reef tag", false);
