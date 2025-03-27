@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 
 /** Add your docs here. */
@@ -64,7 +65,7 @@ public class GenerateReefPoses {
     }
 
     // Returns an angle in radians to calculate the poses
-    public double faceToTheta(int face) {
+    public double faceToTheta(double face) {
         double theta = ((2*Math.PI)*(face/6)+Math.PI) % (2*Math.PI); 
         return theta;
     }
@@ -73,20 +74,20 @@ public class GenerateReefPoses {
         double algaeX = reefX + (radius_reef * Math.cos(theta));
         double algaeY = reefY + (radius_reef * Math.sin(theta));
 
-        return new Pose2d(algaeX, algaeY, Rotation2d.fromRadians(theta));
+        return new Pose2d(Units.inchesToMeters(algaeX), Units.inchesToMeters(algaeY), Rotation2d.fromRadians(theta));
     }
 
     public Pose2d calculateCoralLeft(double theta) {
         double coralX = reefX + (radius_reef * Math.cos(theta)) + ((coralBranchSpacing/2)*Math.cos(theta-(Math.PI/2)));
         double coralY = reefY + (radius_reef * Math.sin(theta)) + ((coralBranchSpacing/2)*Math.sin(theta-(Math.PI/2)));
 
-        return new Pose2d(coralX, coralY, Rotation2d.fromRadians(theta));
+        return new Pose2d(Units.inchesToMeters(coralX), Units.inchesToMeters(coralY), Rotation2d.fromRadians(theta));
     }
 
     public Pose2d calculateCoralRight(double theta) {
         double coralX = reefX + (radius_reef * Math.cos(theta)) + ((coralBranchSpacing/2)*Math.cos(theta+Math.PI/2));
         double coralY = reefY + (radius_reef * Math.sin(theta)) + ((coralBranchSpacing/2)*Math.sin(theta+Math.PI/2));
 
-        return new Pose2d(coralX, coralY, Rotation2d.fromRadians(theta));
+        return new Pose2d(Units.inchesToMeters(coralX), Units.inchesToMeters(coralY), Rotation2d.fromRadians(theta));
     }
 }
