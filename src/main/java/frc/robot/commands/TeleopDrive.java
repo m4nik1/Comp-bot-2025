@@ -66,100 +66,50 @@ public class TeleopDrive extends Command {
     // gets results from camera angled to reef
     var results = RobotContainer.photonVision.getUnreadResults(0);
 
-    // if(RobotContainer.getDriverB()) {
-    //   if(!results.isEmpty()) {
-    //     xTranslation.reset();
-    //     yTranslation.reset();
-    //     // rotationPID.reset();
-    //     // Gets the latest frame since one has been processed since then
-    //     var latestResult = results.get(results.size() - 1);
-    //     if(latestResult.hasTargets()) { // At least one tag has been seen by the camera
-    //       for (var target : latestResult.getTargets()) {
-    //         int tagId = target.getFiducialId();
+    if(RobotContainer.getDriverX()) {
+      xTranslation.reset();
+      yTranslation.reset();
+      Pose2d[] leftCoralPoses = Robot.reefPosesGenerate.getCoralRightPositions();
 
-    //         Logger.recordOutput("Found reef tag", Constants.desiredTagIds.contains(tagId));
-    //         // Finds the tags that are associated with the reef
-    //         if(Constants.desiredTagIds.contains(tagId)) {
-    //           double face = Constants.TagToFaceBlue.get(tagId);
-              
-    //           // Calculates the face angle in radians
-    //           double thetaCalculate = ((2*Math.PI)*(face/6)+Math.PI) % (2*Math.PI); 
+      coralLeftPose = RobotContainer.driveTrain.getPose().nearest(Arrays.asList(leftCoralPoses));
 
-    //           Pose2d calculatedCoralRight = Robot.reefPosesGenerate.calculateCoralRight(thetaCalculate);
+      if(coralLeftPose != null) {
+        Logger.recordOutput("Right Coral Pose", coralLeftPose);
+        xOutput = xTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), coralLeftPose.getX()) * Constants.speedMultiTeleop;
+        yOutput = yTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getY(), coralLeftPose.getY()) * Constants.speedMultiTeleop;
+        // rotOutput = rotation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), algaePose.getX()) * Constants.speedMultiTeleop;
 
-    //           Logger.recordOutput("Face reef", face);
-    //           coralRightPose = new Pose2d(new Translation2d(Units.inchesToMeters(calculatedCoralRight.getX()), Units.inchesToMeters(calculatedCoralRight.getY())), Rotation2d.fromRadians(thetaCalculate));
-    //         }
-    //       }
-    //     }
-    //   }
+        // translationVal = xOutput;
+        // strafeVal = yOutput;
+        // rotation = 0;
+      }
+    }
+    else if(RobotContainer.getDriverB()) {
+      xTranslation.reset();
+      yTranslation.reset();
+      Pose2d[] rightCoralPoses = Robot.reefPosesGenerate.getCoralRightPositions();
 
-    //   if(coralRightPose != null) {
-    //     xOutput = xTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), coralRightPose.getX()) * Constants.speedMultiTeleop;
-    //     yOutput = yTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getY(), coralRightPose.getY()) * Constants.speedMultiTeleop;
-    //     // rotOutput = rotation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), algaePose.getX()) * Constants.speedMultiTeleop;
+      coralRightPose = RobotContainer.driveTrain.getPose().nearest(Arrays.asList(rightCoralPoses));
 
-    //     translationVal = xOutput;
-    //     strafeVal = yOutput;
-    //     rotationVal = rotationLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getRotation, .01)); // getRotation was negative  
-    //     // rotation = 0;
+      if(coralRightPose != null) {
+        Logger.recordOutput("Right Coral Pose", coralRightPose);
+        xOutput = xTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), coralRightPose.getX()) * Constants.speedMultiTeleop;
+        yOutput = yTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getY(), coralRightPose.getY()) * Constants.speedMultiTeleop;
+        // rotOutput = rotation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), algaePose.getX()) * Constants.speedMultiTeleop;
 
-    //     Logger.recordOutput("Coral Right Pose", coralRightPose);
-    //   }
-    // }
+        // translationVal = xOutput;
+        // strafeVal = yOutput;
+        // rotation = 0;
+      }
+    }
 
-    // else if(RobotContainer.getDriverX()) {
-    //   if(!results.isEmpty()) {
-    //     xTranslation.reset();
-    //     yTranslation.reset();
-    //     // rotationPID.reset();
-
-    //     // Gets the latest frame since one has been processed since then
-    //     var latestResult = results.get(results.size() - 1);
-    //     if(latestResult.hasTargets()) { // At least one tag has been seen by the camera
-    //       for (var target : latestResult.getTargets()) {
-    //         int tagId = target.getFiducialId();
-
-    //         Logger.recordOutput("Found reef tag", Constants.desiredTagIds.contains(tagId));
-    //         // Finds the tags that are associated with the reef
-    //         if(Constants.desiredTagIds.contains(tagId)) {
-    //           double face = Constants.TagToFaceRed.get(tagId);
-              
-    //           // Calculates the face angle in radians
-    //           double thetaCalculate = ((2*Math.PI)*(face/6)+Math.PI) % (2*Math.PI); 
-
-    //           Pose2d calculatedAlgae = Robot.reefPosesGenerate.calculateCoralLeft(thetaCalculate);
-
-    //           Logger.recordOutput("Face reef", face);
-    //           coralLeftPose = new Pose2d(new Translation2d(Units.inchesToMeters(calculatedAlgae.getX()), Units.inchesToMeters(calculatedAlgae.getY())), Rotation2d.fromRadians(thetaCalculate));
-    //         }
-    //       }
-    //     }
-    //   }
-
-    //   if(coralLeftPose != null) {
-    //     xOutput = xTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), coralLeftPose.getX()) * Constants.speedMultiTeleop;
-    //     yOutput = yTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getY(), coralLeftPose.getY()) * Constants.speedMultiTeleop;
-    //     // rotOutput = rotation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), algaePose.getX()) * Constants.speedMultiTeleop;
-
-    //     // translationVal = xOutput;
-    //     // strafeVal = yOutput;
-    //     // rotation = 0;
-
-    //     Logger.recordOutput("Coral Left Pose", coralLeftPose);
-    //   }
-    // }
-
-    if(RobotContainer.getDriverY()) {
+    else if(RobotContainer.getDriverY()) {
       xTranslation.reset();
       yTranslation.reset();
       Pose2d[] algaePoses = Robot.reefPosesGenerate.getAlgaePoses();
 
       // Drive to this pose that finds nearest pose from current pose
       algaePose = RobotContainer.driveTrain.getPose().nearest(Arrays.asList(algaePoses));
-
-
-      Logger.recordOutput("Found reef tag", false);
 
       if(algaePose != null) {
         Logger.recordOutput("AlgaePose", algaePose);
@@ -183,9 +133,6 @@ public class TeleopDrive extends Command {
       strafeVal = strafeLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getX, .01)); // getX was negative
       rotationVal = rotationLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getRotation, .01)); // getRotation was negative  
     }
-
-
-    
 
     Translation2d translation = new Translation2d(translationVal, strafeVal);
 

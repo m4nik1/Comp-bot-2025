@@ -52,7 +52,6 @@ public class GenerateReefPoses {
             coralRightPositions[i] = calculateCoralRight(thetaConversion);
             algaePositions[i] = calculateAlgaePose(thetaConversion);
         }
-        Logger.recordOutput("algae pos 1", algaePositions[1]);
     }
 
     public Pose2d[] getAlgaePoses() {
