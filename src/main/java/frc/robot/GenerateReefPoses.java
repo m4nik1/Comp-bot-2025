@@ -6,6 +6,8 @@ package frc.robot;
 
 import javax.xml.crypto.dsig.Transform;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -37,7 +39,7 @@ public class GenerateReefPoses {
 
         if(alliance.get() == DriverStation.Alliance.Red) {
             reefX = 690 - (144 + (65.2/2));
-        } 
+        }
         else {
             reefX = 144 + (65.5/2);
         }
@@ -49,6 +51,7 @@ public class GenerateReefPoses {
             coralRightPositions[i] = calculateCoralRight(thetaConversion);
             algaePositions[i] = calculateAlgaePose(thetaConversion);
         }
+        Logger.recordOutput("algae pos 1", algaePositions[1]);
     }
 
     public Pose2d[] getAlgaePoses() {

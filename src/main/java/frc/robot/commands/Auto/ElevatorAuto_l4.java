@@ -39,11 +39,12 @@ public class ElevatorAuto_l4 extends Command {
   @Override
   public void execute() {
     RobotContainer.elevator.setElevatorMagic(Constants.elevator_l4);
-    RobotContainer.coralPivot.setPivot(Constants.pivot_down);
+    
 
     if(RobotContainer.elevator.isElevatorL4()) {
       timer.start();
-      Logger.recordOutput("Timer", timer.get());
+      // Logger.recordOutput("Timer", timer.get());
+      RobotContainer.coralPivot.setPivot(Constants.pivot_down);
       if(timer.hasElapsed(0.35)) {
         RobotContainer.coralIntake.runCoral(-0.7);
       }
