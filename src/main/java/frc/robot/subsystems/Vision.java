@@ -169,6 +169,9 @@ public class Vision extends SubsystemBase {
         if (numTags > 1)
           estStdDevs = kMultiTagStdDevs;
         // Increase std devs based on (average) distance
+        // if(numTags == 1 && avgDist < 1.5) {
+        //   estStdDevs = VecBuilder.fill(.05, .05, .025);
+        // }
         if (numTags == 1 && avgDist > 3) // Checks if the distance is more than 4 meters away
           estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
         else
