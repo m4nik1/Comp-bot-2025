@@ -39,33 +39,32 @@ public class ElevatorAuto_l4 extends Command {
   @Override
   public void execute() {
     RobotContainer.elevator.setElevatorMagic(Constants.elevator_l4);
-    
+    RobotContainer.coralPivot.setPivot(Constants.pivot_down);
 
-    if(RobotContainer.elevator.isElevatorL4()) {
-      timer.start();
+    // if(RobotContainer.elevator.isElevatorL4()) {
+      // timer.start();
       // Logger.recordOutput("Timer", timer.get());
-      RobotContainer.coralPivot.setPivot(Constants.pivot_down);
-      if(timer.hasElapsed(0.35)) {
-        RobotContainer.coralIntake.runCoral(-0.7);
-      }
-    }
-    if(timer.hasElapsed(1.25)) {
-      RobotContainer.coralIntake.runCoral(0);
-      stop = true;
-
-    }
-    Logger.recordOutput("Stop l4", stop);
+      // RobotContainer.coralPivot.setPivot(Constants.pivot_down);
+      // if(timer.hasElapsed(0.35)) {
+        // RobotContainer.coralIntake.runCoral(-0.7);
+      // }
+    // }
+    // if(timer.hasElapsed(1.25)) {
+      // RobotContainer.coralIntake.runCoral(0);
+      // stop = true;
+    // }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    RobotContainer.coralPivot.setPivot(Constants.pivot_down);
     timer.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return stop;
+    return RobotContainer.elevator.isElevatorL4();
   }
 }

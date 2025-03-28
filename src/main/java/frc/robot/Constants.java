@@ -23,14 +23,14 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
     // Swerve system constants
-  public static final double wheelBase = Units.inchesToMeters(21);
-  public static final double trackWidth = Units.inchesToMeters(21);
+  public static final double wheelBase = Units.inchesToMeters(20.78);
+  public static final double trackWidth = Units.inchesToMeters(20.78);
   public static final double driveBaseRadius = Math.hypot(wheelBase / 2.0, trackWidth / 2.0);
   public static final double wheelDia = Units.inchesToMeters(4.0);
   public static final double wheelCircum = Units.inchesToMeters(4.0) * Math.PI;
   public static final double driveRatio = 5.9;
   public static final double angleRatio = 18.75/1;
-  public static final double speedMultiTeleop = 0.5;
+  public static final double speedMultiTeleop = 0.65;
   public static final double speedTurboTeleop = .85;
   public static final double maxSpeed = 4; // meters per second
   public static final double maxAngularSpd = 5;
@@ -48,7 +48,7 @@ public final class Constants {
   public static final double drivekA = .20; // 6.4 is the voltage for max speed per module
   
   public static final Rotation2d angleOffsetMod0 = Rotation2d.fromRotations(.0307);
-  public static final Rotation2d angleOffsetMod1 = Rotation2d.fromRotations(.5145);
+  public static final Rotation2d angleOffsetMod1 = Rotation2d.fromRotations(.4701);
   public static final Rotation2d angleOffsetMod2 = Rotation2d.fromRotations(.6385);
   public static final Rotation2d angleOffsetMod3 = Rotation2d.fromRotations(.2001);
 
@@ -61,7 +61,7 @@ public final class Constants {
   // CAN ID's
   public static final int pigeonID = 21;
 
-  public static double elevator_l2 = 23.7;
+  public static double elevator_l2 = 21.8;
   public static double elevator_l3 = 62.38;
   public static double elevator_l4  = 124;
   public static double elevator_HP = 11.6;

@@ -6,6 +6,7 @@ package frc.robot.commands.Auto;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -33,7 +34,8 @@ public class RunCoralIntakeAuto extends Command {
   public void execute() {
     timer.start();
     RobotContainer.coralIntake.runCoral( -.6);
-    if(timer.hasElapsed(2.5)) {
+    RobotContainer.coralPivot.setPivot(Constants.pivot_down);
+    if(timer.hasElapsed(1.0)) {
       finished = true;
     }
   }

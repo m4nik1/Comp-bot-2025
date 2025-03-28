@@ -64,7 +64,7 @@ public class RobotContainer {
     });
 
     // NamedCommands.registerCommand("Coral_out", new RunCoralIntakeAuto());
-    NamedCommands.registerCommand("Coral_out", coralIntake.coralOut());
+    NamedCommands.registerCommand("Coral_out", new RunCoralIntakeAuto());
     NamedCommands.registerCommand("Pivot_Down", new CoralDownAuto());
     NamedCommands.registerCommand("Pivot_90", new PivotAuto90());
     NamedCommands.registerCommand("Elevator_L4", new ElevatorAuto_l4());

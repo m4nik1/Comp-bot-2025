@@ -5,6 +5,18 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Elevator_L4"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Center Reef"
@@ -13,7 +25,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Elevator_L4"
+            "name": "Coral_out"
           }
         }
       ]

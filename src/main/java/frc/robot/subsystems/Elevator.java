@@ -55,8 +55,8 @@ public class Elevator extends SubsystemBase {
     elevatorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     
 
-    elevatorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-    elevatorConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+    elevatorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
+    elevatorConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
     elevatorConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = Constants.TopElevatorLimit;
 
     elevatorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
@@ -105,7 +105,7 @@ public class Elevator extends SubsystemBase {
 
   public boolean isElevatorL4() {
     double elevator_pos = getElevatorPosition();
-    return elevator_pos >= (Constants.elevator_l4 + -4);
+    return elevator_pos >= (Constants.elevator_l4 + -7);
   }
 
   public BooleanSupplier isElevatorL4Supplier() {

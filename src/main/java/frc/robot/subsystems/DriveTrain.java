@@ -27,6 +27,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -113,8 +114,22 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void driveRobotRelative(ChassisSpeeds spds) {
-    SwerveModuleState states[] = Constants.swerveKinematics.toSwerveModuleStates(spds);
+    SwerveModuleState states[];
+    ChassisSpeeds spds_discrete = ChassisSpeeds.discretize(spds, .02);
+    states = Constants.swerveKinematics.toSwerveModuleStates(spds_discrete);
     SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.maxSpeed);
+    
+
+    for(ElmCityModule m : elmCityModules) {
+      m.setDesiredState(states[m.modNum], false);
+    }
+  }
+
+  public void driveRobotAlign(ChassisSpeeds spds) {
+    SwerveModuleState states[];
+    states = Constants.swerveKinematics.toSwerveModuleStates(spds);
+    SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.maxSpeed);
+    
 
     for(ElmCityModule m : elmCityModules) {
       m.setDesiredState(states[m.modNum], false);
@@ -210,6 +225,7 @@ public class DriveTrain extends SubsystemBase {
 
     Logger.recordOutput("Robot Pose", odom.getEstimatedPosition());
     Logger.recordOutput("Robot Angle", getRobotAngle());
+    SmartDashboard.putNumber("Robot Angle", getRobotAngle());
   }
 }
  

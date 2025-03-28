@@ -19,7 +19,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Elevator_HP"
+            "name": "Coral_out"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right Turned Return"
           }
         }
       ]

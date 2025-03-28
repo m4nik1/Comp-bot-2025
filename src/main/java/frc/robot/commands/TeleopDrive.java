@@ -12,7 +12,9 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Robot;
@@ -29,6 +31,7 @@ public class TeleopDrive extends Command {
   double targetYaw = 0.0;
   double translationVal, strafeVal, rotationVal;
   boolean targetVisible = true;
+  boolean openLoop = true;
 
   double xOutput, yOutput, rotation;
 
@@ -49,12 +52,14 @@ public class TeleopDrive extends Command {
   public void initialize() {
     targetYaw = 0.0;
     targetVisible = true;
-    xTranslation = new PIDController(.03, 0, 0);
-    yTranslation = new PIDController(.03, 0, 0);
+    xTranslation = new PIDController(.25, 0, 0);
+    yTranslation = new PIDController(.35, 0, 0);
 
     previousTag = -1;
-    // rotationPID = new PIDController(.5, 0, 0);
-    // rotationPID.enableContinuousInput(-Math.PI, Math.PI);
+    rotationPID = new PIDController(.5, 0, 0);
+    rotationPID.enableContinuousInput(-Math.PI, Math.PI);
+
+    openLoop = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -63,85 +68,107 @@ public class TeleopDrive extends Command {
     double speedMultiplier = Constants.speedMultiTeleop;
     double getRotation = -RobotContainer.getRightX();
 
-    // gets results from camera angled to reef
-    var results = RobotContainer.photonVision.getUnreadResults(0);
-
-    if(RobotContainer.getDriverX()) {
+    if (RobotContainer.getDriverX()) {
       xTranslation.reset();
       yTranslation.reset();
       Pose2d[] leftCoralPoses = Robot.reefPosesGenerate.getCoralRightPositions();
 
       coralLeftPose = RobotContainer.driveTrain.getPose().nearest(Arrays.asList(leftCoralPoses));
 
-      if(coralLeftPose != null) {
+      if (coralLeftPose != null) {
         Logger.recordOutput("Right Coral Pose", coralLeftPose);
-        xOutput = xTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), coralLeftPose.getX()) * Constants.speedMultiTeleop;
-        yOutput = yTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getY(), coralLeftPose.getY()) * Constants.speedMultiTeleop;
-        // rotOutput = rotation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), algaePose.getX()) * Constants.speedMultiTeleop;
+        xOutput = xTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), coralLeftPose.getX())
+            * Constants.speedMultiTeleop;
+        yOutput = yTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getY(), coralLeftPose.getY())
+            * Constants.speedMultiTeleop;
+        // rotOutput =
+        // rotation.calculate(RobotContainer.driveTrain.getRobotPose2d().getRotation().getRadians(),
+        // algaePose.getRotation().getRadians()) * Constants.speedMultiTeleop;
 
-        // translationVal = xOutput;
-        // strafeVal = yOutput;
-        // rotation = 0;
+        Logger.recordOutput("xOutput", xOutput);
+        Logger.recordOutput("yOutput", yOutput);
+
+        // Convert to chassis speeds
+        ChassisSpeeds spds = new ChassisSpeeds(xOutput, yOutput, 0);
+
+        RobotContainer.driveTrain.driveRobotRelative(spds);
       }
-    }
-    else if(RobotContainer.getDriverB()) {
+    } else if (RobotContainer.getDriverB()) {
       xTranslation.reset();
       yTranslation.reset();
       Pose2d[] rightCoralPoses = Robot.reefPosesGenerate.getCoralRightPositions();
 
       coralRightPose = RobotContainer.driveTrain.getPose().nearest(Arrays.asList(rightCoralPoses));
 
-      if(coralRightPose != null) {
+      if (coralRightPose != null) {
         Logger.recordOutput("Right Coral Pose", coralRightPose);
-        xOutput = xTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), coralRightPose.getX()) * Constants.speedMultiTeleop;
-        yOutput = yTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getY(), coralRightPose.getY()) * Constants.speedMultiTeleop;
-        // rotOutput = rotation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), algaePose.getX()) * Constants.speedMultiTeleop;
+        xOutput = xTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), coralRightPose.getX())
+            * Constants.speedMultiTeleop;
+        yOutput = yTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getY(), coralRightPose.getY())
+            * Constants.speedMultiTeleop;
+        // rotOutput =
+        // rotation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(),
+        // algaePose.getX()) * Constants.speedMultiTeleop;
 
-        // translationVal = xOutput;
-        // strafeVal = yOutput;
-        // rotation = 0;
+        // Convert to chassis speeds
+        ChassisSpeeds spds = new ChassisSpeeds(xOutput, yOutput, 0);
+
+        RobotContainer.driveTrain.driveRobotRelative(spds);
       }
     }
 
-    else if(RobotContainer.getDriverY()) {
+    else if (RobotContainer.getDriverY()) {
       xTranslation.reset();
       yTranslation.reset();
+      rotationPID.reset();
+      
       Pose2d[] algaePoses = Robot.reefPosesGenerate.getAlgaePoses();
+      openLoop = false;
 
       // Drive to this pose that finds nearest pose from current pose
       algaePose = RobotContainer.driveTrain.getPose().nearest(Arrays.asList(algaePoses));
 
-      if(algaePose != null) {
+      if (algaePose != null) {
         Logger.recordOutput("AlgaePose", algaePose);
-        xOutput = xTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), algaePose.getX()) * Constants.speedMultiTeleop;
-        yOutput = yTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getY(), algaePose.getY()) * Constants.speedMultiTeleop;
-        // rotOutput = rotation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), algaePose.getX()) * Constants.speedMultiTeleop;
+        xOutput = xTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(), algaePose.getX());
+        yOutput = yTranslation.calculate(RobotContainer.driveTrain.getRobotPose2d().getY(), algaePose.getY());
+        // rotation =
+        // rotationPID.calculate(RobotContainer.driveTrain.getRobotPose2d().getX(),
+        // algaePose.getRotation().getRadians()) * Constants.speedMultiTeleop;
 
-        // translationVal = xOutput;
-        // strafeVal = yOutput;
-        // rotation = 0;
+        Logger.recordOutput("xOutput", xOutput);
+        Logger.recordOutput("yOutput", yOutput);
+
+        // Convert to chassis speeds
+        ChassisSpeeds spds = new ChassisSpeeds(xOutput, yOutput, 0);
+
+        RobotContainer.driveTrain.driveRobotRelative(ChassisSpeeds.fromFieldRelativeSpeeds(spds, Rotation2d.fromDegrees(0)));
       }
 
-    }
-    else {
+    } else {
       speedMultiplier = Constants.speedMultiTeleop;
       double getX = -RobotContainer.getLeftX();
       double getY = -RobotContainer.getLeftY();
+      openLoop = true;
 
       // Remember all these values from the stick are negative
-      translationVal = translateLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getY, .01)); // getY was negativeß
+      translationVal = translateLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getY, .01)); // getY was
+                                                                                                        // negativeß
       strafeVal = strafeLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getX, .01)); // getX was negative
-      rotationVal = rotationLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getRotation, .01)); // getRotation was negative  
+      rotationVal = rotationLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getRotation, .01)); // getRotation
+                                                                                                           // was
+                                                                                                           // negative
+
+      Translation2d translation = new Translation2d(translationVal, strafeVal);
+
+      RobotContainer.driveTrain.drive(translation.times(Constants.maxSpeed), rotationVal * Constants.maxAngularSpd);
     }
-
-    Translation2d translation = new Translation2d(translationVal, strafeVal);
-
-    RobotContainer.driveTrain.drive(translation.times(Constants.maxSpeed), rotationVal * Constants.maxAngularSpd);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override

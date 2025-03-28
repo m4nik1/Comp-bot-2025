@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 /** Add your docs here. */
 public class GenerateReefPoses {
@@ -24,7 +25,6 @@ public class GenerateReefPoses {
     double ReefWidth = 65.5;
     double coralBranchSpacing = 13;
     double robotCoralIntake = 18.5; // This is the offset of the coral intake length wise
-
 
     double radius_reef = (ReefWidth/2) + robotCoralIntake;
 
@@ -68,7 +68,15 @@ public class GenerateReefPoses {
 
     // Returns an angle in radians to calculate the poses
     public double faceToTheta(double face) {
-        double theta = ((2*Math.PI)*(face/6)+Math.PI) % (2*Math.PI); 
+        double theta;
+        if(DriverStation.getAlliance().get() == Alliance.Blue) {
+            theta = ((2*Math.PI)*(face/6) + Math.PI) % (2*Math.PI); 
+        }
+        else {
+            theta = ((2*Math.PI)*(face/6)) % (2*Math.PI); 
+        }
+        
+        System.out.println(face + ". " + theta);
         return theta;
     }
 
