@@ -70,10 +70,10 @@ public class GenerateReefPoses {
     public double faceToTheta(double face) {
         double theta;
         if(DriverStation.getAlliance().get() == Alliance.Blue) {
-            theta = ((2*Math.PI)*(face/6) + Math.PI) % (2*Math.PI); 
+            theta = ((2*Math.PI)*(face/6) + Math.PI) % (Math.PI); 
         }
         else {
-            theta = ((2*Math.PI)*(face/6)) % (2*Math.PI); 
+            theta = ((2*Math.PI)*(face/6)) % (Math.PI); 
         }
         
         System.out.println(face + ". " + theta);
