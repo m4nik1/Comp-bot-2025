@@ -24,7 +24,7 @@ public class GenerateReefPoses {
     double FieldWidth = 317;
     double ReefWidth = 65.5;
     double coralBranchSpacing = 13;
-    double robotCoralIntake = 18.5; // This is the offset of the coral intake length wise
+    double robotCoralIntake = 23; // This is the offset of the coral intake length wise
 
     double radius_reef = (ReefWidth/2) + robotCoralIntake;
 
@@ -48,9 +48,9 @@ public class GenerateReefPoses {
         // Generates all the positions at startup
         for(int i = 0; i < 6; i++) {
             double thetaConversion = faceToTheta(i);
-            coralLeftPositions[i] = calculateCoralLeft(thetaConversion);
-            coralRightPositions[i] = calculateCoralRight(thetaConversion);
-            algaePositions[i] = calculateAlgaePose(thetaConversion);
+            coralLeftPositions[i] = calculateCoralLeft(thetaConversion+Math.PI);
+            coralRightPositions[i] = calculateCoralRight(thetaConversion+Math.PI);
+            algaePositions[i] = calculateAlgaePose(thetaConversion+Math.PI);
         }
     }
 
@@ -70,10 +70,15 @@ public class GenerateReefPoses {
     public double faceToTheta(double face) {
         double theta;
         if(DriverStation.getAlliance().get() == Alliance.Blue) {
-            theta = ((2*Math.PI)*(face/6) + Math.PI) % (Math.PI); 
+            // theta = ((2*Math.PI)*(face/6) + Math.PI) % (Math.PI);
+            double t2 = ((2*Math.PI)*(face/6) + Math.PI);
+            double theta_3 = t2 % (2*Math.PI); 
+            theta = (theta_3 + Math.PI) % (2*Math.PI); 
         }
         else {
-            theta = ((2*Math.PI)*(face/6)) % (Math.PI); 
+            double t2 = ((2*Math.PI)*(face/6));
+            double theta_3 = t2 % (2*Math.PI); 
+            theta = (theta_3 + Math.PI) % (2*Math.PI); 
         }
         
         System.out.println(face + ". " + theta);
@@ -84,20 +89,26 @@ public class GenerateReefPoses {
         double algaeX = reefX + (radius_reef * Math.cos(theta));
         double algaeY = reefY + (radius_reef * Math.sin(theta));
 
-        return new Pose2d(Units.inchesToMeters(algaeX), Units.inchesToMeters(algaeY), Rotation2d.fromRadians(theta));
+        return new Pose2d(Units.inchesToMeters(algaeX), Units.inchesToMeters(algaeY), Rotation2d.fromRadians(theta + Math.PI));
     }
 
     public Pose2d calculateCoralLeft(double theta) {
         double coralX = reefX + (radius_reef * Math.cos(theta)) + ((coralBranchSpacing/2)*Math.cos(theta-(Math.PI/2)));
-        double coralY = reefY + (radius_reef * Math.sin(theta)) + ((coralBranchSpacing/2)*Math.sin(theta-(Math.PI/2)));
+        double coralY = (reefY) + ((radius_reef) * Math.sin(theta)) + ((coralBranchSpacing/2)*Math.sin(theta-(Math.PI/2)));
 
-        return new Pose2d(Units.inchesToMeters(coralX), Units.inchesToMeters(coralY), Rotation2d.fromRadians(theta));
+        double offsetX = 14 * Math.sin(theta);
+        double offsetY = 14 * (-Math.cos(theta));
+
+        return new Pose2d(Units.inchesToMeters(coralX+offsetX), Units.inchesToMeters(coralY + offsetY), Rotation2d.fromRadians(theta + Math.PI));
     }
 
     public Pose2d calculateCoralRight(double theta) {
         double coralX = reefX + (radius_reef * Math.cos(theta)) + ((coralBranchSpacing/2)*Math.cos(theta+Math.PI/2));
-        double coralY = reefY + (radius_reef * Math.sin(theta)) + ((coralBranchSpacing/2)*Math.sin(theta+Math.PI/2));
+        double coralY = (reefY) + (radius_reef * Math.sin(theta)) + ((coralBranchSpacing/2)*Math.sin(theta+Math.PI/2));
 
-        return new Pose2d(Units.inchesToMeters(coralX), Units.inchesToMeters(coralY), Rotation2d.fromRadians(theta));
+        double offsetX = 7 * Math.sin(theta);
+        double offsetY = 7 * (-Math.cos(theta));
+
+        return new Pose2d(Units.inchesToMeters(coralX + offsetX), Units.inchesToMeters(coralY + offsetY), Rotation2d.fromRadians(theta + Math.PI));
     }
 }

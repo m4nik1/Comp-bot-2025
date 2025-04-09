@@ -59,8 +59,8 @@ public class DriveTrain extends SubsystemBase {
                                         getYaw(), 
                                         getPositions(), 
                                         new Pose2d(), 
-                                        VecBuilder.fill(0.01, 0.01, 0.01),
-                                        VecBuilder.fill(0.04, 0.04, 0.06));
+                                        VecBuilder.fill(0.01, 0.01, 0.01), // Try (0.005, 0.005, 0.005) to trust odom more
+                                        VecBuilder.fill(0.04, 0.04, 0.06)); // Try (0.05, .05, .08) to trust vision a little less
                                         
     try {
       autoConfig = RobotConfig.fromGUISettings();
