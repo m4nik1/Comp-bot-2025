@@ -153,11 +153,8 @@ public class TeleopDrive extends Command {
 
       // Remember all these values from the stick are negative
       translationVal = translateLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getY, .01)); // getY was
-                                                                                                        // negativeß
       strafeVal = strafeLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getX, .01)); // getX was negative
       rotationVal = rotationLimiter.calculate(speedMultiplier * MathUtil.applyDeadband(getRotation, .01)); // getRotation
-                                                                                                           // was
-                                                                                                           // negative
 
       Translation2d translation = new Translation2d(translationVal, strafeVal);
 
