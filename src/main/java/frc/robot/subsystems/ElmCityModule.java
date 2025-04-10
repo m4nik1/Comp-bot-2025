@@ -10,6 +10,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -19,6 +20,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -36,6 +38,7 @@ public class ElmCityModule extends SubsystemBase {
   PositionDutyCycle anglePosition = new PositionDutyCycle(0);
   DutyCycleOut driveOpenLoop;
   VelocityVoltage driveVelocity;
+  VoltageOut voltRequest;
   SimpleMotorFeedforward driveKfCalc = new SimpleMotorFeedforward(Constants.driveKs, Constants.driveKv, Constants.drivekA);
 
   public int modNum;
@@ -67,6 +70,8 @@ public class ElmCityModule extends SubsystemBase {
     driveOpenLoop = new DutyCycleOut(0);
     driveVelocity = new VelocityVoltage(0);
     driveVelocity.Slot = 0;
+
+    voltRequest = new VoltageOut(0);
 
     configDriveMotor(driveInvert);
     configAngleMotor(angleInvert);
@@ -126,6 +131,10 @@ public class ElmCityModule extends SubsystemBase {
     angleConfig.Slot0.kD = Constants.angleD;
 
     angleMotor.getConfigurator().apply(angleConfig);
+  }
+
+  public void runCharacterizationModule(double output) {
+    driveMotor.setControl(voltRequest.withOutput(output));
   }
 
   public void resetToAbsolute() {

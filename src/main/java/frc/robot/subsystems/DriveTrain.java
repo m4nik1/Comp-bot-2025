@@ -4,8 +4,11 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Volts;
+
 import org.littletonrobotics.junction.Logger;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -30,6 +33,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 
 public class DriveTrain extends SubsystemBase {
@@ -44,6 +48,8 @@ public class DriveTrain extends SubsystemBase {
   Field2d field;
   RobotConfig autoConfig;
 
+  private final SysIdRoutine sysId;
+
 
   public DriveTrain() {
     elmCityModules = new ElmCityModule[] {
@@ -54,6 +60,16 @@ public class DriveTrain extends SubsystemBase {
     };
 
     gyro = new Pigeon2(Constants.pigeonID);
+
+    sysId = new SysIdRoutine(
+      new SysIdRoutine.Config(
+          null,
+          null,
+          null,
+          // (state) -> SignalLogger.writeString("State", state.toString())), // The CTRE way that is faster
+          (state) -> Logger.recordOutput("Drive/SysIdState", state.toString())),
+      new SysIdRoutine.Mechanism(
+          (voltage) -> runCharacterization(voltage.in(Volts)), null, this));
 
     odom = new SwerveDrivePoseEstimator(Constants.swerveKinematics, 
                                         getYaw(), 
@@ -89,6 +105,21 @@ public class DriveTrain extends SubsystemBase {
     );
 
     resetGyro();
+  }
+
+  public void runCharacterization(double output) {
+    // Sends each module same command
+    for(ElmCityModule m : elmCityModules) {
+      m.runCharacterizationModule(output);
+    }
+  }
+
+  public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+    return sysId.quasistatic(direction);
+  }
+
+  public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+    return sysId.dynamic(direction);
   }
 
   public Rotation2d getYaw() {
