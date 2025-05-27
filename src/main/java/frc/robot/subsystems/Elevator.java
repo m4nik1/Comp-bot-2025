@@ -25,7 +25,7 @@ import frc.robot.RobotContainer;
 public class Elevator extends SubsystemBase {
   /** Creates a new Elevator. */
   TalonFX elevatorMotor;
-  VoltageOut voltage;
+  VoltageOut voltage; 
 
   DigitalInput TopElevatorLimit;
   DigitalInput LowerLimit;
@@ -71,12 +71,14 @@ public class Elevator extends SubsystemBase {
     
     // Needed if we dont reach our set position
     elevatorConfig.Slot0.kP = 0.18;
+    // elevatorConfig.Slot0.kP = 0.01;
     elevatorConfig.Slot0.kI = 0;
     elevatorConfig.Slot0.kD = 0; 
 
     
     // Set for speed of elevator
-    elevatorConfig.MotionMagic.MotionMagicAcceleration = 400;
+    // elevatorConfig.MotionMagic.MotionMagicAcceleration = 400;
+    elevatorConfig.MotionMagic.MotionMagicAcceleration = 300;
     elevatorConfig.MotionMagic.MotionMagicCruiseVelocity = 300;
 
     elevatorMotor.getConfigurator().apply(elevatorConfig);

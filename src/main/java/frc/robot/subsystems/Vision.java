@@ -45,11 +45,13 @@ public class Vision extends SubsystemBase {
   final Transform3d[] robotToCamTransforms = {
 
       new Transform3d(new Translation3d(-0.095, 0.3302, 0.6), // Pitch is positive 20 degrees check that though
-      // new Transform3d(Units.inchesToMeters(10), Units.inchesToMeters(4.25), Units.inchesToMeters(23),
+          // new Transform3d(Units.inchesToMeters(10), Units.inchesToMeters(4.25),
+          // Units.inchesToMeters(23),
           new Rotation3d(0, Rotation2d.fromDegrees(-20).getRadians(), Rotation2d.fromDegrees(-20).getRadians())),
 
       new Transform3d(new Translation3d(-0.095, 0.3302, 0.75), // Higher camera
-      // new Transform3d(Units.inchesToMeters(10), Units.inchesToMeters(4.25), Units.inchesToMeters(23+14),
+          // new Transform3d(Units.inchesToMeters(10), Units.inchesToMeters(4.25),
+          // Units.inchesToMeters(23+14),
           new Rotation3d(0, 0, 0))
   };
 
@@ -80,10 +82,17 @@ public class Vision extends SubsystemBase {
     for (int i = 0; i < Constants.numCameras; i++) {
       cameras[i] = new PhotonCamera(camera_names[i]);
 
-      poseEstimators[i] = new PhotonPoseEstimator(
-          aprilTagFieldLayout,
-          PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-          robotToCamTransforms[i]);
+      if (i == 1) {
+        poseEstimators[i] = new PhotonPoseEstimator(
+            aprilTagFieldLayout,
+            PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
+            robotToCamTransforms[i]);
+      } else {
+        poseEstimators[i] = new PhotonPoseEstimator(
+            aprilTagFieldLayout,
+            PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+            robotToCamTransforms[i]);
+      }
 
       poseEstimators[i].setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
     }
@@ -170,7 +179,7 @@ public class Vision extends SubsystemBase {
           estStdDevs = kMultiTagStdDevs;
         // Increase std devs based on (average) distance
         // if(numTags == 1 && avgDist < 1.5) {
-        //   estStdDevs = VecBuilder.fill(.05, .05, .025);
+        // estStdDevs = VecBuilder.fill(.05, .05, .025);
         // }
         if (numTags == 1 && avgDist > 3) // Checks if the distance is more than 4 meters away
           estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
