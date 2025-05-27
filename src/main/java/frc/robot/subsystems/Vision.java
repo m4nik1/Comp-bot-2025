@@ -82,7 +82,7 @@ public class Vision extends SubsystemBase {
     for (int i = 0; i < Constants.numCameras; i++) {
       cameras[i] = new PhotonCamera(camera_names[i]);
 
-      if (i == 1) {
+      if (i == 0) {
         poseEstimators[i] = new PhotonPoseEstimator(
             aprilTagFieldLayout,
             PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
