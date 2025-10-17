@@ -113,6 +113,8 @@ public class Vision extends SubsystemBase {
     return visionEst;
   }
 
+ 
+
   public Matrix<N3, N1> getEstimationStdDevs() {
     return curStdDevs;
   }
@@ -156,6 +158,7 @@ public class Vision extends SubsystemBase {
 
       // Precalculation - see how many tags we found, and calculate an
       // average-distance metric
+      // This goes through the targets and 
       for (var tgt : targets) {
         var tagPose = poseEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
         if (tagPose.isEmpty())
@@ -203,7 +206,7 @@ public class Vision extends SubsystemBase {
 
     // below we are checking if we can trust the single target
     if (singleTarget) {
-      PhotonTrackedTarget target = robotPose.targetsUsed.get(0);
+      PhotonTrackedTarget target = robotPose.targetsUsed.get(2);
 
       // This is only when single targets are detected
       if (target.getPoseAmbiguity() > MAX_SINGLE_ABIGUITY) {
@@ -218,6 +221,54 @@ public class Vision extends SubsystemBase {
 
     RobotContainer.driveTrain.addVisionMeasurment(estimatedRobotPose2d, timestampSeconds, curStdDevs);
   }
+
+  public void addVisionMeasurement(PhotonPoseEstimator estimator, int cameraNum) {
+    List<PhotonPipelineResult> results = cameras[cameraNum].getAllUnreadResults();
+
+     PhotonPipelineResult latestResult = results.get(results.size() - 1);
+     
+     Optional<EstimatedRobotPose> estimatorResult = estimator.update(latestResult);
+     // Now we update the estimator and get the pose from the estimator
+     Pose2d estimatedPose = estimatorResult.estimatedPose.toPose2d();
+
+     double timestampUpdate = estimatedResult.timestampSeconds;
+     List<PhotonTrackedTarget> tags = estimatorResult.targetsUsed;
+     int tagCount = tags.size();
+
+     var distanceToClosetTag = tags[0].bestCameraToTarget.translation().toTranslation().distance(new Translation2d(0, 0));
+
+     int std_devs = 2;
+
+     if (tagCount == 0) {
+      return;
+     }
+
+     if (tagCount == 1) {
+      // comparing to the distance threshold to get the right std_devs
+      if (distanceToClosetTag > 2) {
+        return;
+      }
+
+      if((6 <= primary_id <= 11) | (17 <= primary_id <= 11)) & (distanceToClosetTag <= 0.5) {
+        std_devs = 0.25;
+        if (distanceToClosetTag <= 0.75) {
+          std_devs = 0.1;
+        }
+      }
+    }
+
+    if (tagCount >= 2) {
+      std_devs = 0.7;
+      if((6 <= primary_id <= 11) | (17 <= primary_id <= 11)) & (distanceToClosetTag <= 0.5) {
+        std_devs = 0.5;
+        if (distanceToClosetTag <= 0.25) {
+          std_devs = 0.25;
+        }
+      }
+    }
+
+    // Now we can send the measurement to the drivetrain/SwerveEstimator
+    RobotContainer.driveTrain.addVisionMeasurment(new Pose2d(estimatedPose.getX(), estimatedPose.getY(), RobotContainer.driveTrain.getYaw()), timestampUpdate, [curStdDevs, curStdDevs, 50]);
 
   @Override
   public void periodic() {
