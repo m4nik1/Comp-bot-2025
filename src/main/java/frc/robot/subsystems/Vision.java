@@ -231,7 +231,7 @@ public class Vision extends SubsystemBase {
      // Now we update the estimator and get the pose from the estimator
      Pose2d estimatedPose = estimatorResult.estimatedPose.toPose2d();
 
-     double timestampUpdate = estimatedResult.timestampSeconds;
+     double timestampUpdate = estimatorResult.timestampSeconds;
      List<PhotonTrackedTarget> tags = estimatorResult.targetsUsed;
      int tagCount = tags.size();
 
@@ -249,7 +249,7 @@ public class Vision extends SubsystemBase {
         return;
       }
 
-      if((6 <= primary_id <= 11) | (17 <= primary_id <= 11)) & (distanceToClosetTag <= 0.5) {
+      if((6 <= primary_id <= 11) | (17 <= primary_id <= 11)) && (distanceToClosetTag <= 0.5) {
         std_devs = 0.25;
         if (distanceToClosetTag <= 0.75) {
           std_devs = 0.1;
@@ -259,7 +259,7 @@ public class Vision extends SubsystemBase {
 
     if (tagCount >= 2) {
       std_devs = 0.7;
-      if((6 <= primary_id <= 11) | (17 <= primary_id <= 11)) & (distanceToClosetTag <= 0.5) {
+      if((6 <= primary_id <= 11) | (17 <= primary_id <= 11)) && (distanceToClosetTag <= 0.5) {
         std_devs = 0.5;
         if (distanceToClosetTag <= 0.25) {
           std_devs = 0.25;

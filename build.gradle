@@ -4,8 +4,13 @@ plugins {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    // Use Java toolchain to target Java 21 (latest LTS as requested).
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+    // For compatibility with plugins/tasks that read these properties, set them as well
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
