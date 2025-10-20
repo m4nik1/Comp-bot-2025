@@ -272,7 +272,7 @@ public class Vision extends SubsystemBase {
     }
 
     // Now we can send the measurement to the drivetrain/SwerveEstimator
-    RobotContainer.driveTrain.addVisionMeasurment(new Pose2d(estimatedPose.getX(), estimatedPose.getY(), RobotContainer.driveTrain.getYaw()), timestampUpdate, [curStdDevs, curStdDevs, 50]);
+    RobotContainer.driveTrain.addVisionMeasurment(new Pose2d(estimatedPose.getX(), estimatedPose.getY(), RobotContainer.driveTrain.getYaw()), timestampUpdate, new Matrix<>(Nat.N3(), Nat.N1(), new double[] {std_devs, std_devs, 50.0}));
   }
 
   @Override
