@@ -113,8 +113,6 @@ public class Vision extends SubsystemBase {
     return visionEst;
   }
 
- 
-
   public Matrix<N3, N1> getEstimationStdDevs() {
     return curStdDevs;
   }
@@ -158,7 +156,7 @@ public class Vision extends SubsystemBase {
 
       // Precalculation - see how many tags we found, and calculate an
       // average-distance metric
-      // This goes through the targets and 
+      // This goes through the targets and
       for (var tgt : targets) {
         var tagPose = poseEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
         if (tagPose.isEmpty())
@@ -227,17 +225,21 @@ public class Vision extends SubsystemBase {
 
      PhotonPipelineResult latestResult = results.get(results.size() - 1);
      
-     Optional<EstimatedRobotPose> estimatorResult = estimator.update(latestResult);
+     Optional<EstimatedRobotPose> estimatorResult = Optional.empty();
+
+     estimatorResult = estimator.update(latestResult);
      // Now we update the estimator and get the pose from the estimator
-     Pose2d estimatedPose = estimatorResult.estimatedPose.toPose2d();
+     Pose2d estimatedPose = estimatorResult.get().estimatedPose.toPose2d();
 
-     double timestampUpdate = estimatorResult.timestampSeconds;
-     List<PhotonTrackedTarget> tags = estimatorResult.targetsUsed;
+     double timestampUpdate = estimatorResult.get().timestampSeconds;
+     List<PhotonTrackedTarget> tags = estimatorResult.get().targetsUsed;
      int tagCount = tags.size();
+     int primary_id = tags.get(0).fiducialId;
 
-     var distanceToClosetTag = tags[0].bestCameraToTarget.translation().toTranslation().distance(new Translation2d(0, 0));
+     var distanceToClosetTag = tags.get(0).bestCameraToTarget.getTranslation().toTranslation2d().getDistance(new Translation2d(0, 0));
+    //  .translation().toTranslation().distance(new Translation2d(0, 0));
 
-     int std_devs = 2;
+     double std_devs = 2.0;
 
      if (tagCount == 0) {
       return;
@@ -249,17 +251,19 @@ public class Vision extends SubsystemBase {
         return;
       }
 
-      if((6 <= primary_id <= 11) | (17 <= primary_id <= 11)) && (distanceToClosetTag <= 0.5) {
+      // if(((6 <= primary_id <= 11) || (17 <= primary_id <= 11)) && (distanceToClosetTag <= 0.5)) {
+      if((primary_id >= 6) && (primary_id <= 6) || ((primary_id >= 17) && (primary_id <= 22)) && (distanceToClosetTag <= 1.5)) {
         std_devs = 0.25;
         if (distanceToClosetTag <= 0.75) {
           std_devs = 0.1;
         }
+        // Add a if statement to check if the robot is in teleop to add the measurement
       }
     }
 
     if (tagCount >= 2) {
       std_devs = 0.7;
-      if((6 <= primary_id <= 11) | (17 <= primary_id <= 11)) && (distanceToClosetTag <= 0.5) {
+      if((primary_id >= 6) && (primary_id <= 6) || ((primary_id >= 17) && (primary_id <= 22)) && (distanceToClosetTag <= 0.5)) {
         std_devs = 0.5;
         if (distanceToClosetTag <= 0.25) {
           std_devs = 0.25;
@@ -269,6 +273,7 @@ public class Vision extends SubsystemBase {
 
     // Now we can send the measurement to the drivetrain/SwerveEstimator
     RobotContainer.driveTrain.addVisionMeasurment(new Pose2d(estimatedPose.getX(), estimatedPose.getY(), RobotContainer.driveTrain.getYaw()), timestampUpdate, [curStdDevs, curStdDevs, 50]);
+  }
 
   @Override
   public void periodic() {
