@@ -85,7 +85,7 @@ public class Vision extends SubsystemBase {
       if (i == 0) {
         poseEstimators[i] = new PhotonPoseEstimator(
             aprilTagFieldLayout,
-            PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
+            PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
             robotToCamTransforms[i]);
       } else {
         poseEstimators[i] = new PhotonPoseEstimator(
@@ -223,21 +223,29 @@ public class Vision extends SubsystemBase {
   public void addVisionMeasurement(PhotonPoseEstimator estimator, int cameraNum) {
     List<PhotonPipelineResult> results = cameras[cameraNum].getAllUnreadResults();
 
+     if(results.isEmpty()) return;
+
      PhotonPipelineResult latestResult = results.get(results.size() - 1);
      
-     Optional<EstimatedRobotPose> estimatorResult = Optional.empty();
+     Optional<EstimatedRobotPose> estimatorResult = estimator.update(latestResult);
+     
+      if (estimatorResult.isEmpty()) {
+        // No valid pose, skip this frame
+        System.out.println(cameraNum + " HAS NO POSE FROM CAMERA ");
+        return;
+      }
 
-     estimatorResult = estimator.update(latestResult);
      // Now we update the estimator and get the pose from the estimator
      Pose2d estimatedPose = estimatorResult.get().estimatedPose.toPose2d();
 
      double timestampUpdate = estimatorResult.get().timestampSeconds;
      List<PhotonTrackedTarget> tags = estimatorResult.get().targetsUsed;
      int tagCount = tags.size();
-     int primary_id = tags.get(0).fiducialId;
+     if (tagCount == 0) return;
 
-     var distanceToClosetTag = tags.get(0).bestCameraToTarget.getTranslation().toTranslation2d().getDistance(new Translation2d(0, 0));
-    //  .translation().toTranslation().distance(new Translation2d(0, 0));
+
+     int primary_id = tags.get(0).fiducialId;
+     double distanceToClosetTag = tags.get(0).bestCameraToTarget.getTranslation().toTranslation2d().getDistance(new Translation2d(0, 0));
 
      double std_devs = 2.0;
 
@@ -279,7 +287,7 @@ public class Vision extends SubsystemBase {
   public void periodic() {
 
     for (int k = 0; k < Constants.numCameras; k++) {
-      addVisionMeasurementToDriveTrain(poseEstimators[k], k);
+      addVisionMeasurement(poseEstimators[k], k);
     }
     // addVisionMeasurementToDriveTrain(poseEstimator_reef);
     // findReefFace();

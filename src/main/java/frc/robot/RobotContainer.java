@@ -77,6 +77,7 @@ public class RobotContainer {
     autoChooser.addOption("Right Turned Coral L4", new PathPlannerAuto("Right L4 Facing Coral"));
     autoChooser.addOption("Left Turned Coral L4", new PathPlannerAuto("Right L4 Facing Coral", true));
     autoChooser.addOption("Center L4 Coral", new PathPlannerAuto("Center L4 Coral"));
+    autoChooser.addOption("Test Center auto", new PathPlannerAuto("Test Center Drive"));
     // autoChooser.addOption("Right Two Piece L4", new PathPlannerAuto("Right Two Piece L4"));
     // autoChooser.addOption("Left Two Piece L4", new PathPlannerAuto("Right Two Piece L4", true ));
 
