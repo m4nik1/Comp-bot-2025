@@ -21,7 +21,7 @@ import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.numbers.*;
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -71,7 +71,7 @@ public class Vision extends SubsystemBase {
 
   public Vision() {
 
-    aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
+    aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
     // This takes all the tags into account for estimating pose
     // poseEstimator_reef = new PhotonPoseEstimator(aprilTagFieldLayout,
     // PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam);
@@ -259,11 +259,13 @@ public class Vision extends SubsystemBase {
         return;
       }
 
-      // if(((6 <= primary_id <= 11) || (17 <= primary_id <= 11)) && (distanceToClosetTag <= 0.5)) {
-      if((primary_id >= 6) && (primary_id <= 6) || ((primary_id >= 17) && (primary_id <= 22)) && (distanceToClosetTag <= 1.5)) {
+      if((primary_id >= 6) && (primary_id <= 11) || ((primary_id >= 17) && (primary_id <= 22)) && (distanceToClosetTag <= 1.5)) {
         std_devs = 0.25;
         if (distanceToClosetTag <= 0.75) {
           std_devs = 0.1;
+        }
+        if(DriverStation.isTeleop()) {
+          RobotContainer.driveTrain.addVisionMeasurment(estimatedPose, timestampUpdate, new Matrix<>(Nat.N3(), Nat.N1(), new double[] {std_devs, std_devs, std_devs}));
         }
         // Add a if statement to check if the robot is in teleop to add the measurement
       }
@@ -271,7 +273,7 @@ public class Vision extends SubsystemBase {
 
     if (tagCount >= 2) {
       std_devs = 0.7;
-      if((primary_id >= 6) && (primary_id <= 6) || ((primary_id >= 17) && (primary_id <= 22)) && (distanceToClosetTag <= 0.5)) {
+      if((primary_id >= 6) && (primary_id <= 11) || ((primary_id >= 17) && (primary_id <= 22)) && (distanceToClosetTag <= 0.5)) {
         std_devs = 0.5;
         if (distanceToClosetTag <= 0.25) {
           std_devs = 0.25;
