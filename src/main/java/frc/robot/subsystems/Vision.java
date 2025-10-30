@@ -231,7 +231,7 @@ public class Vision extends SubsystemBase {
      
       if (estimatorResult.isEmpty()) {
         // No valid pose, skip this frame
-        System.out.println(cameraNum + " HAS NO POSE FROM CAMERA ");
+        // System.out.println(cameraNum + " HAS NO POSE FROM CAMERA ");
         return;
       }
 
